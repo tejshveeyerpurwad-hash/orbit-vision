@@ -20,7 +20,7 @@ export default function FailureSimulator({ data }) {
         </div>
         <div>
           <h2 className="text-lg font-bold text-white">Failure Simulator</h2>
-          <p className="text-xs text-base-300">Predictive incident analysis for this change</p>
+          <p className="text-xs text-slate-500">Predictive incident analysis for this change</p>
         </div>
       </div>
 
@@ -47,7 +47,7 @@ export default function FailureSimulator({ data }) {
 
       {fs.failure_reasons?.length > 0 && (
         <div className="animate-fade-up glass rounded-2xl p-6 glass-hover" style={{ animationDelay: '250ms' }}>
-          <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase mb-4">Failure Reasons</h3>
+          <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase mb-4">Failure Reasons</h3>
           <div className="grid gap-3 sm:grid-cols-2">
             {fs.failure_reasons.map((reason, i) => (
               <div key={i} className="flex items-start gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] px-4 py-3">
@@ -56,7 +56,7 @@ export default function FailureSimulator({ data }) {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                   </svg>
                 </div>
-                <span className="text-sm text-base-300 leading-relaxed">{reason}</span>
+                <span className="text-sm text-slate-500 leading-relaxed">{reason}</span>
               </div>
             ))}
           </div>

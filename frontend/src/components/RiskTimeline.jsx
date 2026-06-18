@@ -28,11 +28,11 @@ function RiskDot({ phase, index, total, hovered, onHover, onLeave }) {
           />
         </div>
         <span className={`text-[9px] font-medium text-center leading-tight transition-colors duration-200 ${
-          isActive ? 'text-white' : 'text-base-400'
+          isActive ? 'text-white' : 'text-slate-600'
         }`}>
           {phase.phase}
         </span>
-        <span className="text-[8px] text-base-500 mt-0.5">{phase.date}</span>
+        <span className="text-[8px] text-slate-700 mt-0.5">{phase.date}</span>
       </div>
     </div>
   )
@@ -45,12 +45,12 @@ export default function RiskTimeline({ timeline }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Risk Timeline</h3>
-        <span className="text-[10px] text-base-400">Projected risk over phases</span>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Risk Timeline</h3>
+        <span className="text-[10px] text-slate-600">Projected risk over phases</span>
       </div>
 
       <div className="relative pt-2">
-        <div className="absolute top-[7px] left-[8%] right-[8%] h-0.5 rounded-full bg-base-600">
+        <div className="absolute top-[7px] left-[8%] right-[8%] h-0.5 rounded-full bg-slate-800">
           <div className="h-full rounded-full bg-gradient-to-r from-success via-warning to-danger transition-all duration-500"
             style={{ width: `${Math.max(...timeline.map((p) => p.risk))}%` }}
           />
@@ -66,11 +66,11 @@ export default function RiskTimeline({ timeline }) {
 
         <div className="mt-6 rounded-xl border border-white/[0.04] bg-white/[0.02] p-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-base-300">Risk Projection</span>
+            <span className="text-xs text-slate-500">Risk Projection</span>
             {hovered ? (
               <span className="text-xs font-semibold text-white">{hovered}</span>
             ) : (
-              <span className="text-xs text-base-400">Hover a phase</span>
+              <span className="text-xs text-slate-600">Hover a phase</span>
             )}
           </div>
           <div className="space-y-1.5">
@@ -84,13 +84,13 @@ export default function RiskTimeline({ timeline }) {
                   onMouseEnter={() => setHovered(phase.phase)}
                   onMouseLeave={() => setHovered(null)}
                 >
-                  <span className="text-[10px] text-base-400 w-14 shrink-0">{phase.phase}</span>
-                  <div className="flex-1 h-1.5 rounded-full bg-base-600 overflow-hidden">
+                  <span className="text-[10px] text-slate-600 w-14 shrink-0">{phase.phase}</span>
+                  <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                     <div className={`h-full rounded-full ${color} transition-all duration-500`}
                       style={{ width: `${phase.risk}%` }}
                     />
                   </div>
-                  <span className="text-[10px] font-mono text-base-300 w-8 text-right">{phase.risk}%</span>
+                  <span className="text-[10px] font-mono text-slate-500 w-8 text-right">{phase.risk}%</span>
                 </div>
               )
             })}

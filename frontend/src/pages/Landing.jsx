@@ -41,7 +41,7 @@ export default function Landing() {
   const { data, loading, error, analyze, reset, presets } = useAnalysis()
 
   return (
-    <div className="flex min-h-screen flex-col bg-base-900">
+    <div className="flex min-h-screen flex-col bg-slate-950">
       <Navbar />
 
       <main className="flex-1">
@@ -67,7 +67,7 @@ export default function Landing() {
                 <span className="text-gradient">before production</span>
               </h1>
 
-              <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-base leading-relaxed text-base-400 sm:text-lg" style={{ animationDelay: '150ms' }}>
+              <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg" style={{ animationDelay: '150ms' }}>
                 Orbit Foresight analyzes feature requests against your engineering history,
                 surfacing incident predictions, service dependencies, and executive reports
                 before you merge a single line of code.
@@ -85,7 +85,7 @@ export default function Landing() {
                 </button>
                 <button
                   onClick={() => navigate('/dashboard')}
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-semibold text-base-300 transition-all hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-semibold text-slate-500 transition-all hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
                 >
                   Executive Dashboard
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -116,7 +116,7 @@ export default function Landing() {
                   className="group glass-card p-5 hover:border-brand/20 transition-all duration-300"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.04] text-base-300 transition-all duration-300 group-hover:border-brand/30 group-hover:bg-brand/10 group-hover:text-brand-light">
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.04] text-slate-500 transition-all duration-300 group-hover:border-brand/30 group-hover:bg-brand/10 group-hover:text-brand-light">
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d={f.icon} />
                     </svg>
@@ -124,7 +124,7 @@ export default function Landing() {
                   <h3 className="mb-1.5 text-sm font-semibold text-white/90 group-hover:text-white transition-colors">
                     {f.title}
                   </h3>
-                  <p className="text-xs leading-relaxed text-base-400">{f.desc}</p>
+                  <p className="text-xs leading-relaxed text-slate-600">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -140,7 +140,7 @@ export default function Landing() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">
                 See it in action
               </h2>
-              <p className="mt-2 text-sm text-base-400">
+              <p className="mt-2 text-sm text-slate-600">
                 Enter a feature change below to see instant risk analysis
               </p>
             </div>
@@ -175,7 +175,7 @@ export default function Landing() {
                       </div>
                       <div>
                         <h2 className="text-lg font-bold text-white">Risk Breakdown</h2>
-                        <p className="text-xs text-base-400">Services, files, and historical context</p>
+                        <p className="text-xs text-slate-600">Services, files, and historical context</p>
                       </div>
                     </div>
 
@@ -243,7 +243,7 @@ export default function Landing() {
                 Orbit<span className="text-brand">Foresight</span>
               </span>
             </div>
-            <p className="text-[11px] text-base-500">
+            <p className="text-[11px] text-slate-700">
               Predict. Prevent. Deploy with confidence.
             </p>
           </div>

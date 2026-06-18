@@ -16,7 +16,7 @@ export default function DashboardLayout({ data, children }) {
   const contentReady = data && mounted
 
   return (
-    <div className="flex min-h-screen bg-base-900">
+    <div className="flex min-h-screen bg-slate-950">
       <Sidebar
         activeTab={data?.activeTab || 'simulator'}
         onTabChange={data?.onTabChange || (() => {})}
@@ -25,20 +25,20 @@ export default function DashboardLayout({ data, children }) {
       />
 
       <div className="flex flex-1 flex-col lg:pl-16 xl:pl-64 transition-all duration-300">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-white/[0.06] bg-base-900/80 backdrop-blur-2xl px-4 sm:px-6">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-white/[0.06] bg-slate-950/80 backdrop-blur-2xl px-4 sm:px-6">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="rounded-lg p-1.5 text-base-400 hover:bg-white/[0.06] hover:text-base-100 lg:hidden"
+            className="rounded-lg p-1.5 text-slate-600 hover:bg-white/[0.06] hover:text-slate-300 lg:hidden"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
 
-          <div className="flex items-center gap-1 text-xs text-base-400">
+          <div className="flex items-center gap-1 text-xs text-slate-600">
             <span className="hidden sm:inline">Orbit Foresight</span>
             <span className="hidden sm:inline mx-1.5">/</span>
-            <span className="text-base-200">{tabs.find(t => t.id === data?.activeTab)?.label || 'Dashboard'}</span>
+            <span className="text-slate-400">{tabs.find(t => t.id === data?.activeTab)?.label || 'Dashboard'}</span>
           </div>
 
           <div className="flex-1" />
@@ -57,8 +57,8 @@ export default function DashboardLayout({ data, children }) {
 
           {!contentReady && (
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-base-500" />
-              <span className="text-[10px] text-base-500">No analysis</span>
+              <div className="h-2 w-2 rounded-full bg-slate-700" />
+              <span className="text-[10px] text-slate-700">No analysis</span>
             </div>
           )}
         </header>
@@ -73,12 +73,12 @@ export default function DashboardLayout({ data, children }) {
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center min-h-[60vh] px-4">
               <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.03]">
-                <svg className="h-10 w-10 text-base-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <svg className="h-10 w-10 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-white mb-1">No analysis loaded</h3>
-              <p className="text-sm text-base-400 text-center max-w-sm">Submit a feature request from the landing page to explore incident prediction, service dependencies, and CTO reports.</p>
+              <p className="text-sm text-slate-600 text-center max-w-sm">Submit a feature request from the landing page to explore incident prediction, service dependencies, and CTO reports.</p>
               <a
                 href="/"
                 className="mt-6 inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-brand-dark active:scale-[0.97]"

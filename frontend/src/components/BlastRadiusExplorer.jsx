@@ -32,17 +32,17 @@ export default function BlastRadiusExplorer({ services, riskPaths }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Blast Radius Explorer</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Blast Radius Explorer</h3>
         <div className="flex items-center gap-3">
           {[['high','High'],['medium','Med'],['low','Low']].map(([k,v]) => (
             <div key={k} className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: palette[k].stroke }} />
-              <span className="text-[10px] text-base-400">{v}</span>
+              <span className="text-[10px] text-slate-600">{v}</span>
             </div>
           ))}
         </div>
       </div>
-      <div className="relative overflow-hidden rounded-xl border border-white/[0.04] bg-base-800/40">
+      <div className="relative overflow-hidden rounded-xl border border-white/[0.04] bg-slate-900/40">
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto" style={{ minHeight: 240 }}>
           <defs>
             <marker id="arr-risk" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
@@ -130,7 +130,7 @@ export default function BlastRadiusExplorer({ services, riskPaths }) {
         </svg>
 
         {activeService && nodes.find((n) => n.name === activeService) && (
-          <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/[0.06] bg-base-700/95 backdrop-blur-sm px-3 py-2.5 animate-fade-in">
+          <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/[0.06] bg-slate-800/95 backdrop-blur-sm px-3 py-2.5 animate-fade-in">
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm font-medium text-white">{activeService}</span>
               <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold ${
@@ -139,7 +139,7 @@ export default function BlastRadiusExplorer({ services, riskPaths }) {
                 Risk: {services.find((s) => s.name === activeService)?.risk || 'low'}
               </span>
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-base-300">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
               <span>Propagation: {services.find((s) => s.name === activeService)?.propagation_risk || 0}%</span>
               <span>Dependencies: {services.find((s) => s.name === activeService)?.dependencies?.join(', ') || 'none'}</span>
             </div>
@@ -148,7 +148,7 @@ export default function BlastRadiusExplorer({ services, riskPaths }) {
 
         {!activeService && (
           <div className="absolute bottom-3 left-3 right-3 text-center">
-            <span className="text-[10px] text-base-500">Hover or click a service to explore risk propagation paths</span>
+            <span className="text-[10px] text-slate-700">Hover or click a service to explore risk propagation paths</span>
           </div>
         )}
       </div>

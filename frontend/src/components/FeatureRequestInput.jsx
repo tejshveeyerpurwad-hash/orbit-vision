@@ -46,7 +46,7 @@ export default function FeatureRequestInput({ onAnalyze, loading, presets = [] }
     >
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-          <svg className="h-5 w-5 text-base-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
           </svg>
         </div>
@@ -58,7 +58,7 @@ export default function FeatureRequestInput({ onAnalyze, loading, presets = [] }
           onFocus={() => setShow(true)}
           onKeyDown={handleKey}
           placeholder='Describe a software change, e.g. "Add payment retry support"'
-          className="w-full rounded-xl border border-white/[0.08] bg-base-700/80 py-4 pl-12 pr-36 text-sm text-white placeholder-base-400/50 outline-none ring-1 ring-transparent transition-all duration-200 focus:border-brand/40 focus:ring-brand/20"
+          className="w-full rounded-xl border border-white/[0.08] bg-slate-800/80 py-4 pl-12 pr-36 text-sm text-white placeholder-slate-600/50 outline-none ring-1 ring-transparent transition-all duration-200 focus:border-brand/40 focus:ring-brand/20"
           disabled={loading}
           autoComplete="off"
         />
@@ -90,7 +90,7 @@ export default function FeatureRequestInput({ onAnalyze, loading, presets = [] }
         {show && filtered.length > 0 && !loading && (
           <div
             ref={listRef}
-            className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-white/[0.08] bg-base-700 shadow-2xl shadow-black/50 animate-fade-in"
+            className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-white/[0.08] bg-slate-800 shadow-2xl shadow-black/50 animate-fade-in"
           >
             {filtered.map((s, i) => (
               <button
@@ -99,12 +99,12 @@ export default function FeatureRequestInput({ onAnalyze, loading, presets = [] }
                 className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
                   i === selected
                     ? 'bg-brand/10 text-brand-light'
-                    : 'text-base-300 hover:bg-white/[0.04] hover:text-white'
+                    : 'text-slate-500 hover:bg-white/[0.04] hover:text-white'
                 }`}
                 onClick={() => { setValue(s); submit(s) }}
                 onMouseEnter={() => setSelected(i)}
               >
-                <svg className="h-4 w-4 shrink-0 text-base-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="h-4 w-4 shrink-0 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                 </svg>
                 {s}

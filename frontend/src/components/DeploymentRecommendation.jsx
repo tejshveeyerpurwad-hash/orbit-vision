@@ -65,58 +65,58 @@ export default function DeploymentRecommendation({ recommendation }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Deploy Recommendation</h3>
+            <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Deploy Recommendation</h3>
             <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${r.badge}`}>
               {r.label}
             </span>
           </div>
-          <p className="text-sm text-base-300">{r.desc}</p>
+          <p className="text-sm text-slate-500">{r.desc}</p>
 
           <div className="mt-4 grid grid-cols-3 gap-2">
             {recommendation === 'blocked' && (
               <>
                 <div className="rounded-lg border border-danger/20 bg-danger/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Risks</div>
+                  <div className="text-[10px] text-slate-600">Risks</div>
                   <div className="text-xs font-semibold text-danger">4 critical</div>
                 </div>
                 <div className="rounded-lg border border-warning/20 bg-warning/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Required</div>
+                  <div className="text-[10px] text-slate-600">Required</div>
                   <div className="text-xs font-semibold text-warning">3 actions</div>
                 </div>
-                <div className="rounded-lg border border-base-500/20 bg-white/[0.02] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">ETA</div>
-                  <div className="text-xs font-semibold text-base-200">5 days</div>
+                <div className="rounded-lg border border-slate-700/20 bg-white/[0.02] px-3 py-2 text-center">
+                  <div className="text-[10px] text-slate-600">ETA</div>
+                  <div className="text-xs font-semibold text-slate-400">5 days</div>
                 </div>
               </>
             )}
             {recommendation === 'caution' && (
               <>
                 <div className="rounded-lg border border-warning/20 bg-warning/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Risks</div>
+                  <div className="text-[10px] text-slate-600">Risks</div>
                   <div className="text-xs font-semibold text-warning">2 high</div>
                 </div>
                 <div className="rounded-lg border border-brand/20 bg-brand/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Review</div>
+                  <div className="text-[10px] text-slate-600">Review</div>
                   <div className="text-xs font-semibold text-brand-light">1 required</div>
                 </div>
-                <div className="rounded-lg border border-base-500/20 bg-white/[0.02] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">ETA</div>
-                  <div className="text-xs font-semibold text-base-200">2 days</div>
+                <div className="rounded-lg border border-slate-700/20 bg-white/[0.02] px-3 py-2 text-center">
+                  <div className="text-[10px] text-slate-600">ETA</div>
+                  <div className="text-xs font-semibold text-slate-400">2 days</div>
                 </div>
               </>
             )}
             {recommendation === 'review' && (
               <>
                 <div className="rounded-lg border border-brand/20 bg-brand/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Risks</div>
+                  <div className="text-[10px] text-slate-600">Risks</div>
                   <div className="text-xs font-semibold text-brand-light">1 medium</div>
                 </div>
-                <div className="rounded-lg border border-base-500/20 bg-white/[0.02] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Review</div>
-                  <div className="text-xs font-semibold text-base-200">Optional</div>
+                <div className="rounded-lg border border-slate-700/20 bg-white/[0.02] px-3 py-2 text-center">
+                  <div className="text-[10px] text-slate-600">Review</div>
+                  <div className="text-xs font-semibold text-slate-400">Optional</div>
                 </div>
                 <div className="rounded-lg border border-success/20 bg-success/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">ETA</div>
+                  <div className="text-[10px] text-slate-600">ETA</div>
                   <div className="text-xs font-semibold text-success">1 day</div>
                 </div>
               </>
@@ -124,15 +124,15 @@ export default function DeploymentRecommendation({ recommendation }) {
             {recommendation === 'approved' && (
               <>
                 <div className="rounded-lg border border-success/20 bg-success/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Risks</div>
+                  <div className="text-[10px] text-slate-600">Risks</div>
                   <div className="text-xs font-semibold text-success">Minimal</div>
                 </div>
                 <div className="rounded-lg border border-success/20 bg-success/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">Status</div>
+                  <div className="text-[10px] text-slate-600">Status</div>
                   <div className="text-xs font-semibold text-success">Go</div>
                 </div>
                 <div className="rounded-lg border border-success/20 bg-success/[0.04] px-3 py-2 text-center">
-                  <div className="text-[10px] text-base-400">ETA</div>
+                  <div className="text-[10px] text-slate-600">ETA</div>
                   <div className="text-xs font-semibold text-success">Now</div>
                 </div>
               </>

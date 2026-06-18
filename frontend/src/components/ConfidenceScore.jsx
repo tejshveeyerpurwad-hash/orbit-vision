@@ -21,7 +21,7 @@ export default function ConfidenceScore({ score }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Confidence Score</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Confidence Score</h3>
         <span className={`text-[10px] font-semibold uppercase tracking-wider ${
           color === 'success' ? 'text-success' : color === 'warning' ? 'text-warning' : 'text-danger'
         }`}>
@@ -53,15 +53,15 @@ export default function ConfidenceScore({ score }) {
         </div>
         <div className="flex-1 space-y-2">
           <div className="flex justify-between text-xs">
-            <span className="text-base-400">Model certainty</span>
-            <span className="text-base-200">{pct}%</span>
+            <span className="text-slate-600">Model certainty</span>
+            <span className="text-slate-400">{pct}%</span>
           </div>
-          <div className="h-2 rounded-full bg-base-600 overflow-hidden">
+          <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
             <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-1000 ease-out`}
               style={{ width: `${pct}%` }}
             />
           </div>
-          <p className="text-[10px] text-base-400 leading-relaxed">
+          <p className="text-[10px] text-slate-600 leading-relaxed">
             {pct >= 85 ? 'High confidence in this prediction based on historical patterns.' :
              pct >= 65 ? 'Moderate confidence. Additional data would improve accuracy.' :
              'Low confidence. Manual review strongly recommended.'}

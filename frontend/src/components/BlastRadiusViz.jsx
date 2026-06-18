@@ -34,20 +34,20 @@ export default function BlastRadiusViz({ items }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Blast Radius</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Blast Radius</h3>
         <div className="flex items-center gap-2">
           {['critical', 'high', 'medium', 'low'].map((k) => {
             const s = sevColor[k]
             return (
               <div key={k} className="flex items-center gap-1">
                 <span className="h-2 w-2 rounded-full" style={{ backgroundColor: s.stroke }} />
-                <span className="text-[9px] text-base-400">{s.label}</span>
+                <span className="text-[9px] text-slate-600">{s.label}</span>
               </div>
             )
           })}
         </div>
       </div>
-      <div className="relative overflow-hidden rounded-xl border border-white/[0.04] bg-base-800/40">
+      <div className="relative overflow-hidden rounded-xl border border-white/[0.04] bg-slate-900/40">
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto" style={{ minHeight: 240 }}>
           <circle cx={cx} cy={cy} r={80} fill="rgba(239,68,68,0.04)" stroke="rgba(239,68,68,0.15)" strokeWidth="1" strokeDasharray="4 4" />
           <circle cx={cx} cy={cy} r={55} fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.1)" strokeWidth="1" strokeDasharray="3 3" />
@@ -92,7 +92,7 @@ export default function BlastRadiusViz({ items }) {
           })}
         </svg>
         {hovered && (
-          <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/[0.06] bg-base-700/90 backdrop-blur-sm px-3 py-2 text-xs text-base-300 animate-fade-in">
+          <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/[0.06] bg-slate-800/90 backdrop-blur-sm px-3 py-2 text-xs text-slate-500 animate-fade-in">
             <span className="font-medium text-white">{hovered}</span>
             {' \u2014 '}
             <span className={sevColor[items.find((i) => i.name === hovered)?.severity || 'medium'].text}>

@@ -30,16 +30,16 @@ function ServiceNode({ data }) {
         <span className="h-2 w-2 rounded-full" style={{ backgroundColor: colors.border }} />
         <span className="text-xs font-semibold text-white">{data.label}</span>
       </div>
-      <div className="text-[9px] text-base-400">
+      <div className="text-[9px] text-slate-600">
         Risk: <span style={{ color: colors.text }}>{data.risk.toUpperCase()}</span>
       </div>
       {data.propagationRisk && (
-        <div className="mt-1.5 h-1 rounded-full bg-base-600/50 overflow-hidden">
+        <div className="mt-1.5 h-1 rounded-full bg-slate-800/50 overflow-hidden">
           <div className="h-full rounded-full" style={{ width: `${data.propagationRisk}%`, backgroundColor: colors.border, opacity: 0.5 }} />
         </div>
       )}
       {data.deps && data.deps.length > 0 && (
-        <div className="mt-1.5 text-[8px] text-base-500 truncate max-w-[140px]">
+        <div className="mt-1.5 text-[8px] text-slate-700 truncate max-w-[140px]">
           Dep: {data.deps.join(', ')}
         </div>
       )}
@@ -132,7 +132,7 @@ export default function OrbitKnowledgeGraph({ services, riskPaths, onNodeSelect 
           </div>
           <div>
             <h2 className="text-lg font-bold text-white">Orbit Knowledge Graph</h2>
-            <p className="text-xs text-base-400">Interactive service topology with risk propagation paths</p>
+            <p className="text-xs text-slate-600">Interactive service topology with risk propagation paths</p>
           </div>
         </div>
 
@@ -140,15 +140,15 @@ export default function OrbitKnowledgeGraph({ services, riskPaths, onNodeSelect 
           {[['high','High','#ef4444'],['medium','Med','#f59e0b'],['low','Low','#06b6d4']].map(([k,v,clr]) => (
             <div key={k} className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: clr }} />
-              <span className="text-[10px] text-base-400">{v}</span>
+              <span className="text-[10px] text-slate-600">{v}</span>
             </div>
           ))}
-          <span className="text-base-600 mx-1">|</span>
+          <span className="text-slate-800 mx-1">|</span>
           <div className="flex items-center gap-1.5">
-            <svg className="h-3 w-3 text-base-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="h-3 w-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
-            <span className="text-[10px] text-base-400">Risk propagation</span>
+            <span className="text-[10px] text-slate-600">Risk propagation</span>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function OrbitKnowledgeGraph({ services, riskPaths, onNodeSelect 
           >
             <Background color="rgba(255,255,255,0.03)" gap={24} />
             <Controls
-              className="bg-base-800 border border-white/[0.06] rounded-lg [&_button]:text-base-400 [&_button]:hover:text-base-100 [&_button]:border-white/[0.06]"
+              className="bg-slate-900 border border-white/[0.06] rounded-lg [&_button]:text-slate-600 [&_button]:hover:text-slate-300 [&_button]:border-white/[0.06]"
             />
             <MiniMap
               nodeColor={(node) => {
@@ -199,7 +199,7 @@ export default function OrbitKnowledgeGraph({ services, riskPaths, onNodeSelect 
             </div>
             <button
               onClick={() => setSelectedNode(null)}
-              className="rounded-lg p-1 text-base-400 hover:bg-white/[0.06] hover:text-base-100"
+              className="rounded-lg p-1 text-slate-600 hover:bg-white/[0.06] hover:text-slate-300"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -208,27 +208,27 @@ export default function OrbitKnowledgeGraph({ services, riskPaths, onNodeSelect 
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
-              <div className="text-[10px] text-base-500">Risk Level</div>
+              <div className="text-[10px] text-slate-700">Risk Level</div>
               <div className="text-sm font-semibold text-white capitalize mt-0.5">{selectedService?.risk || 'N/A'}</div>
             </div>
             <div className="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
-              <div className="text-[10px] text-base-500">Propagation Risk</div>
+              <div className="text-[10px] text-slate-700">Propagation Risk</div>
               <div className="text-sm font-semibold text-white mt-0.5">{selectedService?.propagation_risk || 0}%</div>
             </div>
             <div className="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
-              <div className="text-[10px] text-base-500">Dependencies</div>
+              <div className="text-[10px] text-slate-700">Dependencies</div>
               <div className="text-sm font-semibold text-white mt-0.5">{selectedService?.dependencies?.length || 0}</div>
             </div>
             <div className="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
-              <div className="text-[10px] text-base-500">Impacted By</div>
+              <div className="text-[10px] text-slate-700">Impacted By</div>
               <div className="text-sm font-semibold text-white mt-0.5">{selectedService?.impacted_by?.length || 0}</div>
             </div>
           </div>
           {selectedService?.dependencies?.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-1.5">
-              <span className="text-[10px] text-base-500 mr-1">Depends on:</span>
+              <span className="text-[10px] text-slate-700 mr-1">Depends on:</span>
               {selectedService.dependencies.map((d) => (
-                <span key={d} className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-0.5 text-[10px] text-base-300">{d}</span>
+                <span key={d} className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-0.5 text-[10px] text-slate-500">{d}</span>
               ))}
             </div>
           )}
@@ -236,7 +236,7 @@ export default function OrbitKnowledgeGraph({ services, riskPaths, onNodeSelect 
       )}
 
       {!selectedNode && services?.length > 0 && (
-        <div className="text-center text-[10px] text-base-500 animate-fade-in">
+        <div className="text-center text-[10px] text-slate-700 animate-fade-in">
           Click any service node to view details and risk propagation paths
         </div>
       )}

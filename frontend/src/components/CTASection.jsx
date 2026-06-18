@@ -14,7 +14,7 @@ export default function CTASection() {
             Ready to predict your{' '}
             <span className="text-gradient">next incident?</span>
           </h2>
-          <p className="mt-4 text-base-300">
+          <p className="mt-4 text-slate-500">
             Stop finding out about risks in production. Start analyzing every feature request before you merge.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -29,7 +29,7 @@ export default function CTASection() {
             </button>
             <a
               href="#demo-input"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-8 py-3.5 text-sm font-semibold text-base-300 transition-all hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-8 py-3.5 text-sm font-semibold text-slate-500 transition-all hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
             >
               Try a Demo
             </a>

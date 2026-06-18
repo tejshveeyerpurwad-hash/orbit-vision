@@ -4,8 +4,8 @@ export default function ServiceImpactViz({ services }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Service Impact</h3>
-        <span className="text-[10px] text-base-400">{services.length} services</span>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Service Impact</h3>
+        <span className="text-[10px] text-slate-600">{services.length} services</span>
       </div>
       <div className="space-y-3">
         {services.map((s, i) => {
@@ -24,16 +24,16 @@ export default function ServiceImpactViz({ services }) {
                   {s.propagation_risk}%
                 </div>
               </div>
-              <div className="h-1.5 rounded-full bg-base-600 overflow-hidden mb-2">
+              <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden mb-2">
                 <div className="h-full rounded-full transition-all duration-500"
                   style={{ width: `${s.propagation_risk}%`, backgroundColor: colorHex, opacity: 0.7 }}
                 />
               </div>
-              <div className="flex items-center gap-2 text-[10px] text-base-400">
+              <div className="flex items-center gap-2 text-[10px] text-slate-600">
                 <span className="truncate">Depends on: {s.dependencies?.length ? s.dependencies.join(', ') : 'none'}</span>
                 {s.impacted_by?.length > 0 && (
                   <>
-                    <span className="text-base-500">|</span>
+                    <span className="text-slate-700">|</span>
                     <span className="truncate">Impacted by: {s.impacted_by.join(', ')}</span>
                   </>
                 )}

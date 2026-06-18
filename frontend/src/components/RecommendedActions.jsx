@@ -2,7 +2,7 @@ const badges = {
   critical: { bg: 'bg-danger/10', text: 'text-danger', border: 'border-danger/20' },
   high: { bg: 'bg-warning/10', text: 'text-warning', border: 'border-warning/20' },
   medium: { bg: 'bg-brand/10', text: 'text-brand-light', border: 'border-brand/20' },
-  low: { bg: 'bg-white/[0.04]', text: 'text-base-400', border: 'border-white/[0.06]' },
+  low: { bg: 'bg-white/[0.04]', text: 'text-slate-600', border: 'border-white/[0.06]' },
 }
 
 export default function RecommendedActions({ actions }) {
@@ -10,7 +10,7 @@ export default function RecommendedActions({ actions }) {
 
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
-      <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase mb-4">Recommended Actions</h3>
+      <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase mb-4">Recommended Actions</h3>
       <div className="space-y-2">
         {actions.map((a, i) => {
           const b = badges[a.priority] || badges.medium
@@ -25,7 +25,7 @@ export default function RecommendedActions({ actions }) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <span className="flex-1 text-sm text-base-300">{a.action}</span>
+              <span className="flex-1 text-sm text-slate-500">{a.action}</span>
               <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${b.bg} ${b.text} ${b.border}`}>
                 {a.priority}
               </span>

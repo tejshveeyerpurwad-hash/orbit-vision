@@ -10,8 +10,8 @@ export default function SimilarMRs({ mrs }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Similar Historical MRs</h3>
-        <span className="text-[10px] text-base-400">{mrs.length} matches</span>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Similar Historical MRs</h3>
+        <span className="text-[10px] text-slate-600">{mrs.length} matches</span>
       </div>
       <div className="space-y-3 max-h-[440px] overflow-y-auto pr-1">
         {mrs.map((mr, i) => {
@@ -28,19 +28,19 @@ export default function SimilarMRs({ mrs }) {
                     {mr.mr}
                   </span>
                   {mr.author && (
-                    <span className="rounded bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-base-400">
+                    <span className="rounded bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-slate-600">
                       @{mr.author}
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] text-base-500 shrink-0">{mr.date}</span>
+                <span className="text-[10px] text-slate-700 shrink-0">{mr.date}</span>
               </div>
-              <p className="text-sm text-base-300 leading-relaxed mb-3">{mr.description}</p>
+              <p className="text-sm text-slate-500 leading-relaxed mb-3">{mr.description}</p>
               <div className="flex items-center gap-2">
                 <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${oc.bg} ${oc.text} ${oc.border}`}>
                   {oc.label}
                 </span>
-                <span className="flex items-center gap-1 text-[10px] text-base-400">
+                <span className="flex items-center gap-1 text-[10px] text-slate-600">
                   <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>

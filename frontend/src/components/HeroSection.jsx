@@ -23,7 +23,7 @@ export default function HeroSection() {
             <span className="text-gradient">before production</span>
           </h1>
 
-          <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-base-300 sm:text-xl" style={{ animationDelay: '150ms' }}>
+          <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-500 sm:text-xl" style={{ animationDelay: '150ms' }}>
             Orbit Foresight analyzes feature requests against your GitLab
             Orbit history, surfacing risk scores, impacted services, and
             recommended actions before you merge.
@@ -41,7 +41,7 @@ export default function HeroSection() {
             </a>
             <a
               href="#features"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-base-300 transition-all hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-slate-500 transition-all hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
             >
               Learn More
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -54,9 +54,9 @@ export default function HeroSection() {
 
       <div className="mt-16 sm:mt-20 lg:mt-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="animate-fade-up relative overflow-hidden rounded-2xl border border-white/[0.06] bg-base-800/60 p-2 shadow-2xl shadow-black/40 backdrop-blur-sm" style={{ animationDelay: '500ms' }}>
+          <div className="animate-fade-up relative overflow-hidden rounded-2xl border border-white/[0.06] bg-slate-900/60 p-2 shadow-2xl shadow-black/40 backdrop-blur-sm" style={{ animationDelay: '500ms' }}>
             <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-20" />
-            <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-base-900/80">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-slate-950/80">
               <div className="flex h-full items-center justify-center">
                 <div className="text-center p-8">
                   <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-xs text-brand-light">
@@ -71,12 +71,12 @@ export default function HeroSection() {
                       { label: 'Actions', value: '4 recommended', color: 'text-success' },
                     ].map((item) => (
                       <div key={item.label} className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3">
-                        <div className="text-xs text-base-300">{item.label}</div>
+                        <div className="text-xs text-slate-500">{item.label}</div>
                         <div className={`text-lg font-bold ${item.color}`}>{item.value}</div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-base-400">
+                  <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-slate-600">
                     <span className="h-1.5 w-1.5 rounded-full bg-success" />
                     Analysis complete for "Add payment retry support"
                   </div>

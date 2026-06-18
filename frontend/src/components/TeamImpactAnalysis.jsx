@@ -10,8 +10,8 @@ export default function TeamImpactAnalysis({ teams }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Team Impact Analysis</h3>
-        <span className="text-[10px] text-base-400">{teams.length} teams</span>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Team Impact Analysis</h3>
+        <span className="text-[10px] text-slate-600">{teams.length} teams</span>
       </div>
       <div className="space-y-3">
         {teams.map((t, i) => {
@@ -28,15 +28,15 @@ export default function TeamImpactAnalysis({ teams }) {
                     {t.impact}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-[10px] text-base-400">
+                <div className="flex items-center gap-2 text-[10px] text-slate-600">
                   <span>{t.engineers} eng</span>
-                  <span className="text-base-500">|</span>
+                  <span className="text-slate-700">|</span>
                   <span>{t.workload}</span>
                 </div>
               </div>
-              <p className="text-xs text-base-300 leading-relaxed mb-2">{t.description}</p>
+              <p className="text-xs text-slate-500 leading-relaxed mb-2">{t.description}</p>
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-1.5 rounded-full bg-base-600 overflow-hidden">
+                <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                   <div className="h-full rounded-full transition-all duration-500"
                     style={{
                       width: `${t.risk}%`,
@@ -45,7 +45,7 @@ export default function TeamImpactAnalysis({ teams }) {
                     }}
                   />
                 </div>
-                <span className="text-[10px] font-mono text-base-400 w-8 text-right">{t.risk}%</span>
+                <span className="text-[10px] font-mono text-slate-600 w-8 text-right">{t.risk}%</span>
               </div>
             </div>
           )

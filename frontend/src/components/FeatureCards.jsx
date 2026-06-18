@@ -49,7 +49,7 @@ export default function FeatureCards() {
             Ship with{' '}
             <span className="text-gradient">confidence</span>
           </h2>
-          <p className="mt-4 text-base-300">
+          <p className="mt-4 text-slate-500">
             Every feature request is analyzed against your entire GitLab Orbit history to predict what could go wrong.
           </p>
         </div>
@@ -61,13 +61,13 @@ export default function FeatureCards() {
               className="group glass glass-hover rounded-2xl p-6"
               style={{ animationDelay: `${i * 120}ms` }}
             >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.04] text-base-300 transition-all duration-300 group-hover:border-brand/30 group-hover:bg-brand/10 group-hover:text-brand-light">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.04] text-slate-500 transition-all duration-300 group-hover:border-brand/30 group-hover:bg-brand/10 group-hover:text-brand-light">
                 {f.icon}
               </div>
               <h3 className="mb-2 text-base font-semibold text-white/90 group-hover:text-white transition-colors">
                 {f.title}
               </h3>
-              <p className="text-sm leading-relaxed text-base-300">{f.desc}</p>
+              <p className="text-sm leading-relaxed text-slate-500">{f.desc}</p>
             </div>
           ))}
         </div>

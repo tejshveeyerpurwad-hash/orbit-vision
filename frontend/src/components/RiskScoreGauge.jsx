@@ -27,7 +27,7 @@ export default function RiskScoreGauge({ score, size = 'lg' }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Risk Score</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Risk Score</h3>
         <span className={`text-[10px] font-semibold uppercase tracking-wider ${
           color === 'danger' ? 'text-danger' : color === 'warning' ? 'text-warning' : 'text-success'
         }`}>{label}</span>

@@ -34,7 +34,7 @@ export default function ArchitectureSection() {
             From request to{' '}
             <span className="text-gradient">insight</span>
           </h2>
-          <p className="mt-4 text-base-300">
+          <p className="mt-4 text-slate-500">
             Four layers transform your feature request into actionable risk intelligence.
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function ArchitectureSection() {
         <div className="grid gap-0 lg:grid-cols-4 lg:gap-4">
           {layers.map((layer, i) => (
             <div key={layer.title} className="relative">
-              <div className={`glass rounded-2xl p-6 h-full transition-all duration-300 hover:border-brand/20 hover:bg-base-700`}>
+              <div className={`glass rounded-2xl p-6 h-full transition-all duration-300 hover:border-brand/20 hover:bg-slate-800`}>
                 <div className="mb-3 flex items-center gap-3">
                   <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand/20 text-xs font-bold text-brand-light">
                     {i + 1}
@@ -51,7 +51,7 @@ export default function ArchitectureSection() {
                 </div>
                 <ul className="space-y-2">
                   {layer.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-sm text-base-300">
+                    <li key={item} className="flex items-center gap-2 text-sm text-slate-500">
                       <span className="h-1 w-1 rounded-full bg-brand/60" />
                       {item}
                     </li>
@@ -60,7 +60,7 @@ export default function ArchitectureSection() {
               </div>
               {i < layers.length - 1 && (
                 <div className="hidden lg:flex absolute -right-3 top-1/2 z-10 -translate-y-1/2 items-center justify-center">
-                  <svg className="h-5 w-5 text-base-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </div>

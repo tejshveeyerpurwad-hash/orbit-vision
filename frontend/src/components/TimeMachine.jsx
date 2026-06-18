@@ -16,17 +16,17 @@ export default function TimeMachine({ data }) {
         </div>
         <div>
           <h2 className="text-lg font-bold text-white">Incident Time Machine</h2>
-          <p className="text-xs text-base-300">Pattern-matched against {itm.historical_window} of changes</p>
+          <p className="text-xs text-slate-500">Pattern-matched against {itm.historical_window} of changes</p>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3 animate-fade-up" style={{ animationDelay: '50ms' }}>
         <div className="rounded-lg border border-brand/20 bg-brand/[0.04] px-3 py-1.5 text-xs">
-          <span className="text-base-400">Patterns matched: </span>
+          <span className="text-slate-600">Patterns matched: </span>
           <span className="font-semibold text-brand-light">{itm.total_patterns_matched}</span>
         </div>
         <div className="rounded-lg border border-success/20 bg-success/[0.04] px-3 py-1.5 text-xs">
-          <span className="text-base-400">Analysis confidence: </span>
+          <span className="text-slate-600">Analysis confidence: </span>
           <span className="font-semibold text-success">{itm.analysis_confidence}%</span>
         </div>
       </div>

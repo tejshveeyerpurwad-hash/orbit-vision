@@ -12,7 +12,7 @@ export default function ErrorBanner({ message, onDismiss }) {
         <p className="flex-1 text-sm text-danger">{message}</p>
         <button
           onClick={onDismiss}
-          className="shrink-0 rounded-lg bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-base-300 transition-colors hover:bg-white/[0.08] hover:text-white"
+          className="shrink-0 rounded-lg bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-white/[0.08] hover:text-white"
         >
           Dismiss
         </button>

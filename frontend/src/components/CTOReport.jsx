@@ -16,7 +16,7 @@ export default function CTOReport({ data }) {
         </div>
         <div>
           <h2 className="text-lg font-bold text-white">AI CTO Report</h2>
-          <p className="text-xs text-base-300">Executive summary and release readiness assessment</p>
+          <p className="text-xs text-slate-500">Executive summary and release readiness assessment</p>
         </div>
       </div>
 

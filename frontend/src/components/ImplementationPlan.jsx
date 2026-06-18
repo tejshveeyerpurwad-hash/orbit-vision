@@ -10,7 +10,7 @@ const statusIcon = {
     </svg>
   ),
   pending: (
-    <svg className="h-3 w-3 text-base-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg className="h-3 w-3 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
@@ -21,14 +21,14 @@ export default function ImplementationPlan({ plan }) {
 
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
-      <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase mb-6">Implementation Plan</h3>
+      <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase mb-6">Implementation Plan</h3>
       <div className="relative">
         <div className="absolute left-[13px] top-3 h-[calc(100%-24px)] w-0.5 bg-gradient-to-b from-brand/40 via-brand/20 to-transparent" />
         <div className="space-y-6">
           {plan.map((p, i) => (
             <div key={i} className="relative flex gap-4" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-brand/30 bg-base-700 transition-all duration-300 hover:border-brand">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-brand/30 bg-slate-800 transition-all duration-300 hover:border-brand">
                   <span className="text-[10px] font-bold text-brand">
                     {statusIcon[p.status] || (i + 1)}
                   </span>
@@ -37,11 +37,11 @@ export default function ImplementationPlan({ plan }) {
               <div className="flex-1 rounded-xl border border-white/[0.04] bg-white/[0.02] p-4 transition-all duration-300 hover:border-brand/20">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-semibold text-brand-light">{p.phase}</span>
-                  <span className="rounded-md bg-white/[0.04] px-2 py-0.5 text-[10px] font-mono text-base-400">
+                  <span className="rounded-md bg-white/[0.04] px-2 py-0.5 text-[10px] font-mono text-slate-600">
                     {p.duration}
                   </span>
                 </div>
-                <p className="text-sm text-base-300 leading-relaxed">{p.task}</p>
+                <p className="text-sm text-slate-500 leading-relaxed">{p.task}</p>
               </div>
             </div>
           ))}

@@ -21,7 +21,7 @@ export default function Dashboard() {
           {activeTab === 'knowledge-graph' && 'Orbit Knowledge Graph'}
           {activeTab === 'cto-report' && 'AI CTO Report'}
         </h1>
-        <p className="mt-1 text-sm text-base-400">
+        <p className="mt-1 text-sm text-slate-600">
           {activeTab === 'simulator' && 'Real-time risk analysis and deployment guidance for your feature changes'}
           {activeTab === 'knowledge-graph' && 'Interactive service topology with risk propagation and blast radius visualization'}
           {activeTab === 'cto-report' && 'Executive summary with team impact analysis and release readiness scoring'}
@@ -41,7 +41,7 @@ export default function Dashboard() {
               </div>
               <button
                 onClick={reset}
-                className="rounded-lg border border-white/[0.06] px-3 py-1.5 text-[10px] text-base-400 hover:bg-white/[0.04] hover:text-base-200 transition-colors"
+                className="rounded-lg border border-white/[0.06] px-3 py-1.5 text-[10px] text-slate-600 hover:bg-white/[0.04] hover:text-slate-400 transition-colors"
               >
                 Reset
               </button>

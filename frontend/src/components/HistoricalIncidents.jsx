@@ -4,8 +4,8 @@ export default function HistoricalIncidents({ changes }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Historical Incidents</h3>
-        <span className="text-[10px] text-base-400">Past 3 changes</span>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Historical Incidents</h3>
+        <span className="text-[10px] text-slate-600">Past 3 changes</span>
       </div>
       <div className="space-y-3">
         {changes.map((item, i) => (
@@ -23,14 +23,14 @@ export default function HistoricalIncidents({ changes }) {
                   {item.mr}
                 </span>
                 {item.author && (
-                  <span className="rounded bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-base-400">
+                  <span className="rounded bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-slate-600">
                     @{item.author}
                   </span>
                 )}
               </div>
-              <span className="text-[10px] text-base-500">{item.date}</span>
+              <span className="text-[10px] text-slate-700">{item.date}</span>
             </div>
-            <p className="text-sm leading-relaxed text-base-300">{item.description}</p>
+            <p className="text-sm leading-relaxed text-slate-500">{item.description}</p>
           </div>
         ))}
       </div>

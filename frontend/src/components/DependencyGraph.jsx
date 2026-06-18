@@ -33,17 +33,17 @@ export default function DependencyGraph({ deps, interactive = true }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Dependency Graph</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Dependency Graph</h3>
         <div className="flex items-center gap-3">
           {[['high','High'],['medium','Med'],['low','Low']].map(([k,v]) => (
             <div key={k} className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: palette[k].stroke }} />
-              <span className="text-[10px] text-base-400">{v}</span>
+              <span className="text-[10px] text-slate-600">{v}</span>
             </div>
           ))}
         </div>
       </div>
-      <div className="relative overflow-hidden rounded-xl border border-white/[0.04] bg-base-800/40">
+      <div className="relative overflow-hidden rounded-xl border border-white/[0.04] bg-slate-900/40">
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto" style={{ minHeight: 240 }}>
           <defs>
             <marker id="arr-dep" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
@@ -108,7 +108,7 @@ export default function DependencyGraph({ deps, interactive = true }) {
         </svg>
 
         {activeNode && nodes.find((n) => n.service === activeNode) && (
-          <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/[0.06] bg-base-700/95 backdrop-blur-sm px-3 py-2.5 animate-fade-in">
+          <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/[0.06] bg-slate-800/95 backdrop-blur-sm px-3 py-2.5 animate-fade-in">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-white">{activeNode}</span>
               <button
@@ -118,11 +118,11 @@ export default function DependencyGraph({ deps, interactive = true }) {
                 View details &rarr;
               </button>
             </div>
-            <div className="mt-1 flex items-center gap-3 text-xs text-base-300">
+            <div className="mt-1 flex items-center gap-3 text-xs text-slate-500">
               <span>Risk: {
                 deps.find((d) => d.service === activeNode)?.risk || 'unknown'
               }</span>
-              <span className="text-base-500">|</span>
+              <span className="text-slate-700">|</span>
               <span>
                 Depends on: {deps.find((d) => d.service === activeNode)?.dependencies?.join(', ') || 'none'}
               </span>

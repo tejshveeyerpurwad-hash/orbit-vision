@@ -27,7 +27,7 @@ export default function Sidebar({ activeTab, onTabChange, collapsed, onToggle })
         <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={onToggle} />
       )}
 
-      <aside className={`fixed top-0 left-0 z-50 flex h-full flex-col border-r border-white/[0.06] bg-base-900/95 backdrop-blur-2xl transition-all duration-300 ease-in-out ${
+      <aside className={`fixed top-0 left-0 z-50 flex h-full flex-col border-r border-white/[0.06] bg-slate-950/95 backdrop-blur-2xl transition-all duration-300 ease-in-out ${
         collapsed ? 'translate-x-0 w-64' : '-translate-x-full w-64 lg:translate-x-0 lg:w-16 xl:w-64 lg:group-hover:w-64'
       }`}>
 
@@ -41,7 +41,7 @@ export default function Sidebar({ activeTab, onTabChange, collapsed, onToggle })
               Orbit<span className="text-brand">Foresight</span>
             </span>
           </button>
-          <button onClick={onToggle} className="ml-auto rounded-lg p-1.5 text-base-400 hover:bg-white/[0.06] hover:text-base-100 lg:hidden">
+          <button onClick={onToggle} className="ml-auto rounded-lg p-1.5 text-slate-600 hover:bg-white/[0.06] hover:text-slate-300 lg:hidden">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -56,7 +56,7 @@ export default function Sidebar({ activeTab, onTabChange, collapsed, onToggle })
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 activeTab === item.id
                   ? 'bg-brand/[0.08] text-brand-light'
-                  : 'text-base-400 hover:bg-white/[0.04] hover:text-base-100'
+                  : 'text-slate-600 hover:bg-white/[0.04] hover:text-slate-300'
               }`}
             >
               <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -73,8 +73,8 @@ export default function Sidebar({ activeTab, onTabChange, collapsed, onToggle })
               CT
             </div>
             <div className="flex-1 min-w-0 lg:hidden xl:block">
-              <div className="text-xs font-medium text-base-200 truncate">CTO Dashboard</div>
-              <div className="text-[10px] text-base-500">Engineering Leaders</div>
+              <div className="text-xs font-medium text-slate-400 truncate">CTO Dashboard</div>
+              <div className="text-[10px] text-slate-700">Engineering Leaders</div>
             </div>
           </div>
         </div>

@@ -21,12 +21,12 @@ export default function HistoricalIntelligence({ data }) {
           </div>
           <div>
             <h2 className="text-lg font-bold text-white">Historical Intelligence</h2>
-            <p className="text-xs text-base-400">Pattern-matched analysis across {hi.total_patterns_matched} historical changes</p>
+            <p className="text-xs text-slate-600">Pattern-matched analysis across {hi.total_patterns_matched} historical changes</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-2">
           <div className="rounded-lg border border-success/20 bg-success/[0.04] px-3 py-1.5 text-xs">
-            <span className="text-base-400">Confidence: </span>
+            <span className="text-slate-600">Confidence: </span>
             <span className="font-semibold text-success">{hi.analysis_confidence}%</span>
           </div>
         </div>
@@ -36,8 +36,8 @@ export default function HistoricalIntelligence({ data }) {
         <div className="animate-fade-up" style={{ animationDelay: '100ms' }}>
           <div className="glass-card p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Similar Merge Requests</h3>
-              <span className="text-[10px] text-base-500">{hi.similar_mrs?.length || 0} matches</span>
+              <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Similar Merge Requests</h3>
+              <span className="text-[10px] text-slate-700">{hi.similar_mrs?.length || 0} matches</span>
             </div>
             <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
               {hi.similar_mrs?.map((mr, i) => {
@@ -47,16 +47,16 @@ export default function HistoricalIntelligence({ data }) {
                     <div className="flex items-start justify-between mb-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="rounded bg-brand/10 px-1.5 py-0.5 text-[10px] font-semibold text-brand-light">{mr.mr}</span>
-                        <span className="text-[10px] font-mono text-base-500">@{mr.author}</span>
+                        <span className="text-[10px] font-mono text-slate-700">@{mr.author}</span>
                       </div>
-                      <span className="text-[10px] text-base-600">{mr.date}</span>
+                      <span className="text-[10px] text-slate-800">{mr.date}</span>
                     </div>
-                    <p className="text-xs text-base-300 leading-relaxed mb-1.5">{mr.description}</p>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-1.5">{mr.description}</p>
                     <div className="flex items-center gap-2">
                       <span className={`rounded-full border px-1.5 py-0.5 text-[9px] font-semibold ${oc.bg} ${oc.text} ${oc.border}`}>
                         {oc.label}
                       </span>
-                      <span className="text-[10px] text-base-500">{mr.confidence}% match</span>
+                      <span className="text-[10px] text-slate-700">{mr.confidence}% match</span>
                     </div>
                   </div>
                 )
@@ -68,20 +68,20 @@ export default function HistoricalIntelligence({ data }) {
         <div className="animate-fade-up space-y-6" style={{ animationDelay: '150ms' }}>
           <div className="glass-card p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Similar Production Incidents</h3>
-              <span className="text-[10px] text-base-500">{hi.similar_incidents?.length || 0} incidents</span>
+              <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Similar Production Incidents</h3>
+              <span className="text-[10px] text-slate-700">{hi.similar_incidents?.length || 0} incidents</span>
             </div>
             <div className="space-y-2">
               {hi.similar_incidents?.map((inc, i) => (
                 <div key={i} className="rounded-lg border border-danger/10 bg-danger/[0.02] p-3">
                   <div className="flex items-start justify-between mb-1">
                     <span className="text-xs font-semibold text-danger leading-tight">{inc.incident}</span>
-                    <span className="text-[10px] text-base-500 shrink-0 ml-2">{inc.date}</span>
+                    <span className="text-[10px] text-slate-700 shrink-0 ml-2">{inc.date}</span>
                   </div>
-                  <p className="text-[10px] text-base-400 leading-relaxed mb-1.5">Root cause: {inc.root_cause}</p>
-                  <div className="flex items-center gap-3 text-[10px] text-base-500">
+                  <p className="text-[10px] text-slate-600 leading-relaxed mb-1.5">Root cause: {inc.root_cause}</p>
+                  <div className="flex items-center gap-3 text-[10px] text-slate-700">
                     <span>Impact: {inc.impact}</span>
-                    <span className="text-base-600">|</span>
+                    <span className="text-slate-800">|</span>
                     <span>Duration: {inc.duration}</span>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export default function HistoricalIntelligence({ data }) {
 
       <div className="grid gap-6 lg:grid-cols-2 animate-fade-up" style={{ animationDelay: '200ms' }}>
         <div className="glass-card p-5">
-          <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase mb-4">Root Causes</h3>
+          <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase mb-4">Root Causes</h3>
           <div className="space-y-2">
             {hi.root_causes?.map((rc, i) => {
               const freqColor = rc.frequency === 'high' ? '#ef4444' : '#f59e0b'
@@ -101,11 +101,11 @@ export default function HistoricalIntelligence({ data }) {
                 <div key={i} className="flex items-center gap-3 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3.5 py-2.5">
                   <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: freqColor }} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-base-200 truncate">{rc.cause}</div>
+                    <div className="text-xs text-slate-400 truncate">{rc.cause}</div>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[10px] text-base-500 capitalize">{rc.frequency} frequency</span>
-                      <span className="text-base-600">|</span>
-                      <span className="text-[10px] text-base-500">{rc.services_affected} services</span>
+                      <span className="text-[10px] text-slate-700 capitalize">{rc.frequency} frequency</span>
+                      <span className="text-slate-800">|</span>
+                      <span className="text-[10px] text-slate-700">{rc.services_affected} services</span>
                     </div>
                   </div>
                 </div>
@@ -116,8 +116,8 @@ export default function HistoricalIntelligence({ data }) {
 
         <div className="glass-card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Lessons Learned</h3>
-            <span className="text-[10px] text-base-500">{hi.lessons_learned?.length || 0} items</span>
+            <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Lessons Learned</h3>
+            <span className="text-[10px] text-slate-700">{hi.lessons_learned?.length || 0} items</span>
           </div>
           <div className="space-y-2">
             {hi.lessons_learned?.map((ll, i) => {
@@ -129,8 +129,8 @@ export default function HistoricalIntelligence({ data }) {
                       {ll.priority}
                     </span>
                     <div className="min-w-0">
-                      <p className="text-xs text-base-300 leading-relaxed">{ll.lesson}</p>
-                      <span className="text-[10px] text-base-500 mt-0.5 block">Team: {ll.team}</span>
+                      <p className="text-xs text-slate-500 leading-relaxed">{ll.lesson}</p>
+                      <span className="text-[10px] text-slate-700 mt-0.5 block">Team: {ll.team}</span>
                     </div>
                   </div>
                 </div>

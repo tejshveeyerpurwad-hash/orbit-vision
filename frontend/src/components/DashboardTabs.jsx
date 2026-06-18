@@ -18,12 +18,12 @@ export default function DashboardTabs({ active, onChange }) {
             }`}
           >
             <div className={`text-sm font-medium transition-colors duration-200 ${
-              isActive ? 'text-brand-light' : 'text-base-400'
+              isActive ? 'text-brand-light' : 'text-slate-600'
             }`}>
               {tab.label}
             </div>
             <div className={`text-[10px] mt-0.5 transition-colors duration-200 ${
-              isActive ? 'text-base-500' : 'text-base-600'
+              isActive ? 'text-slate-700' : 'text-slate-800'
             }`}>
               {tab.desc}
             </div>

@@ -22,7 +22,7 @@ export default function IncidentProbability({ pct }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Incident Probability</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Incident Probability</h3>
         <span className={`text-[10px] font-semibold uppercase tracking-wider ${
           color === 'danger' ? 'text-danger' : color === 'warning' ? 'text-warning' : 'text-success'
         }`}>{label}</span>
@@ -52,7 +52,7 @@ export default function IncidentProbability({ pct }) {
             </div>
           </div>
         </div>
-        <div className="w-full h-1.5 rounded-full bg-base-600 overflow-hidden">
+        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
           <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-1000 ease-out`}
             style={{ width: `${val}%` }}
           />

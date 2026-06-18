@@ -4,8 +4,8 @@ export default function FailurePrediction({ predictions, confidence }) {
   return (
     <div className="glass rounded-2xl p-6 glass-hover">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Predicted Incidents</h3>
-        <span className="text-[10px] text-base-400">Next 4 weeks</span>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Predicted Incidents</h3>
+        <span className="text-[10px] text-slate-600">Next 4 weeks</span>
       </div>
       <div className="space-y-3">
         {predictions.map((p, i) => {
@@ -27,14 +27,14 @@ export default function FailurePrediction({ predictions, confidence }) {
                   {p.severity}
                 </span>
               </div>
-              <p className="text-xs text-base-400 mb-2 leading-relaxed">{p.description}</p>
+              <p className="text-xs text-slate-600 mb-2 leading-relaxed">{p.description}</p>
               <div className="flex items-center gap-3">
                 <div className="flex-1">
-                  <div className="flex justify-between text-[10px] text-base-400 mb-1">
+                  <div className="flex justify-between text-[10px] text-slate-600 mb-1">
                     <span>Probability</span>
                     <span>{p.probability}%</span>
                   </div>
-                  <div className="h-1.5 rounded-full bg-base-600 overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
                     <div className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${p.probability}%`,
@@ -44,7 +44,7 @@ export default function FailurePrediction({ predictions, confidence }) {
                     />
                   </div>
                 </div>
-                <div className="text-[10px] text-base-500 shrink-0">{p.timeframe}</div>
+                <div className="text-[10px] text-slate-700 shrink-0">{p.timeframe}</div>
               </div>
             </div>
           )

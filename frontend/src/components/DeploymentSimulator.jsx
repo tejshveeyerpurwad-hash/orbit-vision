@@ -13,12 +13,12 @@ export default function DeploymentSimulator({ data }) {
           </div>
           <div>
             <h2 className="text-lg font-bold text-white">Deployment Simulator</h2>
-            <p className="text-xs text-base-400">{ds.total_scenarios} failure scenarios identified — understand what could break and how to prevent it</p>
+            <p className="text-xs text-slate-600">{ds.total_scenarios} failure scenarios identified — understand what could break and how to prevent it</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-2">
           <div className="rounded-lg border border-danger/20 bg-danger/[0.04] px-3 py-1.5 text-xs">
-            <span className="text-base-400">Worst case: </span>
+            <span className="text-slate-600">Worst case: </span>
             <span className="font-semibold text-danger capitalize">{ds.worst_case_severity}</span>
           </div>
         </div>
@@ -42,9 +42,9 @@ export default function DeploymentSimulator({ data }) {
                     <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold capitalize ${sevBg}`}>
                       {s.severity}
                     </span>
-                    <span className="text-[10px] text-base-500">{s.probability}% probability</span>
+                    <span className="text-[10px] text-slate-700">{s.probability}% probability</span>
                   </div>
-                  <p className="text-sm text-base-200 mb-3">{s.what}</p>
+                  <p className="text-sm text-slate-400 mb-3">{s.what}</p>
 
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-lg border border-warning/20 bg-warning/[0.03] p-3">
@@ -54,7 +54,7 @@ export default function DeploymentSimulator({ data }) {
                         </svg>
                         <span className="text-[10px] font-semibold text-warning uppercase tracking-wider">Why could it break?</span>
                       </div>
-                      <p className="text-xs text-base-300 leading-relaxed">{s.why}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed">{s.why}</p>
                     </div>
 
                     <div className="rounded-lg border border-success/20 bg-success/[0.03] p-3">
@@ -64,7 +64,7 @@ export default function DeploymentSimulator({ data }) {
                         </svg>
                         <span className="text-[10px] font-semibold text-success uppercase tracking-wider">How to prevent it?</span>
                       </div>
-                      <p className="text-xs text-base-300 leading-relaxed">{s.prevention}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed">{s.prevention}</p>
                     </div>
                   </div>
                 </div>

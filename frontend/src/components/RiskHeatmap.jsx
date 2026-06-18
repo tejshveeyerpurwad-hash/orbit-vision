@@ -25,7 +25,7 @@ export default function RiskHeatmap({ className = '' }) {
   return (
     <div className={`glass rounded-2xl p-6 glass-hover ${className}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-medium text-base-300 tracking-wider uppercase">Risk Heatmap</h3>
+        <h3 className="text-xs font-medium text-slate-500 tracking-wider uppercase">Risk Heatmap</h3>
         <div className="flex items-center gap-2">
           {[
             { label: 'Critical', color: '#ef4444' },
@@ -35,7 +35,7 @@ export default function RiskHeatmap({ className = '' }) {
           ].map(({ label, color }) => (
             <div key={label} className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-sm" style={{ backgroundColor: color }} />
-              <span className="text-[9px] text-base-400">{label}</span>
+              <span className="text-[9px] text-slate-600">{label}</span>
             </div>
           ))}
         </div>
@@ -53,7 +53,7 @@ export default function RiskHeatmap({ className = '' }) {
               >
                 {cell.area}
               </div>
-              <div className="flex items-center justify-between text-[8px] text-base-400">
+              <div className="flex items-center justify-between text-[8px] text-slate-600">
                 <span>L:{cell.likelihood}%</span>
                 <span>I:{cell.impact}%</span>
               </div>

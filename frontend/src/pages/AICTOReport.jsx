@@ -17,6 +17,7 @@ const reportData = {
     { team: 'Payments', readiness: 72, load: 85, confidence: 'On Track', members: 8, availability: '2 blocked by upstream dependency', sprintVelocity: 48, capacityRemaining: 15, focusArea: 'Core retry logic + circuit breaker' },
     { team: 'Billing', readiness: 65, load: 60, confidence: 'Needs Support', members: 5, availability: '1 on leave until Jul 12', sprintVelocity: 32, capacityRemaining: 40, focusArea: 'Migration + compliance tokenization' },
     { team: 'Platform', readiness: 88, load: 30, confidence: 'Ready', members: 12, availability: 'All available, 3 on-call rotation', sprintVelocity: 72, capacityRemaining: 70, focusArea: 'Webhook DLQ + observability + rate limiting' },
+    { team: 'QA', readiness: 45, load: 90, confidence: 'Needs Support', members: 3, availability: '1 shared with other project', sprintVelocity: 18, capacityRemaining: 10, focusArea: 'E2E testing + load testing + chaos testing' },
   ],
   riskCategories: [
     { name: 'Payment Gateway Failure', severity: 'Critical', score: 92, mitigation: 'Active', service: 'Payment API', impact: 'All transactions fail', likelihood: 35, detectionTime: '30s', rto: '5 min' },
@@ -29,6 +30,8 @@ const reportData = {
     { name: 'Cache Invalidation Bug', severity: 'Low', score: 18, mitigation: 'Resolved', service: 'Cache Layer', impact: 'Stale data served', likelihood: 12, detectionTime: '10 min', rto: '20 min' },
     { name: 'Idempotency Key Collision', severity: 'Medium', score: 38, mitigation: 'In Progress', service: 'Payment API', impact: 'Duplicate charges', likelihood: 18, detectionTime: '5 min', rto: '10 min' },
     { name: 'Async Queue Backpressure', severity: 'Low', score: 15, mitigation: 'Resolved', service: 'Message Queue', impact: 'Processing delay', likelihood: 8, detectionTime: '30 min', rto: '1 hr' },
+    { name: 'Third-Party Provider Rate Limit', severity: 'Medium', score: 35, mitigation: 'Active', service: 'Payment API', impact: 'Transaction delays', likelihood: 40, detectionTime: '1 min', rto: '5 min' },
+    { name: 'Configuration Drift in Canary', severity: 'Low', score: 20, mitigation: 'Planned', service: 'Deployment', impact: 'Inconsistent behavior', likelihood: 15, detectionTime: '15 min', rto: '30 min' },
   ],
   riskByService: [
     { service: 'Payment API', score: 92, color: 'red' },
@@ -50,11 +53,13 @@ const reportData = {
     { risk: 'Secrets Rotation Gap', severity: 'Medium', strategy: 'Automate secrets rotation with HashiCorp Vault integration. 30-day rotation policy with expiry alerts and automatic invalidation.', owner: 'Eve Park', timeline: 'Sprint 2', reduction: 88, costImpact: 1200, successMetric: '100% secrets rotated within policy window' },
   ],
   costBreakdown: [
+    { phase: 'Kickoff & Requirements', hours: 6, pct: 4, cost: 618, deliverables: 'PRD refinement, stakeholder alignment doc' },
     { phase: 'Design & Planning', hours: 18, pct: 13, cost: 1854, deliverables: 'Architecture doc, sequence diagrams, risk register' },
     { phase: 'Core Implementation', hours: 52, pct: 38, cost: 5356, deliverables: 'Circuit breaker, retry logic, queue handlers' },
     { phase: 'Integration & Testing', hours: 36, pct: 26, cost: 3708, deliverables: 'Integration tests, E2E tests, chaos tests' },
     { phase: 'Security Review', hours: 18, pct: 13, cost: 1854, deliverables: 'Security audit report, penetration test results' },
     { phase: 'Deployment & Docs', hours: 12, pct: 9, cost: 1236, deliverables: 'Runbook, KB article, monitoring dashboards' },
+    { phase: 'Post-Launch Support', hours: 8, pct: 6, cost: 824, deliverables: 'Warranty period, incident response readiness' },
   ],
   monthlyProjection: [
     { month: 'Jul', savings: 0, cumulative: 0, events: 0 },
@@ -90,6 +95,8 @@ const reportData = {
     { name: 'Best Case', riskReduction: 85, roi: 420, cost: 11000, timeline: '5 weeks', probability: 20, savingsYear1: 3800000, riskScore: 25, confidence: 94 },
     { name: 'Expected', riskReduction: 68, roi: 320, cost: 14000, timeline: '6 weeks', probability: 60, savingsYear1: 2800000, riskScore: 68, confidence: 87 },
     { name: 'Worst Case', riskReduction: 45, roi: 180, cost: 22000, timeline: '9 weeks', probability: 20, savingsYear1: 1500000, riskScore: 82, confidence: 62 },
+    { name: 'Aggressive Skip', riskReduction: 30, roi: 120, cost: 8000, timeline: '3 weeks', probability: 15, savingsYear1: 900000, riskScore: 91, confidence: 45 },
+    { name: 'Phased Rollout', riskReduction: 75, roi: 280, cost: 16000, timeline: '8 weeks', probability: 10, savingsYear1: 2200000, riskScore: 35, confidence: 80 },
   ],
   technicalDebt: {
     currentDebtDays: 23, projectedDebtDays: 8, codeQuality: 72, testCoverage: 58, docScore: 44,
@@ -100,6 +107,9 @@ const reportData = {
       { area: 'Legacy webhook handler needs refactor', days: 5, severity: 'Medium', priority: 'P2', resolution: 'Refactor to use new async handler pattern' },
       { area: 'Hardcoded config values for timeouts', days: 3, severity: 'Low', priority: 'P3', resolution: 'Externalize to environment config' },
       { area: 'Deprecated HTTP client library usage', days: 1, severity: 'Low', priority: 'P3', resolution: 'Upgrade to latest major version' },
+    { area: 'Missing circuit breaker configuration validation', days: 2, severity: 'Medium', priority: 'P2', resolution: 'Add config schema validation tests' },
+    { area: 'Incomplete OpenAPI spec for retry endpoints', days: 1.5, severity: 'Low', priority: 'P3', resolution: 'Generate spec from code annotations' },
+    { area: 'Stale feature flags after rollout', days: 0.5, severity: 'Low', priority: 'P3', resolution: 'Add flag cleanup to launch checklist' },
     ],
   },
   deploymentConfig: {
@@ -112,6 +122,8 @@ const reportData = {
     { standard: 'SOC 2 Type II', status: 'Compliant', required: true, deadline: 'N/A', owner: 'Compliance', notes: 'Annual audit passed in Q2 2026' },
     { standard: 'GDPR Data Handling', status: 'Compliant', required: true, deadline: 'N/A', owner: 'Legal', notes: 'DPA in place with all processors' },
     { standard: 'CCPA Consumer Rights', status: 'Not Applicable', required: false, deadline: 'N/A', owner: 'Legal', notes: 'No California consumer data processed' },
+    { standard: 'ISO 27001', status: 'Compliant', required: true, deadline: 'N/A', owner: 'Security', notes: 'Certification renewed Q1 2026' },
+    { standard: 'HIPAA BA Agreement', status: 'Not Applicable', required: false, deadline: 'N/A', owner: 'Legal', notes: 'No PHI processed in payment flows' },
   ],
   securityFindings: [
     { finding: 'Payment token not encrypted at rest in retry queue', severity: 'Critical', fixEffort: '4h', status: 'Remediating', owner: 'Alice Chen', dueDate: 'Jul 5' },
@@ -119,11 +131,15 @@ const reportData = {
     { finding: 'Missing request validation on retry endpoint', severity: 'High', fixEffort: '3h', status: 'Remediating', owner: 'Bob Kumar', dueDate: 'Jul 3' },
     { finding: 'Rate limiter bypass possible via header manipulation', severity: 'Medium', fixEffort: '6h', status: 'Planned', owner: 'Platform', dueDate: 'Jul 10' },
     { finding: 'Verbose error messages in API responses exposing stack traces', severity: 'Low', fixEffort: '2h', status: 'Planned', owner: 'Payments', dueDate: 'Jul 12' },
+    { finding: 'Missing audit log for retry admin actions', severity: 'Medium', fixEffort: '4h', status: 'Planned', owner: 'Security', dueDate: 'Jul 15' },
+    { finding: 'TLS certificate expiration on webhook endpoint', severity: 'High', fixEffort: '1h', status: 'Remediated', owner: 'DevOps', dueDate: 'Jun 30' },
   ],
   environmentMatrix: [
     { env: 'Development', status: 'Ready', config: 'Latest commit', dataVolume: 'Synthetic test data', refreshRate: 'Daily', access: 'All engineers' },
     { env: 'Staging', status: 'Provisioning', config: 'Mirror prod (feat branch)', dataVolume: 'Anonymized prod copy', refreshRate: 'Weekly', access: 'Engineers + QA' },
     { env: 'Production', status: 'Live', config: 'Locked (change controlled)', dataVolume: '12M transactions/month', refreshRate: 'Real-time', access: 'On-call + SRE' },
+    { env: 'DR/Disaster Recovery', status: 'Standby', config: 'Async replica', dataVolume: 'Replicated', refreshRate: 'Continuous', access: 'SRE only' },
+    { env: 'Load Testing', status: 'On-demand', config: 'Ephemeral', dataVolume: 'Generated', refreshRate: 'Per test', access: 'QA + Performance' },
   ],
   communicationPlan: [
     { stakeholder: 'Engineering Team', channel: 'Slack #payment-retry channel', frequency: 'Daily standup at 9:30am', owner: 'Tech Lead', format: 'Async + sync' },
@@ -141,6 +157,9 @@ const reportData = {
     { resource: 'Platform engineers', allocated: 2, needed: 2, gap: 0, critical: false, recruiting: 'None needed' },
     { resource: 'QA engineers', allocated: 1, needed: 2, gap: 1, critical: false, recruiting: 'Contractor starting Jul 1' },
     { resource: 'DevOps engineers', allocated: 0.5, needed: 1, gap: 0.5, critical: false, recruiting: 'Part-time from infra team' },
+    { resource: 'Security engineers', allocated: 0.5, needed: 1, gap: 0.5, critical: false, recruiting: 'Security review only' },
+    { resource: 'Technical writers', allocated: 0, needed: 0.5, gap: 0.5, critical: false, recruiting: 'Shared with platform docs' },
+    { resource: 'SRE / On-call engineers', allocated: 2, needed: 2, gap: 0, critical: true, recruiting: 'Existing team covers rotation' },
   ],
   dependencyGraph: [
     { dependency: 'Payment gateway API key rotation by Security', status: 'Blocked', owner: 'Security', resolution: 'Jul 2', risk: 'High', criticalPath: true },
@@ -148,6 +167,10 @@ const reportData = {
     { dependency: 'Staging environment provisioned with prod config', status: 'Pending', owner: 'DevOps', resolution: 'Jul 8', risk: 'Low', criticalPath: false },
     { dependency: 'Change advisory board approval for production deployment', status: 'Scheduled', owner: 'Eve Park', resolution: 'Jul 22', risk: 'Low', criticalPath: true },
     { dependency: 'Load testing results meet SLO thresholds', status: 'Pending', owner: 'QA', resolution: 'Jul 15', risk: 'Low', criticalPath: false },
+    { dependency: 'Tokenization vault provisioning by Security', status: 'In Progress', owner: 'Security', resolution: 'Jul 10', risk: 'Medium', criticalPath: true },
+    { dependency: 'PagerDuty alert routing configuration for new retry alerts', status: 'Pending', owner: 'DevOps', resolution: 'Jul 18', risk: 'Low', criticalPath: false },
+    { dependency: 'Datadog dashboard creation for retry metrics', status: 'Pending', owner: 'Platform', resolution: 'Jul 16', risk: 'Low', criticalPath: false },
+    { dependency: 'Runbook review and approval by SRE team', status: 'Not Started', owner: 'SRE', resolution: 'Jul 20', risk: 'Low', criticalPath: false },
   ],
   monitoringAlerts: [
     { metric: 'Payment retry rate', threshold: '>5% of total payments', severity: 'Warning', response: 'Investigate within 15 min' },
@@ -157,6 +180,10 @@ const reportData = {
     { metric: 'End-to-end latency p99', threshold: '>500ms', severity: 'Warning', response: 'Triage with platform team' },
     { metric: 'Payment success rate', threshold: '<99.5%', severity: 'Critical', response: 'Immediate incident response' },
     { metric: 'DLQ reprocess rate', threshold: '<90% within 1hr', severity: 'Warning', response: 'Manual reprocess trigger' },
+    { metric: 'Canary error rate', threshold: '>1% above baseline', severity: 'Critical', response: 'Auto-rollback + page SRE' },
+    { metric: 'Memory usage per pod', threshold: '>80% for 5 min', severity: 'Warning', response: 'Investigate memory leak' },
+    { metric: 'Retry queue depth', threshold: '>1000 messages', severity: 'Warning', response: 'Scale consumer workers' },
+    { metric: 'Payment idempotency collision rate', threshold: '>0.01%', severity: 'Warning', response: 'Review idempotency key generation' },
   ],
 }
 
@@ -226,7 +253,7 @@ function RingGauge({ value, size = 80, stroke = 6, color = '#22c55e', label = ''
 }
 
 function StatusDot({ status }) {
-  const colors = { Complete: 'bg-emerald-500', 'In Progress': 'bg-amber-500', 'At Risk': 'bg-red-500', Pending: 'bg-slate-600', Live: 'bg-emerald-500', Ready: 'bg-emerald-500', Provisioning: 'bg-amber-500', Blocked: 'bg-red-500', Scheduled: 'bg-blue-500', Remediated: 'bg-emerald-500', Remediating: 'bg-amber-500', Planned: 'bg-slate-500', Compliant: 'bg-emerald-500', 'In Progress': 'bg-amber-500', 'Not Applicable': 'bg-slate-600', Warning: 'bg-yellow-500', Critical: 'bg-red-500' }
+  const colors = { Complete: 'bg-emerald-500', 'In Progress': 'bg-amber-500', 'At Risk': 'bg-red-500', Pending: 'bg-slate-600', Live: 'bg-emerald-500', Ready: 'bg-emerald-500', Provisioning: 'bg-amber-500', Blocked: 'bg-red-500', Scheduled: 'bg-blue-500', Remediated: 'bg-emerald-500', Remediating: 'bg-amber-500', Planned: 'bg-slate-500', Compliant: 'bg-emerald-500', 'Not Applicable': 'bg-slate-600', Warning: 'bg-yellow-500', Critical: 'bg-red-500' }
   return <span className={`h-1.5 w-1.5 rounded-full ${colors[status] || 'bg-slate-600'} inline-block`} />
 }
 

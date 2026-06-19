@@ -945,7 +945,7 @@ function HistoricalComparisonCard({ metric }) {
 export default function IncidentTimeMachine() {
   const [input, setInput] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
-  const [results, setResults] = useState(null)
+  const [results, setResults] = useState(mockResults)
   const [showPresets, setShowPresets] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState(-1)
   const [activeTimelineIdx, setActiveTimelineIdx] = useState(-1)
@@ -1591,17 +1591,7 @@ export default function IncidentTimeMachine() {
           )}
         </AnimatePresence>
 
-        {!results && !analyzing && (
-          <motion.div variants={item} className="text-center py-16">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.06] bg-gradient-to-br from-purple-500/10 to-cyan-500/10">
-              <svg className="h-10 w-10 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-white mb-1 tracking-wider uppercase">Ready to Navigate Time?</h3>
-            <p className="text-sm text-slate-600 max-w-md mx-auto font-mono">Enter a change or incident above to traverse the timeline and uncover historical patterns.</p>
-          </motion.div>
-        )}
+        
       </motion.div>
     </Layout>
   )

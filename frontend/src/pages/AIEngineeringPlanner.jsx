@@ -413,7 +413,7 @@ const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
 export default function AIEngineeringPlanner() {
   const [input, setInput] = useState('')
   const [planning, setPlanning] = useState(false)
-  const [plan, setPlan] = useState(null)
+  const [plan, setPlan] = useState(mockPlan)
   const [showPresets, setShowPresets] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState(-1)
   const inputRef = useRef(null)
@@ -440,94 +440,7 @@ export default function AIEngineeringPlanner() {
 
   useEffect(() => { setSelectedPreset(-1) }, [input])
 
-  if (!plan && !planning) {
-    return (
-      <Layout>
-        <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
-          <motion.div variants={item} className="flex items-start gap-5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-violet-500 shadow-lg shadow-violet-500/25">
-              <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-0.5">
-                <h1 className="text-3xl font-bold tracking-tight text-white">STRATEGIC PLANNING</h1>
-                <span className="rounded-full bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 text-[9px] font-semibold text-violet-400 tracking-wider uppercase">Pro</span>
-              </div>
-              <p className="text-sm text-slate-500">AI-Powered Engineering Planning Suite</p>
-            </div>
-          </motion.div>
-
-          <motion.div variants={item}>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-5">
-              <form onSubmit={e => { e.preventDefault(); generate(input) }}>
-                <div className="relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                  </svg>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={e => { setInput(e.target.value); setShowPresets(true) }}
-                    onFocus={() => setShowPresets(true)}
-                    onKeyDown={handleKey}
-                    placeholder="Describe a feature to plan..."
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 py-3.5 pl-11 pr-44 text-sm text-white placeholder-slate-600 outline-none focus:border-violet-500/40 transition-all"
-                    disabled={planning}
-                  />
-                  <div className="absolute inset-y-1.5 right-1.5 flex items-center gap-1">
-                    <button
-                      type="submit"
-                      disabled={planning || !input.trim()}
-                      className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-violet-400 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/20"
-                    >
-                      {planning ? (
-                        <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Generating</>
-                      ) : (
-                        <><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>Generate Plan</>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </form>
-              <AnimatePresence>
-                {showPresets && filtered.length > 0 && !planning && (
-                  <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="mt-2 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden">
-                    {filtered.map((s, i) => (
-                      <button key={s} type="button" className={`flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${i === selectedPreset ? 'bg-violet-500/10 text-violet-300' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white'}`} onClick={() => { setInput(s); setShowPresets(false); generate(s) }}>
-                        <svg className="h-3.5 w-3.5 shrink-0 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
-                        {s}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <div className="flex items-center gap-2 mt-3 overflow-x-auto pb-1">
-                <span className="text-[9px] text-slate-600 font-medium mr-1">Popular:</span>
-                {presets.slice(0, 4).map((p, i) => (
-                  <button key={i} type="button" onClick={() => { setInput(p); setShowPresets(false); generate(p) }} className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[10px] text-slate-400 hover:border-violet-500/30 hover:text-violet-300 transition-all whitespace-nowrap">
-                    {p}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div variants={item} className="text-center py-16">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-800 bg-slate-900/50">
-              <svg className="h-10 w-10 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-white mb-1">Transform feature requests into engineering plans</h3>
-            <p className="text-sm text-slate-600 max-w-md mx-auto">Enter a feature request above to generate a complete engineering plan with impact analysis, effort estimates, work items, and release readiness scoring.</p>
-          </motion.div>
-        </motion.div>
-      </Layout>
-    )
-  }
+  
 
   return (
     <Layout>
@@ -594,6 +507,62 @@ export default function AIEngineeringPlanner() {
                   <StatusBadge status={plan.impact.complexity === 'High' ? 'critical' : plan.impact.complexity === 'Medium' ? 'warning' : 'info'} label={plan.impact.complexity} />
                   <StatusBadge status="info" label={`${plan.effort.totalStoryPoints} pts`} />
                   <span className="text-[9px] text-slate-600 border border-slate-800 rounded px-2 py-1">{plan.effort.engineeringHours}h est.</span>
+                </div>
+              </motion.div>
+
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
+                  <form onSubmit={e => { e.preventDefault(); generate(input) }}>
+                    <div className="relative">
+                      <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                      </svg>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={input}
+                        onChange={e => { setInput(e.target.value); setShowPresets(true) }}
+                        onFocus={() => setShowPresets(true)}
+                        onKeyDown={handleKey}
+                        placeholder="Describe a feature to plan..."
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 py-3 pl-11 pr-44 text-sm text-white placeholder-slate-600 outline-none focus:border-violet-500/40 transition-all"
+                        disabled={planning}
+                      />
+                      <div className="absolute inset-y-1.5 right-1.5 flex items-center gap-1">
+                        <button
+                          type="submit"
+                          disabled={planning || !input.trim()}
+                          className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-violet-400 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/20"
+                        >
+                          {planning ? (
+                            <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Generating</>
+                          ) : (
+                            <><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>Generate Plan</>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <AnimatePresence>
+                    {showPresets && filtered.length > 0 && !planning && (
+                      <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="mt-2 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden">
+                        {filtered.map((s, i) => (
+                          <button key={s} type="button" className={`flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${i === selectedPreset ? 'bg-violet-500/10 text-violet-300' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white'}`} onClick={() => { setInput(s); setShowPresets(false); generate(s) }}>
+                            <svg className="h-3.5 w-3.5 shrink-0 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                            {s}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <div className="flex items-center gap-2 mt-3 overflow-x-auto pb-1">
+                    <span className="text-[9px] text-slate-600 font-medium mr-1">Popular:</span>
+                    {presets.slice(0, 4).map((p, i) => (
+                      <button key={i} type="button" onClick={() => { setInput(p); setShowPresets(false); generate(p) }} className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[10px] text-slate-400 hover:border-violet-500/30 hover:text-violet-300 transition-all whitespace-nowrap">
+                        {p}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
 

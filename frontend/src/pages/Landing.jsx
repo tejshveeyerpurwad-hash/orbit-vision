@@ -128,6 +128,14 @@ const statusMessages = [
   'Deployment approved: billing service v2.4.1 promoted to production',
   'Risk scan complete: 12 services analyzed, 0 critical issues',
   'Executive briefing: weekly engineering intelligence digest ready',
+  'System health check passed: all services operating within normal parameters',
+  'New deployment detected: payment service rolling out canary release',
+  'Incident analysis complete: root cause identified for cache invalidation bug',
+  'Risk score updated: auth service risk decreased from 72% to 65%',
+  'Knowledge Graph sync: 2 deprecated services removed from topology',
+  'Executive report: monthly engineering ROI analysis generated',
+  'Alert threshold adjusted: incident sensitivity calibrated for payment pipeline',
+  'Dependency scan: 4 new service connections discovered in auth domain',
 ]
 
 export default function Landing() {
@@ -461,6 +469,16 @@ export default function Landing() {
               animate={{ y: [0, -38, 0], opacity: [0.15, 0.55, 0.15] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1.85 }}
             />
+            <motion.div className="absolute top-[32%] left-[12%] h-2 w-2 rounded-full bg-cyan-500/10" animate={{ y: [0, -29, 0], opacity: [0.14, 0.48, 0.14] }} transition={{ duration: 7.1, repeat: Infinity, ease: 'easeInOut', delay: 4 }} />
+            <motion.div className="absolute bottom-[38%] right-[35%] h-3 w-3 rounded-full bg-violet-500/10" animate={{ y: [0, -37, 0], opacity: [0.18, 0.56, 0.18] }} transition={{ duration: 8.3, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }} />
+            <motion.div className="absolute top-[55%] right-[55%] h-2 w-2 rounded-full bg-brand/10" animate={{ y: [0, -33, 0], opacity: [0.12, 0.44, 0.12] }} transition={{ duration: 6.4, repeat: Infinity, ease: 'easeInOut', delay: 3.1 }} />
+            <motion.div className="absolute bottom-[12%] left-[35%] h-2.5 w-2.5 rounded-full bg-cyan-500/10" animate={{ y: [0, -41, 0], opacity: [0.16, 0.52, 0.16] }} transition={{ duration: 8.9, repeat: Infinity, ease: 'easeInOut', delay: 1.45 }} />
+            <motion.div className="absolute top-[78%] left-[60%] h-2 w-2 rounded-full bg-violet-500/10" animate={{ y: [0, -30, 0], opacity: [0.11, 0.47, 0.11] }} transition={{ duration: 6.7, repeat: Infinity, ease: 'easeInOut', delay: 3.6 }} />
+            <motion.div className="absolute top-[42%] right-[15%] h-3 w-3 rounded-full bg-brand/10" animate={{ y: [0, -39, 0], opacity: [0.17, 0.54, 0.17] }} transition={{ duration: 8.1, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} />
+            <motion.div className="absolute top-[62%] left-[42%] h-2 w-2 rounded-full bg-cyan-500/10" animate={{ y: [0, -27, 0], opacity: [0.13, 0.46, 0.13] }} transition={{ duration: 6.3, repeat: Infinity, ease: 'easeInOut', delay: 2.2 }} />
+            <motion.div className="absolute bottom-[42%] left-[52%] h-2.5 w-2.5 rounded-full bg-violet-500/10" animate={{ y: [0, -35, 0], opacity: [0.15, 0.5, 0.15] }} transition={{ duration: 7.6, repeat: Infinity, ease: 'easeInOut', delay: 0.85 }} />
+            <motion.div className="absolute top-[25%] right-[65%] h-2 w-2 rounded-full bg-brand/10" animate={{ y: [0, -28, 0], opacity: [0.1, 0.42, 0.1] }} transition={{ duration: 6.8, repeat: Infinity, ease: 'easeInOut', delay: 4.2 }} />
+            <motion.div className="absolute top-[88%] left-[15%] h-3 w-3 rounded-full bg-cyan-500/10" animate={{ y: [0, -43, 0], opacity: [0.19, 0.58, 0.19] }} transition={{ duration: 9.1, repeat: Infinity, ease: 'easeInOut', delay: 1.75 }} />
 
             <div className="absolute -left-40 -top-40 h-[800px] w-[800px] rounded-full bg-brand/[0.03] blur-3xl" />
             <div className="absolute -right-40 -bottom-40 h-[600px] w-[600px] rounded-full bg-violet-500/[0.02] blur-3xl" />
@@ -541,6 +559,17 @@ export default function Landing() {
                 <motion.circle cx={400} cy={400} r={2} fill="#7c3aed" animate={{ cx: [400, 550, 550, 400], cy: [400, 450, 450, 400] }} transition={{ duration: 6, repeat: Infinity, ease: 'linear' }} />
                 <motion.circle cx={350} cy={200} r={1.5} fill="#06b6d4" animate={{ cx: [350, 400, 400, 350], cy: [200, 100, 100, 200] }} transition={{ duration: 9, repeat: Infinity, ease: 'linear' }} />
                 <motion.circle cx={450} cy={350} r={1.5} fill="#4f46e5" animate={{ cx: [450, 400, 400, 450], cy: [350, 400, 400, 350] }} transition={{ duration: 8, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={350} cy={480} r={1.5} fill="#06b6d4" animate={{ cx: [350, 400, 400, 350], cy: [480, 400, 400, 480] }} transition={{ duration: 6.5, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={480} cy={120} r={1.5} fill="#7c3aed" animate={{ cx: [480, 400, 400, 480], cy: [120, 100, 100, 120] }} transition={{ duration: 7, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={250} cy={450} r={1.5} fill="#4f46e5" animate={{ cx: [250, 300, 300, 250], cy: [450, 300, 300, 450] }} transition={{ duration: 9, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={550} cy={450} r={1.5} fill="#06b6d4" animate={{ cx: [550, 500, 500, 550], cy: [450, 280, 280, 450] }} transition={{ duration: 7.5, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={300} cy={120} r={1.5} fill="#7c3aed" animate={{ cx: [300, 200, 200, 300], cy: [120, 150, 150, 120] }} transition={{ duration: 8, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={500} cy={180} r={1.5} fill="#4f46e5" animate={{ cx: [500, 400, 400, 500], cy: [180, 100, 100, 180] }} transition={{ duration: 7.2, repeat: Infinity, ease: 'linear' }} />
+                <motion.circle cx={250} cy={220} r={1.5} fill="#06b6d4" animate={{ cx: [250, 200, 200, 250], cy: [220, 150, 150, 220] }} transition={{ duration: 8.5, repeat: Infinity, ease: 'linear' }} />
+                <line x1={350} y1={480} x2={250} y2={450} stroke="#4f46e5" strokeWidth={0.3} opacity={0.12} />
+                <line x1={480} y1={120} x2={300} y2={120} stroke="#7c3aed" strokeWidth={0.3} opacity={0.12} />
+                <line x1={500} y1={180} x2={480} y2={120} stroke="#06b6d4" strokeWidth={0.3} opacity={0.1} />
+                <line x1={250} y1={220} x2={300} y2={120} stroke="#4f46e5" strokeWidth={0.3} opacity={0.1} />
               </svg>
             </div>
           </div>
@@ -609,6 +638,38 @@ export default function Landing() {
             </div>
           </div>
         </section>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="border-b border-white/[0.04] py-3 bg-slate-900/20"
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+              <span className="text-[9px] font-medium text-slate-600 uppercase tracking-wider">Trusted by engineering teams at</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Vercel</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Stripe</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Linear</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Figma</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Railway</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Supabase</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Cal.com</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">Netlify</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">PlanetScale</span>
+              <span className="text-[9px] text-slate-700">|</span>
+              <span className="text-[10px] text-slate-500 font-semibold">WorkOS</span>
+            </div>
+          </div>
+        </motion.div>
 
         <div className="border-y border-white/[0.04] overflow-hidden bg-slate-900/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2.5">
@@ -1211,6 +1272,89 @@ export default function Landing() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div variants={fadeUp} className="mx-auto max-w-2xl text-center mb-6">
               <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/[0.06] px-4 py-1.5 text-xs font-medium text-brand-light">
+                Platform Integrations
+              </div>
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">
+                Connect your{' '}
+                <span className="bg-gradient-to-r from-brand via-violet-400 to-cyan-400 bg-clip-text text-transparent">entire stack</span>
+              </h2>
+              <p className="mt-2 text-sm text-slate-500">Seamless integration with your existing tools and infrastructure</p>
+            </motion.div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+              <motion.div variants={fadeUpSmall} className="group rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 text-center hover:border-white/[0.12] transition-all duration-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/[0.1] text-blue-400 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.007-1.875 2.25-1.875s2.25.84 2.25 1.875c0 .369-.128.713-.349 1.003-.215.283-.401.604-.401.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.959.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+                  </svg>
+                </div>
+                <div className="text-[11px] font-semibold text-white">GitLab</div>
+                <div className="text-[8px] text-slate-600 mt-0.5">CI/CD & Repos</div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSmall} className="group rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 text-center hover:border-white/[0.12] transition-all duration-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/[0.1] text-cyan-400 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                  </svg>
+                </div>
+                <div className="text-[11px] font-semibold text-white">Datadog</div>
+                <div className="text-[8px] text-slate-600 mt-0.5">Monitoring</div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSmall} className="group rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 text-center hover:border-white/[0.12] transition-all duration-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/[0.1] text-violet-400 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253" />
+                  </svg>
+                </div>
+                <div className="text-[11px] font-semibold text-white">Slack</div>
+                <div className="text-[8px] text-slate-600 mt-0.5">Notifications</div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSmall} className="group rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 text-center hover:border-white/[0.12] transition-all duration-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/[0.1] text-emerald-400 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
+                  </svg>
+                </div>
+                <div className="text-[11px] font-semibold text-white">PagerDuty</div>
+                <div className="text-[8px] text-slate-600 mt-0.5">Incident Mgmt</div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSmall} className="group rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 text-center hover:border-white/[0.12] transition-all duration-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/[0.1] text-amber-400 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
+                  </svg>
+                </div>
+                <div className="text-[11px] font-semibold text-white">AWS</div>
+                <div className="text-[8px] text-slate-600 mt-0.5">Cloud Infrastructure</div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSmall} className="group rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 text-center hover:border-white/[0.12] transition-all duration-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/[0.1] text-rose-400 mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div className="text-[11px] font-semibold text-white">Sentry</div>
+                <div className="text-[8px] text-slate-600 mt-0.5">Error Tracking</div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={stagger}
+          className="border-t border-white/[0.04] py-10 sm:py-12"
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <motion.div variants={fadeUp} className="mx-auto max-w-2xl text-center mb-6">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/[0.06] px-4 py-1.5 text-xs font-medium text-brand-light">
                 Live Status Wall
               </div>
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">
@@ -1559,6 +1703,28 @@ export default function Landing() {
                 <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
                   Orbit Foresight predicts failures before production.
                 </h2>
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="h-3.5 w-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z" />
+                    </svg>
+                    <span className="text-[10px] text-emerald-500 font-semibold">94% Accuracy</span>
+                  </div>
+                  <div className="h-3 w-px bg-white/[0.06]" />
+                  <div className="flex items-center gap-1.5">
+                    <svg className="h-3.5 w-3.5 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-[10px] text-cyan-500 font-semibold">45min MTTR</span>
+                  </div>
+                  <div className="h-3 w-px bg-white/[0.06]" />
+                  <div className="flex items-center gap-1.5">
+                    <svg className="h-3.5 w-3.5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                    <span className="text-[10px] text-violet-500 font-semibold">320% ROI</span>
+                  </div>
+                </div>
                 <p className="text-sm text-slate-500 max-w-lg mx-auto mb-6">
                   Identifies root causes instantly. Maps blast radius automatically. Generates engineering action plans.
                   Transforms engineering operations into executive intelligence.

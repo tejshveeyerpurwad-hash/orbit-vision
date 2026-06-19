@@ -4,6 +4,9 @@ import { useState } from 'react'
 const links = [
   { to: '/', label: 'Home' },
   { to: '/dashboard', label: 'Dashboard' },
+  { to: '/intelligence', label: 'Intelligence' },
+  { to: '/knowledge-graph', label: 'Knowledge Graph' },
+  { to: '/analytics', label: 'Analytics' },
 ]
 
 export default function Navbar() {

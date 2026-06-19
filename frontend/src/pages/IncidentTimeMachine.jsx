@@ -4,60 +4,122 @@ import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 
 const presets = [
-  'Add payment retry support',
-  'Update billing invoice schema',
-  'Refactor auth session handler',
-  'Add webhook idempotency keys',
-  'Migrate database connection pool',
-  'Deploy new API gateway rate limiter',
+  'Deploy new payment gateway with retry logic',
+  'Update billing invoice schema migration',
+  'Refactor auth session handler timeout',
+  'Add webhook idempotency key generation',
+  'Migrate database connection pool config',
+  'Deploy new API gateway rate limiter rules',
 ]
+
+const timelineHistory = [
+  { date: '2024-06-01', title: 'Payment pipeline outage', severity: 'critical', description: 'Complete payment flow blocked for 45 minutes', duration: '45min', services: ['Payment Service', 'API Gateway'] },
+  { date: '2024-05-28', title: 'Billing worker OOM cascade', severity: 'critical', description: '15K invoices delayed by 3 hours', duration: '3hr', services: ['Billing Worker', 'Database'] },
+  { date: '2024-05-15', title: 'Webhook delivery failure', severity: 'high', description: '2% merchants affected by duplicate events', duration: '2hr', services: ['Webhook Service', 'Event Bus'] },
+  { date: '2024-05-02', title: 'Auth session token leak', severity: 'high', description: 'Session data exposed to unauthorized users', duration: '1hr', services: ['Auth Service', 'Redis'] },
+  { date: '2024-04-20', title: 'Rate limiter misconfiguration', severity: 'medium', description: 'Legitimate traffic blocked for 15 minutes', duration: '30min', services: ['API Gateway'] },
+  { date: '2024-04-10', title: 'Database connection pool exhaustion', severity: 'critical', description: 'All read queries failed for 2.5 hours', duration: '2.5hr', services: ['Database', 'API Service'] },
+  { date: '2024-03-28', title: 'Cache invalidation bug', severity: 'medium', description: 'Stale data served across all regions', duration: '45min', services: ['Cache Layer', 'API Service'] },
+  { date: '2024-03-15', title: 'Deployment rollback failure', severity: 'high', description: 'Rollback delayed by 90 minutes', duration: '1.5hr', services: ['CI/CD Pipeline'] },
+]
+
+const deployments = [
+  { service: 'payment-api', version: 'v2.1.0', env: 'production', date: 'Jun 1', outcome: 'rolled-back', risk: 87, metricsBefore: { errorRate: 0.1, latency: 42, throughput: 1200 }, metricsAfter: { errorRate: 2.3, latency: 350, throughput: 300 } },
+  { service: 'billing-worker', version: 'v1.8.3', env: 'production', date: 'May 28', outcome: 'rolled-back', risk: 92, metricsBefore: { errorRate: 0.3, latency: 65, throughput: 800 }, metricsAfter: { errorRate: 4.1, latency: 420, throughput: 150 } },
+  { service: 'webhook-gateway', version: 'v3.0.1', env: 'staging', date: 'May 22', outcome: 'failed', risk: 45, metricsBefore: { errorRate: 0.5, latency: 55, throughput: 600 }, metricsAfter: { errorRate: 1.8, latency: 89, throughput: 580 } },
+  { service: 'auth-service', version: 'v4.2.0', env: 'production', date: 'May 2', outcome: 'success', risk: 34, metricsBefore: { errorRate: 0.8, latency: 120, throughput: 2000 }, metricsAfter: { errorRate: 0.2, latency: 38, throughput: 2400 } },
+  { service: 'api-gateway', version: 'v5.0.0', env: 'production', date: 'Apr 20', outcome: 'rolled-back', risk: 73, metricsBefore: { errorRate: 0.4, latency: 28, throughput: 3000 }, metricsAfter: { errorRate: 3.2, latency: 95, throughput: 1800 } },
+  { service: 'cache-layer', version: 'v2.3.1', env: 'staging', date: 'Mar 28', outcome: 'success', risk: 22, metricsBefore: { errorRate: 0.6, latency: 15, throughput: 5000 }, metricsAfter: { errorRate: 0.1, latency: 8, throughput: 5500 } },
+]
+
+const replays = [
+  {
+    title: 'Payment Pipeline Outage', date: 'Jun 1, 2024', duration: '45min', severity: 'critical',
+    steps: [
+      { time: '14:00', action: 'Deploy v2.1.0 to production', type: 'Trigger' },
+      { time: '14:02', action: 'Payment success rate drops below 95%', type: 'Detection' },
+      { time: '14:03', action: 'PagerDuty alert fired — on-call notified', type: 'Alert' },
+      { time: '14:06', action: 'Engineer identifies retry queue saturation', type: 'Response' },
+      { time: '14:15', action: 'Deploy circuit breaker with exponential backoff', type: 'Mitigation' },
+      { time: '14:45', action: 'Pipeline at 100% success, incident resolved', type: 'Resolution' },
+    ],
+  },
+  {
+    title: 'Billing Worker OOM Cascade', date: 'May 28, 2024', duration: '3hr', severity: 'critical',
+    steps: [
+      { time: '08:00', action: 'Monthly billing cycle initiates batch processing', type: 'Trigger' },
+      { time: '08:05', action: 'Database returns slow responses under load', type: 'Detection' },
+      { time: '08:07', action: 'Memory usage alert fires at 80% heap', type: 'Alert' },
+      { time: '08:10', action: 'Retry queue grows unbounded, heap at 95%', type: 'Response' },
+      { time: '08:15', action: 'Worker OOM killed, all jobs fail', type: 'Mitigation' },
+      { time: '11:00', action: 'Memory limits configured, jobs reprocessed', type: 'Resolution' },
+    ],
+  },
+  {
+    title: 'Webhook Idempotency Failure', date: 'Apr 28, 2024', duration: '2hr', severity: 'high',
+    steps: [
+      { time: '09:30', action: 'Network blip triggers webhook retries for 500 merchants', type: 'Trigger' },
+      { time: '09:31', action: 'Duplicate events detected in audit logs', type: 'Detection' },
+      { time: '09:35', action: 'Data inconsistency alert raised by monitoring', type: 'Alert' },
+      { time: '09:45', action: 'Engineering team begins investigation', type: 'Response' },
+      { time: '10:15', action: 'Idempotency keys generated and deployed', type: 'Mitigation' },
+      { time: '11:30', action: 'Dedup window confirmed, all systems normal', type: 'Resolution' },
+    ],
+  },
+]
+
+const evolution = [
+  { month: 'Jan', risk: 45 },
+  { month: 'Feb', risk: 52 },
+  { month: 'Mar', risk: 68 },
+  { month: 'Apr', risk: 81 },
+  { month: 'May', risk: 73 },
+  { month: 'Jun', risk: 59 },
+]
+
+const patternSparklines = {
+  'Retry queue overflow': [3, 5, 8, 12, 11, 12],
+  'Memory exhaustion in workers': [2, 4, 6, 8, 7, 8],
+  'Missing circuit breaker pattern': [1, 2, 3, 5, 6, 6],
+  'Database connection leaks': [1, 2, 3, 4, 3, 2],
+  'Race conditions in session handlers': [1, 2, 3, 4, 5, 5],
+  'Insufficient monitoring coverage': [6, 7, 8, 9, 8, 7],
+}
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } }
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
-
-const heatmapGrid = [
-  [2,3,4,4,5,5,4,3,2,2,3,4,5,5,4,3,2,2,3,4,4,3,2,1],
-  [2,2,3,4,5,5,5,4,3,3,4,5,5,5,4,3,2,2,3,4,4,3,2,1],
-  [1,2,3,3,4,5,5,4,3,3,4,5,5,4,3,2,2,3,3,4,3,2,1,1],
-  [2,2,3,4,4,4,4,3,2,2,3,4,4,4,3,2,1,2,3,3,3,2,1,0],
-  [3,3,4,5,5,5,4,3,2,3,4,5,5,4,3,2,2,3,3,4,4,3,2,1],
-  [1,1,1,2,2,2,2,1,1,1,1,2,2,2,1,1,1,1,2,2,2,1,1,0],
-  [0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,1,1,1,0,0,0],
-]
 
 const mockResults = {
   incidentProbability: 82,
   confidenceScore: 91,
   severity: 'high',
   summaryStats: [
-    { label: 'Historical Incidents Analyzed', value: 847, color: '#22c55e' },
-    { label: 'Failure Patterns Detected', value: 6, color: '#f59e0b' },
-    { label: 'Incidents Prevented YTD', value: 23, color: '#3b82f6' },
-    { label: 'Avg Time Travel Accuracy', value: 94, color: '#a855f7', suffix: '%' },
+    { label: 'Timelines Analyzed', value: 847, color: '#a855f7', suffix: '' },
+    { label: 'Incidents Replayed', value: 156, color: '#22d3ee', suffix: '' },
+    { label: 'Patterns Detected', value: 23, color: '#f59e0b', suffix: '' },
+    { label: 'Accuracy Rate', value: 94.2, color: '#22c55e', suffix: '%' },
   ],
   timeline: [
     { date: '2024-06-01', title: 'Payment pipeline outage', severity: 'critical', duration: '45min', impact: 'All payment flows blocked', services: ['Payment Service', 'API Gateway'], rootCause: 'Missing circuit breaker' },
     { date: '2024-05-28', title: 'Billing worker OOM cascade', severity: 'critical', duration: '3hr', impact: '15K invoices delayed', services: ['Billing Worker', 'Database'], rootCause: 'Unbounded retry queue' },
     { date: '2024-05-15', title: 'Webhook delivery failure', severity: 'high', duration: '2hr', impact: '2% merchants affected', services: ['Webhook Service', 'Event Bus'], rootCause: 'Missing idempotency keys' },
-    { date: '2024-05-02', title: 'Auth session token leak', severity: 'high', duration: '1hr', impact: 'Session data exposed to unauthorized users', services: ['Auth Service', 'Redis'], rootCause: 'Missing TTL on session tokens' },
-    { date: '2024-04-20', title: 'Rate limiter misconfiguration', severity: 'medium', duration: '30min', impact: 'Legitimate traffic blocked for 15min', services: ['API Gateway'], rootCause: 'Incorrect rate limit threshold' },
-    { date: '2024-04-10', title: 'Database connection pool exhaustion', severity: 'critical', duration: '2.5hr', impact: 'All read queries failed for 2.5 hours', services: ['Database', 'API Service'], rootCause: 'Connection leak in ORM layer' },
-    { date: '2024-03-28', title: 'Cache invalidation bug', severity: 'medium', duration: '45min', impact: 'Stale data served across all regions', services: ['Cache Layer', 'API Service'], rootCause: 'Missing cache key prefix' },
+    { date: '2024-05-02', title: 'Auth session token leak', severity: 'high', duration: '1hr', impact: 'Session data exposed', services: ['Auth Service', 'Redis'], rootCause: 'Missing TTL on session tokens' },
+    { date: '2024-04-20', title: 'Rate limiter misconfiguration', severity: 'medium', duration: '30min', impact: 'Legitimate traffic blocked', services: ['API Gateway'], rootCause: 'Incorrect rate limit threshold' },
+    { date: '2024-04-10', title: 'Database connection pool exhaustion', severity: 'critical', duration: '2.5hr', impact: 'All read queries failed', services: ['Database', 'API Service'], rootCause: 'Connection leak in ORM layer' },
+    { date: '2024-03-28', title: 'Cache invalidation bug', severity: 'medium', duration: '45min', impact: 'Stale data served across regions', services: ['Cache Layer', 'API Service'], rootCause: 'Missing cache key prefix' },
     { date: '2024-03-15', title: 'Deployment rollback failure', severity: 'high', duration: '1.5hr', impact: 'Rollback delayed by 90 minutes', services: ['CI/CD Pipeline'], rootCause: 'Missing rollback validation step' },
   ],
   patterns: [
-    { name: 'Retry queue overflow', frequency: 12, severityDist: { critical: 3, high: 5, medium: 4 }, firstSeen: 'Jan 2024', lastSeen: 'Jun 2024', status: 'monitoring' },
-    { name: 'Memory exhaustion in workers', frequency: 8, severityDist: { critical: 4, high: 3, medium: 1 }, firstSeen: 'Feb 2024', lastSeen: 'Jun 2024', status: 'monitoring' },
-    { name: 'Missing circuit breaker pattern', frequency: 6, severityDist: { critical: 5, high: 1, medium: 0 }, firstSeen: 'Mar 2024', lastSeen: 'Jun 2024', status: 'active' },
-    { name: 'Database connection leaks', frequency: 4, severityDist: { critical: 2, high: 1, medium: 1 }, firstSeen: 'Apr 2024', lastSeen: 'May 2024', status: 'mitigated' },
-    { name: 'Race conditions in session handlers', frequency: 5, severityDist: { critical: 1, high: 3, medium: 1 }, firstSeen: 'Mar 2024', lastSeen: 'Jul 2024', status: 'active' },
-    { name: 'Insufficient monitoring coverage', frequency: 9, severityDist: { critical: 0, high: 4, medium: 5 }, firstSeen: 'Jan 2024', lastSeen: 'Jun 2024', status: 'active' },
+    { name: 'Retry queue overflow', frequency: 12, severityDist: { critical: 3, high: 5, medium: 4 }, firstSeen: 'Jan 2024', lastSeen: 'Jun 2024', status: 'monitoring', trend: 'up', confidence: 87 },
+    { name: 'Memory exhaustion in workers', frequency: 8, severityDist: { critical: 4, high: 3, medium: 1 }, firstSeen: 'Feb 2024', lastSeen: 'Jun 2024', status: 'monitoring', trend: 'stable', confidence: 82 },
+    { name: 'Missing circuit breaker pattern', frequency: 6, severityDist: { critical: 5, high: 1, medium: 0 }, firstSeen: 'Mar 2024', lastSeen: 'Jun 2024', status: 'active', trend: 'up', confidence: 94 },
+    { name: 'Database connection leaks', frequency: 4, severityDist: { critical: 2, high: 1, medium: 1 }, firstSeen: 'Apr 2024', lastSeen: 'May 2024', status: 'mitigated', trend: 'down', confidence: 79 },
+    { name: 'Race conditions in session handlers', frequency: 5, severityDist: { critical: 1, high: 3, medium: 1 }, firstSeen: 'Mar 2024', lastSeen: 'Jul 2024', status: 'active', trend: 'up', confidence: 91 },
+    { name: 'Insufficient monitoring coverage', frequency: 9, severityDist: { critical: 0, high: 4, medium: 5 }, firstSeen: 'Jan 2024', lastSeen: 'Jun 2024', status: 'active', trend: 'down', confidence: 76 },
   ],
   rootCauses: [
     {
-      id: 'RCA-001',
-      title: 'Payment Retry Chain Collapse',
-      severity: 'critical',
+      id: 'RCA-001', title: 'Payment Retry Chain Collapse', severity: 'critical',
       trigger: 'Downstream payment gateway returns 503 during peak load',
       failure: 'Missing circuit breaker allows unbounded retries, saturating all worker threads',
       impact: 'Complete payment pipeline outage for 45 minutes, $120K revenue loss',
@@ -71,11 +133,10 @@ const mockResults = {
         { time: 'T+45min', event: 'Circuit breaker deployed, recovery starts' },
       ],
       lessons: 'All retry loops must implement circuit breaker pattern. Add retry queue monitoring alerts at 80% capacity.',
+      prevention: 'Implement circuit breaker in all external service calls with max 3 retries and exponential backoff.',
     },
     {
-      id: 'RCA-002',
-      title: 'Billing Worker OOM Cascade',
-      severity: 'critical',
+      id: 'RCA-002', title: 'Billing Worker OOM Cascade', severity: 'critical',
       trigger: 'Monthly billing cycle triggers batch processing of 50K invoices',
       failure: 'Unbounded retry mechanism exhausts heap memory, causing OOM kills',
       impact: '15K invoices delayed by 3 hours, SLA breach for 12 enterprise customers',
@@ -89,11 +150,10 @@ const mockResults = {
         { time: 'T+3hr', event: 'Memory limits configured, jobs reprocessed' },
       ],
       lessons: 'Set bounded retry queues with memory limits. Implement circuit breaker for database calls under load.',
+      prevention: 'Add memory limit enforcement to all worker processes with pre-configured heap thresholds.',
     },
     {
-      id: 'RCA-003',
-      title: 'Webhook Idempotency Failure',
-      severity: 'high',
+      id: 'RCA-003', title: 'Webhook Idempotency Failure', severity: 'high',
       trigger: 'Network blip causes webhook delivery retries for 500 merchants',
       failure: 'Missing idempotency keys result in duplicate event processing',
       impact: '2% merchants received duplicate notifications, data inconsistency in audit logs',
@@ -107,6 +167,7 @@ const mockResults = {
         { time: 'T+2hr', event: 'Idempotency keys deployed, dedup fixed' },
       ],
       lessons: 'All webhook handlers must enforce idempotency. Add dedup validation to event pipeline.',
+      prevention: 'Generate idempotency keys for all webhook deliveries with 24-hour deduplication window.',
     },
   ],
   recoveryTimeline: [
@@ -138,73 +199,18 @@ const mockResults = {
   ],
 }
 
-function AnimatedGauge({ value, label, sub, color, delay = 300 }) {
-  const [pct, setPct] = useState(0)
-  useEffect(() => {
-    const t = setTimeout(() => setPct(value), delay)
-    return () => clearTimeout(t)
-  }, [value, delay])
-
-  const circumference = Math.PI * 56
-  const offset = circumference - (pct / 100) * circumference
-
-  return (
-    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 backdrop-blur-xl hover:border-white/[0.12] transition-all duration-300">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-medium text-slate-500 tracking-wide uppercase">{label}</span>
-        {sub && <span className="text-[10px] text-slate-600">{sub}</span>}
-      </div>
-      <div className="flex flex-col items-center py-3">
-        <svg className="w-32 h-32 -rotate-90" viewBox="0 0 128 128">
-          <circle cx="64" cy="64" r="56" fill="none" stroke="#1e293b" strokeWidth="10" />
-          <circle
-            cx="64" cy="64" r="56" fill="none"
-            stroke={color} strokeWidth="10" strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            className="transition-all duration-1000 ease-out"
-          />
-        </svg>
-        <div className="relative -mt-[68px]">
-          <span className="text-3xl font-bold text-white">{pct}<span className="text-lg text-slate-500">%</span></span>
-        </div>
-      </div>
-    </div>
-  )
+const severityColor = {
+  critical: { border: 'border-red-500/30', bg: 'bg-red-500/[0.04]', dot: 'bg-red-500', badge: 'bg-red-500/10 text-red-400 border-red-500/20', text: 'text-red-400', glow: '#ef4444' },
+  high: { border: 'border-orange-500/30', bg: 'bg-orange-500/[0.04]', dot: 'bg-orange-500', badge: 'bg-orange-500/10 text-orange-400 border-orange-500/20', text: 'text-orange-400', glow: '#f97316' },
+  medium: { border: 'border-yellow-500/30', bg: 'bg-yellow-500/[0.04]', dot: 'bg-yellow-500', badge: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', text: 'text-yellow-400', glow: '#eab308' },
 }
 
-function AnimatedScore({ value, label, color, delay = 400 }) {
-  const [w, setW] = useState(0)
-  useEffect(() => {
-    const t = setTimeout(() => setW(value), delay)
-    return () => clearTimeout(t)
-  }, [value, delay])
-
-  return (
-    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 backdrop-blur-xl">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-medium text-slate-500">{label}</span>
-        <span className="text-lg font-bold" style={{ color }}>{value}%</span>
-      </div>
-      <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${w}%` }}
-          transition={{ duration: 1, ease: 'easeOut', delay: delay / 1000 }}
-          className="h-full rounded-full"
-          style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}40` }}
-        />
-      </div>
-    </div>
-  )
-}
-
-function AnimatedStatCard({ value, label, color, delay = 200, suffix = '' }) {
+function AnimatedStatCard({ value, label, color, delay = 200 }) {
   const [count, setCount] = useState(0)
   useEffect(() => {
     const timer = setTimeout(() => {
       let current = 0
-      const step = Math.max(1, Math.ceil(value / 30))
+      const step = Math.max(0.1, value / 30)
       const interval = setInterval(() => {
         current += step
         if (current >= value) {
@@ -223,28 +229,379 @@ function AnimatedStatCard({ value, label, color, delay = 200, suffix = '' }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: delay / 1000 + 0.3 }}
-      className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 backdrop-blur-xl hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300"
+      className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 backdrop-blur-xl hover:border-purple-500/30 hover:bg-white/[0.04] transition-all duration-300 group"
     >
-      <p className="text-[11px] font-medium text-slate-500 tracking-wide uppercase mb-1">{label}</p>
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-[11px] font-mono font-medium text-slate-500 tracking-wide uppercase">{label}</p>
+        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+        </div>
+      </div>
       <div className="flex items-baseline gap-1">
-        <span className="text-3xl font-bold tracking-tight" style={{ color }}>{count}{suffix}</span>
+        <span className="text-3xl font-bold tracking-tight tabular-nums" style={{ color }}>
+          {label.includes('Rate') ? count.toFixed(1) : Math.floor(count)}{label.includes('Rate') ? '' : ''}
+        </span>
+        {label.includes('Rate') && <span className="text-lg text-slate-500" style={{ color }}>%</span>}
+      </div>
+      <div className="mt-3 h-1 rounded-full bg-slate-800 overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${(count / (label.includes('Rate') ? 100 : value > 500 ? value : 1000)) * 100}%` }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="h-full rounded-full"
+          style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}40` }}
+        />
       </div>
     </motion.div>
   )
 }
 
-const severityColor = {
-  critical: { border: 'border-red-500/30', bg: 'bg-red-500/[0.04]', dot: 'bg-red-500', badge: 'bg-red-500/10 text-red-400 border-red-500/20', text: 'text-red-400' },
-  high: { border: 'border-orange-500/30', bg: 'bg-orange-500/[0.04]', dot: 'bg-orange-500', badge: 'bg-orange-500/10 text-orange-400 border-orange-500/20', text: 'text-orange-400' },
-  medium: { border: 'border-yellow-500/30', bg: 'bg-yellow-500/[0.04]', dot: 'bg-yellow-500', badge: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', text: 'text-yellow-400' },
+function Sparkline({ data, color = '#a855f7', height = 24, width = 80 }) {
+  if (!data || data.length < 2) return null
+  const max = Math.max(...data)
+  const min = Math.min(...data)
+  const range = max - min || 1
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * width
+    const y = height - ((v - min) / range) * (height - 4) - 2
+    return `${x},${y}`
+  }).join(' ')
+  return (
+    <svg width={width} height={height} className="overflow-visible">
+      <polyline fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" points={points} />
+      {data.map((v, i) => {
+        const x = (i / (data.length - 1)) * width
+        const y = height - ((v - min) / range) * (height - 4) - 2
+        return <circle key={i} cx={x} cy={y} r="1.5" fill={color} />
+      })}
+    </svg>
+  )
 }
 
-function getHeatColor(val) {
-  const scale = ['#1e293b', '#064e3b', '#059669', '#ca8a04', '#ea580c', '#dc2626']
-  return scale[Math.min(val, 5)]
+function WormholeAnimation() {
+  return (
+    <div className="relative w-full h-32 my-6 overflow-hidden rounded-xl border border-white/[0.04] bg-slate-950/50">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <svg className="w-24 h-24 animate-spin-slow" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="ring1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#a855f7" />
+              <stop offset="50%" stopColor="#22d3ee" />
+              <stop offset="100%" stopColor="#d946ef" />
+            </linearGradient>
+            <linearGradient id="ring2" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#22d3ee" />
+              <stop offset="50%" stopColor="#d946ef" />
+              <stop offset="100%" stopColor="#a855f7" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="url(#ring1)" strokeWidth="1" opacity="0.6" className="animate-spin-reverse" style={{ transformOrigin: 'center' }} />
+          <circle cx="50" cy="50" r="35" fill="none" stroke="url(#ring2)" strokeWidth="1.5" opacity="0.5" className="animate-spin" style={{ transformOrigin: 'center' }} />
+          <circle cx="50" cy="50" r="25" fill="none" stroke="url(#ring1)" strokeWidth="2" opacity="0.4" className="animate-spin-reverse" style={{ transformOrigin: 'center' }} />
+          <circle cx="50" cy="50" r="15" fill="none" stroke="url(#ring2)" strokeWidth="2.5" opacity="0.3" className="animate-spin" style={{ transformOrigin: 'center' }} />
+          <circle cx="50" cy="50" r="6" fill="none" stroke="#22d3ee" strokeWidth="3" opacity="0.2" className="animate-pulse" />
+        </svg>
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/5 to-transparent" />
+    </div>
+  )
 }
 
-const tabs = ['Timeline', 'Patterns', 'Root Causes', 'Heatmap', 'Prevention']
+function DeploymentCard({ deploy, index }) {
+  const [showComparison, setShowComparison] = useState(false)
+  const outcomeColors = {
+    'rolled-back': { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/20' },
+    failed: { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/20' },
+    success: { bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20' },
+  }
+  const oc = outcomeColors[deploy.outcome] || outcomeColors.success
+
+  const metrics = [
+    { label: 'Error Rate', before: `${deploy.metricsBefore.errorRate}%`, after: `${deploy.metricsAfter.errorRate}%`, beforeVal: deploy.metricsBefore.errorRate, afterVal: deploy.metricsAfter.errorRate },
+    { label: 'Latency', before: `${deploy.metricsBefore.latency}ms`, after: `${deploy.metricsAfter.latency}ms`, beforeVal: deploy.metricsBefore.latency, afterVal: deploy.metricsAfter.latency },
+    { label: 'Throughput', before: `${deploy.metricsBefore.throughput}/s`, after: `${deploy.metricsAfter.throughput}/s`, beforeVal: deploy.metricsBefore.throughput, afterVal: deploy.metricsAfter.throughput },
+  ]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08 }}
+      className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-4 hover:border-purple-500/20 transition-all"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-mono font-semibold text-cyan-400">{deploy.service}</span>
+          <span className="text-[9px] font-mono text-slate-600">{deploy.version}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${oc.bg} ${oc.text} ${oc.border}`}>{deploy.outcome}</span>
+          <span className="text-[9px] text-slate-600">{deploy.date}</span>
+        </div>
+      </div>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-[9px] font-mono text-slate-600 bg-white/[0.04] px-1.5 py-0.5 rounded">{deploy.env}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="text-[9px] text-slate-600">Risk:</span>
+          <span className={`text-[10px] font-bold font-mono ${deploy.risk > 70 ? 'text-red-400' : deploy.risk > 40 ? 'text-yellow-400' : 'text-green-400'}`}>{deploy.risk}%</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() => setShowComparison(!showComparison)}
+        className="w-full flex items-center justify-center gap-1.5 rounded-md bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 text-[9px] text-slate-500 hover:text-cyan-400 hover:border-cyan-500/20 transition-all"
+      >
+        <svg className={`w-3 h-3 transition-transform ${showComparison ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+        {showComparison ? 'Hide comparison' : 'Before vs After comparison'}
+      </button>
+      <AnimatePresence>
+        {showComparison && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-3 space-y-2 pt-3 border-t border-white/[0.06]">
+              {metrics.map((m) => {
+                const worsened = m.afterVal > m.beforeVal && m.label !== 'Throughput'
+                const improved = m.label === 'Throughput' ? m.afterVal > m.beforeVal : m.afterVal < m.beforeVal
+                return (
+                  <div key={m.label} className="flex items-center gap-3">
+                    <span className="text-[9px] text-slate-600 w-16 shrink-0">{m.label}</span>
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="text-[9px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded">{m.before}</span>
+                      <svg className="w-3 h-3 text-slate-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                      <span className={`text-[9px] font-mono ${worsened ? 'text-red-400 bg-red-500/10' : improved ? 'text-green-400 bg-green-500/10' : 'text-yellow-400 bg-yellow-500/10'} px-1.5 py-0.5 rounded`}>{m.after}</span>
+                      {worsened && <svg className="w-3 h-3 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" /></svg>}
+                      {improved && <svg className="w-3 h-3 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" /></svg>}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
+function ReplayCard({ replay, index }) {
+  const [playing, setPlaying] = useState(false)
+  const [currentStep, setCurrentStep] = useState(-1)
+  const intervalRef = useRef(null)
+
+  const handlePlay = () => {
+    if (playing) {
+      clearInterval(intervalRef.current)
+      setPlaying(false)
+      setCurrentStep(-1)
+      return
+    }
+    setPlaying(true)
+    setCurrentStep(0)
+    let step = 0
+    intervalRef.current = setInterval(() => {
+      step++
+      if (step >= replay.steps.length) {
+        clearInterval(intervalRef.current)
+        setPlaying(false)
+        setCurrentStep(-1)
+      } else {
+        setCurrentStep(step)
+      }
+    }, 800)
+  }
+
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current)
+  }, [])
+
+  const sev = severityColor[replay.severity] || severityColor.medium
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-4 hover:border-cyan-500/20 transition-all"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <h4 className="text-xs font-semibold text-white mb-0.5">{replay.title}</h4>
+          <div className="flex items-center gap-2 text-[9px] text-slate-600">
+            <span className="font-mono">{replay.date}</span>
+            <span className="text-slate-700">|</span>
+            <span>{replay.duration}</span>
+          </div>
+        </div>
+        <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${sev.badge}`}>{replay.severity}</span>
+      </div>
+      <div className="relative mb-3">
+        <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+          <motion.div
+            className="h-full rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-fuchsia-500"
+            animate={{ width: playing && currentStep >= 0 ? `${((currentStep + 1) / replay.steps.length) * 100}%` : '0%' }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+        <div className="flex justify-between mt-1">
+          <span className="text-[8px] text-slate-700">0%</span>
+          <span className="text-[8px] text-slate-700">100%</span>
+        </div>
+      </div>
+      <div className="space-y-1 min-h-[80px]">
+        {replay.steps.map((step, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{
+              opacity: currentStep >= i ? 1 : 0.2,
+              x: currentStep >= i ? 0 : -5,
+            }}
+            transition={{ duration: 0.3 }}
+            className={`flex items-center gap-2 px-2 py-1 rounded text-[9px] ${
+              currentStep === i
+                ? 'bg-purple-500/10 border border-purple-500/20'
+                : currentStep > i
+                  ? 'bg-white/[0.02]'
+                  : ''
+            }`}
+          >
+            <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${currentStep >= i ? 'bg-cyan-400' : 'bg-slate-700'}`} />
+            <span className="font-mono text-slate-600 w-10 shrink-0">{step.time}</span>
+            <span className={`flex-1 ${currentStep >= i ? 'text-slate-300' : 'text-slate-700'}`}>{step.action}</span>
+            {currentStep >= i && (
+              <span className={`text-[7px] px-1 py-0.5 rounded ${
+                step.type === 'Trigger' ? 'bg-red-500/10 text-red-400' :
+                step.type === 'Detection' ? 'bg-yellow-500/10 text-yellow-400' :
+                step.type === 'Alert' ? 'bg-orange-500/10 text-orange-400' :
+                step.type === 'Response' ? 'bg-blue-500/10 text-blue-400' :
+                step.type === 'Mitigation' ? 'bg-purple-500/10 text-purple-400' :
+                'bg-green-500/10 text-green-400'
+              }`}>{step.type}</span>
+            )}
+          </motion.div>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={handlePlay}
+        className={`mt-3 w-full flex items-center justify-center gap-2 rounded-md px-3 py-2 text-[10px] font-semibold transition-all ${
+          playing
+            ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20'
+            : 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/20 hover:from-purple-500/30 hover:to-cyan-500/30'
+        }`}
+      >
+        {playing ? (
+          <><svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>Stop Replay</>
+        ) : (
+          <><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5.14v14.72a1 1 0 001.5.86l11-7.36a1 1 0 000-1.72l-11-7.36A1 1 0 008 5.14z" /></svg>Replay Incident</>
+        )}
+      </button>
+    </motion.div>
+  )
+}
+
+function RiskChart() {
+  const [animate, setAnimate] = useState(false)
+  useEffect(() => { setTimeout(() => setAnimate(true), 500) }, [])
+
+  const width = 600
+  const height = 180
+  const padding = { top: 20, right: 20, bottom: 30, left: 40 }
+  const chartW = width - padding.left - padding.right
+  const chartH = height - padding.top - padding.bottom
+  const maxRisk = 100
+
+  const points = evolution.map((d, i) => ({
+    x: padding.left + (i / (evolution.length - 1)) * chartW,
+    y: padding.top + chartH - (d.risk / maxRisk) * chartH,
+    ...d,
+  }))
+
+  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')
+  const areaPath = `${linePath} L${points[points.length - 1].x},${padding.top + chartH} L${points[0].x},${padding.top + chartH} Z`
+
+  const incidentAnnotations = [
+    { index: 2, label: 'Webhook failure', risk: evolution[2].risk },
+    { index: 3, label: 'DB pool exhaust', risk: evolution[3].risk },
+    { index: 4, label: 'Rollback failure', risk: evolution[4].risk },
+  ]
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
+      <defs>
+        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {[0, 25, 50, 75, 100].map((v) => {
+        const y = padding.top + chartH - (v / maxRisk) * chartH
+        return (
+          <g key={v}>
+            <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke="#1e293b" strokeWidth="1" />
+            <text x={padding.left - 8} y={y + 3} textAnchor="end" className="fill-slate-600" fontSize="8" fontFamily="monospace">{v}</text>
+          </g>
+        )
+      })}
+      {evolution.map((d, i) => {
+        const x = padding.left + (i / (evolution.length - 1)) * chartW
+        return <text key={i} x={x} y={height - 6} textAnchor="middle" className="fill-slate-600" fontSize="9" fontFamily="monospace">{d.month}</text>
+      })}
+      <motion.path
+        d={areaPath}
+        fill="url(#chartGrad)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: animate ? 1 : 0 }}
+        transition={{ duration: 0.8 }}
+      />
+      <motion.path
+        d={linePath}
+        fill="none"
+        stroke="#a855f7"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: animate ? 1 : 0 }}
+        transition={{ duration: 1.5, ease: 'easeInOut' }}
+      />
+      {points.map((p, i) => (
+        <motion.circle
+          key={i}
+          cx={p.x}
+          cy={p.y}
+          r="4"
+          fill="#1e293b"
+          stroke="#a855f7"
+          strokeWidth="2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: animate ? 1 : 0 }}
+          transition={{ delay: 0.5 + i * 0.15 }}
+        />
+      ))}
+      {incidentAnnotations.map((ann) => {
+        const p = points[ann.index]
+        return (
+          <g key={ann.label}>
+            <line x1={p.x} y1={p.y - 8} x2={p.x} y2={p.y - 24} stroke="#f97316" strokeWidth="1" strokeDasharray="2,2" />
+            <rect x={p.x - 24} y={p.y - 38} width="48" height="14" rx="3" className="fill-slate-800" stroke="#f97316" strokeWidth="0.5" />
+            <text x={p.x} y={p.y - 28} textAnchor="middle" className="fill-orange-400" fontSize="7" fontFamily="monospace">{ann.label}</text>
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
 
 export default function IncidentTimeMachine() {
   const [input, setInput] = useState('')
@@ -252,7 +609,9 @@ export default function IncidentTimeMachine() {
   const [results, setResults] = useState(null)
   const [showPresets, setShowPresets] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState(-1)
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTimelineIdx, setActiveTimelineIdx] = useState(-1)
+  const [timeNav, setTimeNav] = useState('6 months')
+  const timelineRef = useRef(null)
   const inputRef = useRef(null)
 
   const filtered = input.trim()
@@ -279,19 +638,34 @@ export default function IncidentTimeMachine() {
 
   useEffect(() => { setSelectedPreset(-1) }, [input])
 
+  const scrollTimeline = (dir) => {
+    if (timelineRef.current) {
+      timelineRef.current.scrollBy({ left: dir * 280, behavior: 'smooth' })
+    }
+  }
+
   return (
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
         <motion.div variants={item}>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand to-purple-500 shadow-lg shadow-brand/20">
-              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 shadow-lg shadow-purple-500/25">
+                  <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-cyan-400 animate-ping opacity-75" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-widest uppercase text-white">Time Lab</h1>
+                <p className="text-[11px] font-mono text-slate-500 tracking-wide">Chronological Incident Forensics Engine</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Incident Time Machine</h1>
-              <p className="text-sm text-slate-500">Travel back in time to predict incidents before they happen</p>
+            <div className="hidden sm:flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/5 px-4 py-1.5">
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-[9px] font-mono text-green-400 tracking-wider uppercase">Active Timeline</span>
             </div>
           </div>
         </motion.div>
@@ -310,26 +684,28 @@ export default function IncidentTimeMachine() {
                   onChange={e => { setInput(e.target.value); setShowPresets(true) }}
                   onFocus={() => setShowPresets(true)}
                   onKeyDown={handleKey}
-                  placeholder='Describe a software change, e.g. "Add payment retry support"'
-                  className="w-full rounded-xl border border-white/[0.06] bg-slate-800/60 py-3.5 pl-11 pr-36 text-sm text-white placeholder-slate-600 outline-none focus:border-brand/40 focus:bg-slate-800/80 transition-all"
+                  placeholder="Navigate to a change or incident..."
+                  className="w-full rounded-xl border border-white/[0.06] bg-slate-800/60 py-3.5 pl-11 pr-36 text-sm text-white placeholder-slate-600 outline-none focus:border-purple-500/40 focus:bg-slate-800/80 transition-all font-mono"
                   disabled={analyzing}
                 />
                 <div className="absolute inset-y-1.5 right-1.5 flex items-center gap-1">
                   <button
                     type="submit"
                     disabled={analyzing || !input.trim()}
-                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-brand to-purple-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand/20"
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 via-fuchsia-500 to-cyan-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/25 group relative overflow-hidden"
                   >
-                    {analyzing ? (
-                      <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Analyzing</>
-                    ) : (
-                      <><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Travel Back</>
-                    )}
+                    <span className="relative z-10 flex items-center gap-2">
+                      {analyzing ? (
+                        <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Analyzing</>
+                      ) : (
+                        <><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Travel</>
+                      )}
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   </button>
                 </div>
               </div>
             </form>
-
             <AnimatePresence>
               {showPresets && filtered.length > 0 && !analyzing && (
                 <motion.div
@@ -343,7 +719,7 @@ export default function IncidentTimeMachine() {
                       key={s}
                       type="button"
                       className={`flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${
-                        i === selectedPreset ? 'bg-brand/10 text-brand-light' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white'
+                        i === selectedPreset ? 'bg-purple-500/10 text-purple-300' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white'
                       }`}
                       onClick={() => { setInput(s); setShowPresets(false); analyze(s) }}
                     >
@@ -361,14 +737,30 @@ export default function IncidentTimeMachine() {
 
         {analyzing && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
-                  <div className="h-3 w-24 bg-slate-800 rounded mb-3" />
+                  <div className="h-3 w-28 bg-slate-800 rounded mb-3" />
                   <div className="h-8 w-16 bg-slate-800 rounded mb-2" />
                   <div className="h-2 w-full bg-slate-800 rounded" />
                 </div>
               ))}
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
+              <div className="h-3 w-40 bg-slate-800 rounded mb-4" />
+              <div className="flex gap-4 overflow-hidden">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="w-52 h-32 rounded-lg bg-slate-800/50 shrink-0" />
+                ))}
+              </div>
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
+              <div className="h-3 w-32 bg-slate-800 rounded mb-4" />
+              <div className="grid gap-3 sm:grid-cols-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-24 rounded-lg bg-slate-800/50" />
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
@@ -388,565 +780,465 @@ export default function IncidentTimeMachine() {
                 ))}
               </motion.div>
 
+              <motion.div variants={item} className="relative">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                    <svg className="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Interactive Timeline Navigation
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => scrollTimeline(-1)}
+                      className="w-7 h-7 rounded-lg border border-white/[0.06] bg-white/[0.03] flex items-center justify-center hover:border-purple-500/30 transition-all"
+                    >
+                      <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => scrollTimeline(1)}
+                      className="w-7 h-7 rounded-lg border border-white/[0.06] bg-white/[0.03] flex items-center justify-center hover:border-purple-500/30 transition-all"
+                    >
+                      <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </button>
+                  </div>
+                </div>
+                <div className="relative">
+                  <div className="absolute top-[38px] left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500/20 via-cyan-500/20 to-purple-500/20" />
+                  <div
+                    ref={timelineRef}
+                    className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent -mx-1 px-1"
+                    style={{ scrollBehavior: 'smooth' }}
+                  >
+                    {timelineHistory.map((ev, i) => {
+                      const sev = severityColor[ev.severity] || severityColor.medium
+                      const isActive = activeTimelineIdx === i
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setActiveTimelineIdx(activeTimelineIdx === i ? -1 : i)}
+                          className={`relative shrink-0 w-56 rounded-xl border p-4 text-left transition-all duration-300 ${
+                            isActive
+                              ? 'border-purple-500/40 bg-purple-500/[0.06] shadow-lg shadow-purple-500/10'
+                              : 'border-white/[0.04] bg-white/[0.02] hover:border-purple-500/20 hover:bg-white/[0.04]'
+                          }`}
+                        >
+                          <div className="absolute -top-[13px] left-6 w-3 h-3 rounded-full border-2 border-slate-800 z-10 bg-slate-950"
+                            style={{ borderColor: isActive ? sev.glow : '#334155', boxShadow: isActive ? `0 0 8px ${sev.glow}40` : 'none' }}>
+                            <div className={`w-1.5 h-1.5 rounded-full ${sev.dot} mx-auto mt-[2px]`} />
+                          </div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[9px] font-mono text-slate-600">{ev.date}</span>
+                            <span className={`rounded-full border px-1.5 py-0.5 text-[7px] font-semibold ${sev.badge}`}>{ev.severity}</span>
+                          </div>
+                          <h4 className="text-xs font-semibold text-white mb-1 leading-tight">{ev.title}</h4>
+                          <p className="text-[9px] text-slate-500 mb-2 leading-relaxed">{ev.description}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[8px] font-mono text-slate-600">{ev.duration}</span>
+                            <div className="flex gap-1">
+                              {ev.services.slice(0, 2).map(s => (
+                                <span key={s} className="rounded bg-white/[0.04] px-1 py-0.5 text-[7px] font-mono text-slate-600">{s.split(' ')[0]}</span>
+                              ))}
+                            </div>
+                          </div>
+                          {isActive && (
+                            <motion.div
+                              layoutId="timeline-glow"
+                              className="absolute inset-0 rounded-xl border-2 border-transparent"
+                              style={{ boxShadow: `inset 0 0 20px ${sev.glow}15` }}
+                            />
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+
+              <WormholeAnimation />
+
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 backdrop-blur-xl p-1">
-                  <div className="flex overflow-x-auto">
-                    {tabs.map((tab, i) => (
-                      <button
-                        key={tab}
-                        type="button"
-                        onClick={() => setActiveTab(i)}
-                        className={`relative px-5 py-3 text-xs font-medium whitespace-nowrap transition-all ${
-                          activeTab === i
-                            ? 'text-white'
-                            : 'text-slate-500 hover:text-slate-300'
-                        }`}
-                      >
-                        {tab}
-                        {activeTab === i && (
-                          <motion.div
-                            layoutId="tab-indicator"
-                            className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gradient-to-r from-brand to-purple-500"
-                          />
-                        )}
-                      </button>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
+                      </svg>
+                      Historical Deployment Explorer
+                    </h3>
+                    <StatusBadge status="info" label={`${deployments.length} deployments`} />
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {deployments.map((d, i) => (
+                      <DeploymentCard key={d.service} deploy={d} index={i} />
                     ))}
                   </div>
                 </div>
               </motion.div>
 
-              <AnimatePresence mode="wait">
-                {activeTab === 0 && (
-                  <motion.div
-                    key="timeline"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-8"
-                  >
-                    {/* Gauges + Scores Row inside Timeline */}
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                      <AnimatedGauge value={results.incidentProbability} label="Incident Probability" sub="Risk Score" color="#ef4444" delay={200} />
-                      <AnimatedGauge value={results.confidenceScore} label="Confidence Score" sub="Model Accuracy" color="#22c55e" delay={400} />
-                      <div className="space-y-3">
-                        <AnimatedScore value={results.incidentProbability} label="Risk Assessment" color="#ef4444" delay={300} />
-                        <AnimatedScore value={85} label="Similarity Match" color="#f59e0b" delay={500} />
-                      </div>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 backdrop-blur-xl"
-                      >
-                        <span className="text-[11px] font-medium text-slate-500 tracking-wide uppercase">Severity Level</span>
-                        <div className="flex flex-col items-center justify-center py-4">
-                          <div className="relative flex items-center justify-center w-20 h-20 rounded-full" style={{ backgroundColor: 'rgba(239,68,68,0.12)', border: '3px solid #ef4444', boxShadow: '0 0 25px rgba(239,68,68,0.25)' }}>
-                            <span className="text-lg font-extrabold text-red-400 uppercase tracking-wider">High</span>
-                          </div>
-                          <div className="mt-3 flex items-center gap-2 text-[10px] text-slate-600">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500" /> Low
-                            <span className="w-1.5 h-1.5 rounded-full bg-yellow-500" /> Med
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> <span className="text-red-400 font-semibold">High</span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-600" /> Crit
-                          </div>
-                        </div>
-                      </motion.div>
-                    </div>
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                      </svg>
+                      Incident Replay System
+                    </h3>
+                    <StatusBadge status="warning" label={`${replays.length} replays`} />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {replays.map((r, i) => (
+                      <ReplayCard key={r.title} replay={r} index={i} />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
 
-                    {/* Historical Incident Timeline */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Historical Incident Timeline</h3>
-                        <StatusBadge status="error" label={`${results.timeline.length} incidents`} />
-                      </div>
-                      <div className="relative">
-                        <div className="absolute left-[19px] top-2 bottom-2 w-px bg-gradient-to-b from-red-500/60 via-orange-500/40 to-yellow-500/20" />
-                        <div className="space-y-0">
-                          {results.timeline.map((ev, i) => {
-                            const sev = severityColor[ev.severity] || severityColor.medium
-                            return (
-                              <div key={i} className="relative flex gap-5 pb-6 last:pb-0">
-                                <div className="relative flex-shrink-0 mt-1">
-                                  <div className={`w-10 h-10 rounded-full border-2 ${sev.border} ${sev.bg} flex items-center justify-center z-10 relative`}>
-                                    <div className={`w-2 h-2 rounded-full ${sev.dot}`} />
-                                  </div>
-                                  {i < results.timeline.length - 1 && (
-                                    <div className="absolute top-10 left-1/2 -translate-x-1/2 w-px h-[calc(100%-2.5rem)] bg-white/[0.06]" />
-                                  )}
-                                </div>
-                                <div className="flex-1 min-w-0 pt-1.5">
-                                  <div className="flex items-center justify-between gap-2 mb-1">
-                                    <span className="text-[10px] font-mono text-slate-600">{ev.date}</span>
-                                    <span className="text-[10px] font-medium text-slate-500">{ev.duration}</span>
-                                  </div>
-                                  <h4 className="text-sm font-semibold text-white mb-1">{ev.title}</h4>
-                                  <p className="text-xs text-slate-500 mb-2">{ev.impact}</p>
-                                  <div className="flex items-center gap-2 flex-wrap">
-                                    <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold ${sev.badge}`}>
-                                      {ev.severity}
-                                    </span>
-                                    <span className="text-[10px] text-slate-600">{ev.rootCause}</span>
-                                  </div>
-                                  <div className="mt-2 flex gap-1.5 flex-wrap">
-                                    {ev.services.map(s => (
-                                      <span key={s} className="rounded-md bg-white/[0.04] px-2 py-0.5 text-[9px] font-mono text-slate-500 border border-white/[0.06]">{s}</span>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Similar Deployments */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Similar Past Deployments</h3>
-                        <StatusBadge status="warning" label={`${results.mrs.length} matches`} />
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {results.mrs.map((mr, i) => (
-                          <motion.div
-                            key={mr.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.08 }}
-                            className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-3 hover:border-cyan-500/20 hover:bg-white/[0.04] transition-all"
-                          >
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-1.5">
-                                <span className="rounded bg-cyan-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-cyan-300">{mr.id}</span>
-                                <span className="text-[9px] font-mono text-slate-600">{mr.author}</span>
-                              </div>
-                              <span className="text-[9px] text-slate-600">{mr.date}</span>
-                            </div>
-                            <p className="text-[10px] text-slate-400 leading-relaxed mb-2">{mr.desc}</p>
-                            <div className="flex items-center justify-between">
-                              <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${
-                                mr.outcome === 'Incident' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                                mr.outcome === 'Near Miss' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
-                                'bg-green-500/10 text-green-400 border-green-500/20'
-                              }`}>{mr.outcome}</span>
-                              <div className="flex items-center gap-1.5">
-                                <div className="h-1.5 w-12 rounded-full bg-slate-800 overflow-hidden">
-                                  <div className="h-full rounded-full bg-cyan-500" style={{ width: `${mr.match}%` }} />
-                                </div>
-                                <span className="text-[9px] text-slate-500 font-mono">{mr.match}%</span>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Recovery Timeline */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-5">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Recovery Timeline — Top Incident</h3>
-                        <StatusBadge status="info" label="45min total" />
-                      </div>
-                      <div className="relative">
-                        <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-brand via-purple-500 to-slate-700 rounded-full" />
-                        <div className="space-y-6">
-                          {results.recoveryTimeline.map((step, i) => (
-                            <div key={i} className="relative flex gap-4">
-                              <div className="relative flex-shrink-0 mt-0.5">
-                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center z-10 relative ${
-                                  i === 0 ? 'border-red-500 bg-red-500/20' :
-                                  i === results.recoveryTimeline.length - 1 ? 'border-green-500 bg-green-500/20' :
-                                  'border-brand bg-brand/20'
-                                }`}>
-                                  <div className={`w-1.5 h-1.5 rounded-full ${
-                                    i === 0 ? 'bg-red-500' :
-                                    i === results.recoveryTimeline.length - 1 ? 'bg-green-500' :
-                                    'bg-brand'
-                                  }`} />
-                                </div>
-                              </div>
-                              <div className="flex-1 min-w-0 pb-1">
-                                <div className="flex items-center justify-between mb-0.5">
-                                  <h4 className="text-sm font-semibold text-white">{step.step}</h4>
-                                  <span className="text-[10px] font-mono text-slate-600 bg-white/[0.04] px-2 py-0.5 rounded">{step.duration}</span>
-                                </div>
-                                <p className="text-[11px] text-slate-500 leading-relaxed mb-1">{step.detail}</p>
-                                <span className="text-[9px] text-slate-600">Owner: {step.owner}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 1 && (
-                  <motion.div
-                    key="patterns"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-6"
-                  >
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-5">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Failure Pattern Analysis</h3>
-                        <StatusBadge status="warning" label={`${results.patterns.length} patterns`} />
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        {results.patterns.map((p, i) => {
-                          const total = p.severityDist.critical + p.severityDist.high + p.severityDist.medium
-                          const statusStyle = p.status === 'active' ? 'border-red-500/20 bg-red-500/[0.03]' :
-                            p.status === 'monitoring' ? 'border-yellow-500/20 bg-yellow-500/[0.03]' :
-                            'border-green-500/20 bg-green-500/[0.03]'
-                          const statusColor = p.status === 'active' ? 'text-red-400 bg-red-500/10' :
-                            p.status === 'monitoring' ? 'text-yellow-400 bg-yellow-500/10' :
-                            'text-green-400 bg-green-500/10'
-                          return (
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
+                      </svg>
+                      Before vs After Comparison
+                    </h3>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    {[
+                      { label: 'Error Rate', states: ['0.1%', '2.3%', '0.05%'], colors: ['#22c55e', '#ef4444', '#22c55e'], before: 0.1, during: 2.3, after: 0.05, unit: '%' },
+                      { label: 'Latency', states: ['42ms', '350ms', '38ms'], colors: ['#22c55e', '#ef4444', '#22c55e'], before: 42, during: 350, after: 38, unit: 'ms' },
+                      { label: 'Throughput', states: ['1200/s', '300/s', '1500/s'], colors: ['#22c55e', '#ef4444', '#22c55e'], before: 1200, during: 300, after: 1500, unit: '/s' },
+                    ].map((metric) => {
+                      const [phase, setPhase] = useState(0)
+                      useEffect(() => {
+                        const t = setInterval(() => setPhase(p => (p + 1) % 3), 2500)
+                        return () => clearInterval(t)
+                      }, [])
+                      const maxVal = Math.max(metric.before, metric.during, metric.after)
+                      return (
+                        <div key={metric.label} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4">
+                          <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">{metric.label}</h4>
+                          <AnimatePresence mode="wait">
                             <motion.div
-                              key={p.name}
+                              key={phase}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: i * 0.08 }}
-                              className={`rounded-lg border ${statusStyle} p-4 hover:border-white/[0.12] transition-all`}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ duration: 0.3 }}
+                              className="text-center"
                             >
-                              <div className="flex items-center justify-between mb-3">
-                                <h4 className="text-sm font-semibold text-white">{p.name}</h4>
-                                <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold ${statusColor}`}>{p.status}</span>
+                              <span className="text-2xl font-bold tabular-nums" style={{ color: metric.colors[phase] }}>{metric.states[phase]}</span>
+                              <div className="mt-2 flex justify-center gap-1">
+                                {['Before', 'During', 'After'].map((p, i) => (
+                                  <div key={p} className={`w-2 h-2 rounded-full transition-all ${i === phase ? 'bg-cyan-400 scale-125' : 'bg-slate-800'}`} />
+                                ))}
                               </div>
-                              <div className="flex items-baseline gap-1 mb-3">
-                                <span className="text-2xl font-bold text-white">{p.frequency}</span>
-                                <span className="text-[10px] text-slate-600">occurrences</span>
+                              <div className="mt-3 h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <motion.div
+                                  className="h-full rounded-full"
+                                  style={{ backgroundColor: metric.colors[phase] }}
+                                  animate={{ width: `${([metric.before, metric.during, metric.after][phase] / maxVal) * 100}%` }}
+                                  transition={{ duration: 0.5 }}
+                                />
                               </div>
-                              <div className="space-y-1.5 mb-3">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[9px] text-red-400 w-10">Critical</span>
-                                  <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
-                                    <div className="h-full rounded-full bg-red-500" style={{ width: `${(p.severityDist.critical / total) * 100}%` }} />
-                                  </div>
-                                  <span className="text-[9px] text-slate-500 w-4 text-right">{p.severityDist.critical}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[9px] text-orange-400 w-10">High</span>
-                                  <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
-                                    <div className="h-full rounded-full bg-orange-500" style={{ width: `${(p.severityDist.high / total) * 100}%` }} />
-                                  </div>
-                                  <span className="text-[9px] text-slate-500 w-4 text-right">{p.severityDist.high}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[9px] text-yellow-400 w-10">Medium</span>
-                                  <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
-                                    <div className="h-full rounded-full bg-yellow-500" style={{ width: `${(p.severityDist.medium / total) * 100}%` }} />
-                                  </div>
-                                  <span className="text-[9px] text-slate-500 w-4 text-right">{p.severityDist.medium}</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between text-[10px] text-slate-600 border-t border-white/[0.06] pt-2">
-                                <span>First: {p.firstSeen}</span>
-                                <span>Last: {p.lastSeen}</span>
-                              </div>
+                              <span className="text-[8px] text-slate-600 mt-1 block">
+                                {['Before change', 'During incident', 'After fix'][phase]}
+                              </span>
                             </motion.div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                          </AnimatePresence>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </motion.div>
 
-                {activeTab === 2 && (
-                  <motion.div
-                    key="rootcauses"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-6">
-                      {results.rootCauses.map((rca, i) => {
-                        const sev = severityColor[rca.severity] || severityColor.medium
-                        return (
-                          <motion.div
-                            key={rca.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.15 }}
-                            className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5"
-                          >
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-3">
-                                <span className={`rounded-lg px-2 py-1 text-[9px] font-bold ${sev.badge}`}>{rca.id}</span>
-                                <h3 className="text-sm font-semibold text-white">{rca.title}</h3>
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.75v3.375m0 0l3-3m-3 3l-3-3M3.75 13.5h10.5m-10.5 0l3 3m-3-3l-3-3m12 3h3.375m-3.375 0l3 3m-3-3l3-3" />
+                      </svg>
+                      Failure Pattern Detection
+                    </h3>
+                    <StatusBadge status="warning" label={`${results.patterns.length} patterns`} />
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {results.patterns.map((p, i) => {
+                      const total = p.severityDist.critical + p.severityDist.high + p.severityDist.medium
+                      const statusStyle = p.status === 'active' ? 'border-red-500/20 bg-red-500/[0.03]' :
+                        p.status === 'monitoring' ? 'border-yellow-500/20 bg-yellow-500/[0.03]' :
+                        'border-green-500/20 bg-green-500/[0.03]'
+                      const statusColor = p.status === 'active' ? 'text-red-400 bg-red-500/10' :
+                        p.status === 'monitoring' ? 'text-yellow-400 bg-yellow-500/10' :
+                        'text-green-400 bg-green-500/10'
+                      const trendIcon = p.trend === 'up' ? '↑' : p.trend === 'down' ? '↓' : '→'
+                      const trendColor = p.trend === 'up' ? 'text-red-400' : p.trend === 'down' ? 'text-green-400' : 'text-yellow-400'
+                      const sparkData = patternSparklines[p.name] || [1, 2, 3, 4, 5, 6]
+                      return (
+                        <motion.div
+                          key={p.name}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.06 }}
+                          className={`rounded-lg border ${statusStyle} p-4 hover:border-white/[0.12] transition-all`}
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-xs font-semibold text-white mb-1 truncate">{p.name}</h4>
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg font-bold text-white tabular-nums">{p.frequency}</span>
+                                <span className={`text-sm font-mono ${trendColor}`}>{trendIcon}</span>
                               </div>
-                              <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold ${sev.badge}`}>{rca.severity}</span>
                             </div>
+                            <div className="flex flex-col items-end gap-1">
+                              <span className={`rounded-full px-1.5 py-0.5 text-[7px] font-semibold ${statusColor}`}>{p.status}</span>
+                              <span className="text-[8px] text-slate-600">{p.confidence}% conf</span>
+                            </div>
+                          </div>
+                          <div className="flex justify-center my-2">
+                            <Sparkline data={sparkData} color={p.trend === 'up' ? '#ef4444' : p.trend === 'down' ? '#22c55e' : '#eab308'} height={28} width={100} />
+                          </div>
+                          <div className="space-y-1 mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] text-red-400 w-9">Critical</span>
+                              <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                <div className="h-full rounded-full bg-red-500" style={{ width: `${(p.severityDist.critical / total) * 100}%` }} />
+                              </div>
+                              <span className="text-[8px] text-slate-600 w-3 text-right">{p.severityDist.critical}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] text-orange-400 w-9">High</span>
+                              <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                <div className="h-full rounded-full bg-orange-500" style={{ width: `${(p.severityDist.high / total) * 100}%` }} />
+                              </div>
+                              <span className="text-[8px] text-slate-600 w-3 text-right">{p.severityDist.high}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] text-yellow-400 w-9">Med</span>
+                              <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                <div className="h-full rounded-full bg-yellow-500" style={{ width: `${(p.severityDist.medium / total) * 100}%` }} />
+                              </div>
+                              <span className="text-[8px] text-slate-600 w-3 text-right">{p.severityDist.medium}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between text-[8px] text-slate-700 border-t border-white/[0.06] pt-2 font-mono">
+                            <span>First: {p.firstSeen}</span>
+                            <span>Last: {p.lastSeen}</span>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </motion.div>
 
-                            {/* Cause Chain */}
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-                              {[
-                                { label: 'Trigger', value: rca.trigger, color: 'border-red-500/30 bg-red-500/[0.04]' },
-                                { label: 'Failure', value: rca.failure, color: 'border-orange-500/30 bg-orange-500/[0.04]' },
-                                { label: 'Impact', value: rca.impact, color: 'border-yellow-500/30 bg-yellow-500/[0.04]' },
-                                { label: 'Resolution', value: rca.resolution, color: 'border-green-500/30 bg-green-500/[0.04]' },
-                              ].map((item, j) => (
-                                <div key={item.label} className={`rounded-lg border ${item.color} p-3`}>
-                                  <div className="flex items-center gap-1.5 mb-1.5">
-                                    <span className={`w-1.5 h-1.5 rounded-full ${item.color.includes('red') ? 'bg-red-500' : item.color.includes('orange') ? 'bg-orange-500' : item.color.includes('yellow') ? 'bg-yellow-500' : 'bg-green-500'}`} />
-                                    <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</span>
-                                  </div>
-                                  <p className="text-[10px] text-slate-400 leading-relaxed">{item.value}</p>
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                      </svg>
+                      Historical Risk Evolution
+                    </h3>
+                    <StatusBadge status="info" label="Jan-Jun 2024" />
+                  </div>
+                  <RiskChart />
+                </div>
+              </motion.div>
+
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                      </svg>
+                      Root Cause Analysis
+                    </h3>
+                    <StatusBadge status="error" label={`${results.rootCauses.length} deep-dives`} />
+                  </div>
+                  <div className="space-y-5">
+                    {results.rootCauses.map((rca, i) => {
+                      const sev = severityColor[rca.severity] || severityColor.medium
+                      return (
+                        <motion.div
+                          key={rca.id}
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.12 }}
+                          className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-4 hover:border-purple-500/20 transition-all"
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold font-mono ${sev.badge}`}>{rca.id}</span>
+                              <h4 className="text-xs font-semibold text-white">{rca.title}</h4>
+                            </div>
+                            <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${sev.badge}`}>{rca.severity}</span>
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            {[
+                              { label: 'Trigger', value: rca.trigger, color: 'border-red-500/20 bg-red-500/[0.03]' },
+                              { label: 'Failure', value: rca.failure, color: 'border-orange-500/20 bg-orange-500/[0.03]' },
+                              { label: 'Impact', value: rca.impact, color: 'border-yellow-500/20 bg-yellow-500/[0.03]' },
+                              { label: 'Resolution', value: rca.resolution, color: 'border-green-500/20 bg-green-500/[0.03]' },
+                            ].map((item) => (
+                              <div key={item.label} className={`rounded-lg border ${item.color} p-2.5`}>
+                                <span className="text-[8px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">{item.label}</span>
+                                <p className="text-[9px] text-slate-400 leading-relaxed">{item.value}</p>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mb-3">
+                            <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider block mb-1.5">Timeline of Events</span>
+                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+                              {rca.eventTimeline.map((ev, j) => (
+                                <div key={j} className={`flex items-center gap-3 px-3 py-1.5 ${j < rca.eventTimeline.length - 1 ? 'border-b border-white/[0.04]' : ''}`}>
+                                  <span className="text-[8px] font-mono font-semibold text-cyan-400 shrink-0 w-10">{ev.time}</span>
+                                  <span className="text-[9px] text-slate-400">{ev.event}</span>
                                 </div>
                               ))}
                             </div>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="rounded-lg border border-green-500/10 bg-green-500/[0.02] p-2.5">
+                              <span className="text-[8px] font-semibold text-green-400 uppercase tracking-wider block mb-1">Lessons Learned</span>
+                              <p className="text-[9px] text-slate-400 leading-relaxed">{rca.lessons}</p>
+                            </div>
+                            <div className="rounded-lg border border-cyan-500/10 bg-cyan-500/[0.02] p-2.5">
+                              <span className="text-[8px] font-semibold text-cyan-400 uppercase tracking-wider block mb-1">Prevention</span>
+                              <p className="text-[9px] text-slate-400 leading-relaxed">{rca.prevention}</p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </motion.div>
 
-                            {/* Affected Services */}
-                            <div className="mb-5">
-                              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-2">Affected Services</span>
-                              <div className="flex flex-wrap gap-1.5">
-                                {rca.affectedServices.map(s => (
-                                  <span key={s} className="rounded-md bg-white/[0.04] border border-white/[0.06] px-2 py-1 text-[10px] font-mono text-slate-400">{s}</span>
-                                ))}
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Prevention Recommendations
+                    </h3>
+                    <StatusBadge status="success" label={`${results.recommendations.length} actions`} />
+                  </div>
+                  <div className="space-y-2">
+                    {results.recommendations.map((r, i) => {
+                      const statusBadgeStyle = r.status === 'completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                        r.status === 'in_progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                        'bg-slate-500/10 text-slate-400 border-slate-500/20'
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.06 }}
+                          className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-3 hover:border-green-500/20 hover:bg-white/[0.04] transition-all"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex flex-col items-center gap-1 mt-0.5 min-w-[32px]">
+                              <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
+                                r.priority === 'P0' ? 'bg-red-500/10 text-red-400' :
+                                r.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
+                                'bg-slate-500/10 text-slate-400'
+                              }`}>{r.priority}</span>
+                              <span className={`rounded-full border px-1 py-0.5 text-[6px] font-semibold ${statusBadgeStyle}`}>{r.status.replace('_', ' ')}</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium text-white mb-0.5">{r.action}</p>
+                              <p className="text-[9px] text-slate-500 leading-relaxed mb-1.5">{r.detail}</p>
+                              <div className="flex items-center gap-3 text-[8px] text-slate-600 flex-wrap">
+                                <span className="flex items-center gap-1">
+                                  <svg className="w-2.5 h-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.94-4.125L12 1.5l-2.06 3.375m2.94 0h-2.94M10.5 6.375L6.44 2.25m.06 4.5L2.25 10.5m4.5 0l2.81 2.81M15 12l-2.25 2.25M15 12l2.25-2.25M5.25 12l-2.25 2.25m4.5 0l2.25-2.25" />
+                                  </svg>
+                                  {r.owner}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <svg className="w-2.5 h-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  {r.effort}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <svg className="w-2.5 h-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                  </svg>
+                                  {r.impact}
+                                </span>
                               </div>
                             </div>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </motion.div>
 
-                            {/* Event Timeline */}
-                            <div className="mb-4">
-                              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-2">Event Timeline</span>
-                              <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] overflow-hidden">
-                                {rca.eventTimeline.map((ev, j) => (
-                                  <div key={j} className={`flex items-center gap-4 px-4 py-2 ${j < rca.eventTimeline.length - 1 ? 'border-b border-white/[0.04]' : ''}`}>
-                                    <span className="text-[10px] font-mono font-semibold text-brand shrink-0 w-12">{ev.time}</span>
-                                    <span className="text-[11px] text-slate-400">{ev.event}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Lessons */}
-                            <div className="rounded-lg border border-green-500/10 bg-green-500/[0.02] p-3">
-                              <div className="flex items-start gap-2">
-                                <svg className="h-3.5 w-3.5 text-green-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                                </svg>
-                                <p className="text-[11px] text-slate-400 leading-relaxed">{rca.lessons}</p>
-                              </div>
-                            </div>
-                          </motion.div>
+              <motion.div variants={item}>
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                      </svg>
+                      Time Navigation Controls
+                    </h3>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-mono text-slate-600">You are here:</span>
+                      <span className="text-xs font-mono font-semibold text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded border border-cyan-500/20">June 2024</span>
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      {['1 month ago', '3 months', '6 months', '1 year'].map((label) => {
+                        const isActive = timeNav === label
+                        return (
+                          <button
+                            key={label}
+                            type="button"
+                            onClick={() => setTimeNav(label)}
+                            className={`px-3 py-1.5 rounded-lg text-[9px] font-mono font-semibold transition-all ${
+                              isActive
+                                ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30'
+                                : 'bg-white/[0.03] text-slate-600 border border-white/[0.06] hover:border-purple-500/20 hover:text-slate-300'
+                            }`}
+                          >
+                            {label}
+                          </button>
                         )
                       })}
                     </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 3 && (
-                  <motion.div
-                    key="heatmap"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-6"
-                  >
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-5">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Incident Heatmap — Day of Week vs Hour</h3>
-                        <div className="flex items-center gap-2 text-[9px] text-slate-500">
-                          <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#1e293b' }} />
-                          <span>None</span>
-                          <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#064e3b' }} />
-                          <span>Low</span>
-                          <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#059669' }} />
-                          <span>Med</span>
-                          <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#ca8a04' }} />
-                          <span>High</span>
-                          <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#ea580c' }} />
-                          <span>Crit</span>
-                          <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#dc2626' }} />
-                          <span>Severe</span>
-                        </div>
-                      </div>
-                      <div className="overflow-x-auto">
-                        <div className="inline-flex flex-col gap-1 min-w-[720px]">
-                          {/* Header row — hours */}
-                          <div className="flex items-center gap-1 pl-[70px]">
-                            {Array.from({ length: 24 }).map((_, i) => (
-                              <div key={i} className="w-[26px] text-center text-[8px] font-mono text-slate-600">{i}</div>
-                            ))}
-                          </div>
-                          {heatmapGrid.map((row, dayIdx) => (
-                            <div key={dayIdx} className="flex items-center gap-1">
-                              <div className="w-[70px] text-[9px] font-medium text-slate-500 text-right pr-2 shrink-0">
-                                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][dayIdx]}
-                              </div>
-                              {row.map((val, hourIdx) => (
-                                <div
-                                  key={hourIdx}
-                                  className="group relative w-[26px] h-[26px] rounded-sm cursor-default transition-transform hover:scale-110"
-                                  style={{ backgroundColor: getHeatColor(val) }}
-                                >
-                                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block z-20">
-                                    <div className="bg-slate-700 text-white text-[9px] px-2 py-1 rounded whitespace-nowrap shadow-lg border border-white/[0.08]">
-                                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][dayIdx]} {hourIdx}:00 — {val} incidents
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mt-5 p-3 rounded-lg border border-white/[0.06] bg-white/[0.02]">
-                        <div className="flex items-center gap-4 text-[10px] text-slate-500">
-                          <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#dc2626' }} />
-                            Peak incident hours: 9:00–11:00 and 14:00–16:00
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#1e293b' }} />
-                            Lowest: Weekends and 0:00–5:00
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Production Incidents */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Related Production Incidents</h3>
-                        <StatusBadge status="error" label={`${results.incidents.length} incidents`} />
-                      </div>
-                      <div className="space-y-2">
-                        {results.incidents.map((inc, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.1 }}
-                            className="rounded-lg border border-red-500/10 bg-red-500/[0.02] p-3 hover:border-red-500/20 transition-all"
-                          >
-                            <div className="flex items-start justify-between mb-1">
-                              <span className="text-xs font-semibold text-red-400 leading-tight">{inc.title}</span>
-                              <span className="text-[10px] text-slate-500 shrink-0 ml-2">{inc.date}</span>
-                            </div>
-                            <p className="text-[10px] text-slate-400 leading-relaxed mb-1">Root cause: {inc.cause}</p>
-                            <div className="flex items-center gap-3 text-[10px] text-slate-500">
-                              <span>Impact: {inc.impact}</span>
-                              <span className="text-slate-600">|</span>
-                              <span>Duration: {inc.duration}</span>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 4 && (
-                  <motion.div
-                    key="prevention"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-6"
-                  >
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-5">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Prevention Recommendations</h3>
-                        <StatusBadge status="info" label={`${results.recommendations.length} actions`} />
-                      </div>
-                      <div className="space-y-3">
-                        {results.recommendations.map((r, i) => {
-                          const statusBadgeStyle = r.status === 'completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                            r.status === 'in_progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-                            'bg-slate-500/10 text-slate-400 border-slate-500/20'
-                          return (
-                            <motion.div
-                              key={i}
-                              initial={{ opacity: 0, y: 8 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: i * 0.08 }}
-                              className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4 hover:border-white/[0.12] hover:bg-white/[0.04] transition-all"
-                            >
-                              <div className="flex items-start gap-3">
-                                <div className="flex flex-col items-center gap-1 mt-0.5">
-                                  <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
-                                    r.priority === 'P0' ? 'bg-red-500/10 text-red-400' :
-                                    r.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
-                                    'bg-slate-500/10 text-slate-400'
-                                  }`}>{r.priority}</span>
-                                  <span className={`rounded-full border px-1.5 py-0.5 text-[7px] font-semibold ${statusBadgeStyle}`}>{r.status.replace('_', ' ')}</span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-white mb-1">{r.action}</p>
-                                  <p className="text-[11px] text-slate-500 leading-relaxed mb-2">{r.detail}</p>
-                                  <div className="flex items-center gap-4 text-[10px] text-slate-600 flex-wrap">
-                                    <span className="flex items-center gap-1">
-                                      <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.94-4.125L12 1.5l-2.06 3.375m2.94 0h-2.94M10.5 6.375L6.44 2.25m.06 4.5L2.25 10.5m4.5 0l2.81 2.81M15 12l-2.25 2.25M15 12l2.25-2.25M5.25 12l-2.25 2.25m4.5 0l2.25-2.25" />
-                                      </svg>
-                                      {r.owner}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                      <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                      </svg>
-                                      {r.effort}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                      <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                      </svg>
-                                      {r.impact}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Lessons Learned */}
-                    <div className="rounded-xl border border-green-500/10 bg-slate-900/50 p-5">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Lessons Learned from Past Incidents</h3>
-                        <StatusBadge status="success" label="3 insights" />
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        {results.incidents.map((inc, i) => (
-                          <div key={i} className="rounded-lg border border-green-500/10 bg-green-500/[0.02] p-4">
-                            <div className="text-[10px] text-slate-500 font-medium mb-1.5">{inc.title.split('—')[0].trim()}</div>
-                            <div className="flex items-start gap-2">
-                              <svg className="h-3.5 w-3.5 text-green-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                              </svg>
-                              <p className="text-xs text-slate-400 leading-relaxed">{inc.fix}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
 
         {!results && !analyzing && (
           <motion.div variants={item} className="text-center py-16">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.06] bg-gradient-to-br from-brand/5 to-purple-500/5">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.06] bg-gradient-to-br from-purple-500/10 to-cyan-500/10">
               <svg className="h-10 w-10 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-white mb-1">Ready to travel back in time?</h3>
-            <p className="text-sm text-slate-600 max-w-md mx-auto">Enter a software change request above to see similar historical incidents, root causes, and prevention recommendations.</p>
+            <h3 className="text-lg font-semibold text-white mb-1 tracking-wider uppercase">Ready to Navigate Time?</h3>
+            <p className="text-sm text-slate-600 max-w-md mx-auto font-mono">Enter a change or incident above to traverse the timeline and uncover historical patterns.</p>
           </motion.div>
         )}
       </motion.div>

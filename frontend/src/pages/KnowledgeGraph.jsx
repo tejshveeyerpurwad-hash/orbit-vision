@@ -135,7 +135,7 @@ export default function KnowledgeGraph() {
           />
         </motion.div>
 
-        <motion.div variants={item} className="h-[550px] rounded-xl border border-white/[0.06] overflow-hidden">
+        <motion.div variants={item} className="h-[400px] md:h-[500px] lg:h-[600px] rounded-xl border border-white/[0.06] overflow-hidden">
           <ReactFlow
             nodes={displayNodes}
             edges={edges}

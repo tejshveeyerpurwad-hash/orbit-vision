@@ -5,6 +5,8 @@ const links = [
   { to: '/', label: 'Home' },
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/intelligence', label: 'Intelligence' },
+  { to: '/time-machine', label: 'Time Machine' },
+  { to: '/ai-planner', label: 'AI Planner' },
   { to: '/knowledge-graph', label: 'Knowledge Graph' },
   { to: '/analytics', label: 'Analytics' },
 ]

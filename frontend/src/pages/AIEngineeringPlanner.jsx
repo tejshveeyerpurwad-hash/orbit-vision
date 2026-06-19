@@ -58,10 +58,31 @@ const mockPlan = {
     { phase: 'Staging Deploy', start: 'Sprint 2 Week 2', end: 'Sprint 2 Week 2', duration: '2 days', status: 'pending', progress: 0 },
     { phase: 'Production Release', start: 'Sprint 3 Week 1', end: 'Sprint 3 Week 1', duration: '1 day', status: 'pending', progress: 0 },
   ],
+  milestones: [
+    { date: 'Sprint 1 Week 1', label: 'Design Sign-off', critical: true },
+    { date: 'Sprint 2 Week 1', label: 'Core Implementation Complete', critical: true },
+    { date: 'Sprint 2 Week 2', label: 'Integration Tests Pass', critical: false },
+    { date: 'Sprint 3 Week 1', label: 'Production Go-live', critical: true },
+  ],
+  dependencies: [
+    { from: 0, to: 1 },
+    { from: 1, to: 2 },
+    { from: 2, to: 3 },
+    { from: 3, to: 4 },
+  ],
   risks: [
-    { risk: 'Circuit breaker misconfiguration may cause silent failures', severity: 'critical', mitigation: 'Add comprehensive integration tests with fault injection', owner: 'Payments Team', probability: 'Medium' },
-    { risk: 'Retry queue overflow under peak load', severity: 'high', mitigation: 'Implement bounded retry queues with backpressure monitoring', owner: 'Platform Team', probability: 'High' },
-    { risk: 'Billing reconciliation delay during rollout', severity: 'medium', mitigation: 'Implement feature flag with gradual rollout (10% → 50% → 100%)', owner: 'Billing Team', probability: 'Low' },
+    { risk: 'Circuit breaker misconfiguration may cause silent failures', severity: 'critical', mitigation: 'Add comprehensive integration tests with fault injection', owner: 'Payments Team', probability: 'Medium', impact: 9, likelihood: 7 },
+    { risk: 'Retry queue overflow under peak load', severity: 'high', mitigation: 'Implement bounded retry queues with backpressure monitoring', owner: 'Platform Team', probability: 'High', impact: 8, likelihood: 6 },
+    { risk: 'Billing reconciliation delay during rollout', severity: 'medium', mitigation: 'Implement feature flag with gradual rollout (10% → 50% → 100%)', owner: 'Billing Team', probability: 'Low', impact: 5, likelihood: 3 },
+    { risk: 'Database migration conflicts with existing transactions', severity: 'high', mitigation: 'Run migrations during low-traffic window with rollback plan', owner: 'Platform Team', probability: 'Medium', impact: 7, likelihood: 5 },
+    { risk: 'Monitoring gaps for retry metrics', severity: 'medium', mitigation: 'Add Datadog dashboards and alerts for retry rates', owner: 'DevOps Team', probability: 'Low', impact: 4, likelihood: 4 },
+  ],
+  riskForecast: [
+    { sprint: 1, risk: 35, label: 'Design & Planning' },
+    { sprint: 2, risk: 55, label: 'Core Implementation' },
+    { sprint: 3, risk: 45, label: 'Integration & Testing' },
+    { sprint: 4, risk: 30, label: 'Staging & QA' },
+    { sprint: 5, risk: 20, label: 'Production Rollout' },
   ],
   workItems: [
     { title: 'Implement circuit breaker pattern', type: 'feat', priority: 'P0', points: 8, assignee: '@alice', sprint: 1, status: 'in_progress' },
@@ -98,6 +119,31 @@ const mockPlan = {
     estimatedDays: 14,
     percentComplete: 25,
   },
+  costEstimation: {
+    hourlyRate: 150,
+    totalCost: 20400,
+    currency: 'USD',
+    budget: 25000,
+    phaseCosts: [
+      { phase: 'Design & Architecture', hours: 32, cost: 4800 },
+      { phase: 'Core Implementation', hours: 52, cost: 7800 },
+      { phase: 'Billing Integration', hours: 20, cost: 3000 },
+      { phase: 'Testing & QA', hours: 20, cost: 3000 },
+      { phase: 'Deployment & Monitoring', hours: 12, cost: 1800 },
+    ],
+  },
+  recommendations: [
+    { title: 'Add circuit breaker metrics dashboard', priority: 'P0', effort: '3 days', impact: 'Critical — prevents silent failures in production', description: 'Instrument circuit breaker state changes and expose via Prometheus metrics. Add Datadog dashboard for real-time monitoring of open/closed/half-open states with alert thresholds.' },
+    { title: 'Implement retry queue backpressure', priority: 'P0', effort: '5 days', impact: 'Critical — prevents queue overflow under load', description: 'Add adaptive rate limiting to retry queue consumer based on downstream latency. Use Semaphore pattern to bound concurrent retry executions and prevent resource exhaustion.' },
+    { title: 'Set up feature flag for gradual rollout', priority: 'P1', effort: '2 days', impact: 'High — enables safe staged deployment', description: 'Integrate with LaunchDarkly for percentage-based rollout of new retry logic. Implement kill switch capability to instantly fall back to legacy retry behavior.' },
+    { title: 'Create integration test suite for retry scenarios', priority: 'P1', effort: '4 days', impact: 'High — validates correctness across services', description: 'Build comprehensive integration tests covering network timeout, 5xx responses, rate limiting, and idempotency checks. Use testcontainers for dependent service simulation.' },
+    { title: 'Document runbook for retry failure escalation', priority: 'P2', effort: '1 day', impact: 'Medium — reduces MTTR during incidents', description: 'Create runbook with flowcharts for diagnosing retry failures, common alert responses, and escalation paths. Include Splunk queries and dashboard links.' },
+  ],
+  allocation: {
+    teams: ['Payments', 'Billing', 'Platform'],
+    sprints: [1, 2, 3],
+    data: [[80, 60, 30], [40, 20, 10], [20, 10, 5]],
+  },
 }
 
 const tabs = [
@@ -106,6 +152,26 @@ const tabs = [
   { id: 'timeline', label: 'Timeline', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
   { id: 'resources', label: 'Resources', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
 ]
+
+function AnimatedCounter({ value, suffix = '', duration = 800, delay = 0, className = '' }) {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    if (value === undefined || value === null) return
+    const timeout = setTimeout(() => {
+      const steps = 30
+      const inc = value / steps
+      let cur = 0
+      const iv = setInterval(() => {
+        cur += inc
+        if (cur >= value) { setCount(value); clearInterval(iv) }
+        else setCount(Math.floor(cur))
+      }, duration / steps)
+      return () => clearInterval(iv)
+    }, delay)
+    return () => clearTimeout(timeout)
+  }, [value, duration, delay])
+  return <span className={className}>{count}{suffix}</span>
+}
 
 function ReadinessGauge({ value }) {
   const [pct, setPct] = useState(0)
@@ -181,15 +247,20 @@ function GanttBar({ phase, start, duration, status, progress, index }) {
   }
   const sc = statusColors[status] || statusColors.pending
   const fc = fillColors[status] || fillColors.pending
+  const isCritical = ['Core Implementation', 'Design Review', 'Production Release'].includes(phase)
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.08 }}
-      className="grid grid-cols-[120px_1fr] sm:grid-cols-[140px_1fr_80px] items-center gap-2 sm:gap-4 py-2"
+      className={`grid grid-cols-[120px_1fr] sm:grid-cols-[140px_1fr_80px] items-center gap-2 sm:gap-4 py-2 ${isCritical ? 'relative' : ''}`}
     >
+      {isCritical && <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-amber-500/40 rounded-full" />}
       <div className="min-w-0">
-        <div className="text-xs font-medium text-slate-300 truncate">{phase}</div>
+        <div className="flex items-center gap-1.5">
+          <div className="text-xs font-medium text-slate-300 truncate">{phase}</div>
+          {isCritical && <span className="text-[7px] font-bold text-amber-500 bg-amber-500/10 rounded px-1 py-0.5">CRITICAL</span>}
+        </div>
         <div className="text-[9px] text-slate-600 mt-0.5">{start}</div>
       </div>
       <div className={`rounded-full border h-6 sm:h-7 ${sc} relative overflow-hidden`}>
@@ -203,7 +274,8 @@ function GanttBar({ phase, start, duration, status, progress, index }) {
           <span className="text-[9px] font-medium text-slate-300">{duration}</span>
         </div>
       </div>
-      <div className="hidden sm:flex justify-end">
+      <div className="hidden sm:flex justify-end items-center gap-2">
+        <span className={`text-[9px] font-medium ${progress >= 100 ? 'text-green-400' : progress > 0 ? 'text-violet-400' : 'text-slate-600'}`}>{progress}%</span>
         <StatusBadge status={status} label={status.replace('_', ' ')} />
       </div>
     </motion.div>
@@ -219,8 +291,9 @@ function SprintCard({ workItem }) {
   }
   const tc = typeColors[workItem.type] || typeColors.chore
   const priorityColor = workItem.priority === 'P0' ? 'text-red-400' : workItem.priority === 'P1' ? 'text-yellow-400' : 'text-slate-500'
+  const priorityBorder = workItem.priority === 'P0' ? 'border-l-red-500/60' : workItem.priority === 'P1' ? 'border-l-amber-500/60' : ''
   return (
-    <div className={`rounded-lg border border-white/[0.06] border-l-2 ${tc} p-3 hover:border-white/[0.12] transition-all group`}>
+    <div className={`rounded-lg border border-white/[0.06] border-l-2 ${tc} ${priorityBorder} p-3 hover:border-white/[0.12] hover:shadow-lg hover:shadow-violet-500/5 transition-all group`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <span className={`rounded px-1 py-0.5 text-[8px] font-bold uppercase ${priorityColor} bg-white/[0.04]`}>{workItem.priority}</span>
@@ -271,6 +344,34 @@ function BoardColumn({ title, items, accentColor, emptyText }) {
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+function RiskMatrix({ risks }) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+      {risks.map((r, i) => {
+        const score = r.impact * r.likelihood
+        const color = score >= 50 ? 'bg-red-500/20 border-red-500/40 text-red-300' : score >= 25 ? 'bg-amber-500/20 border-amber-500/40 text-amber-300' : 'bg-violet-500/20 border-violet-500/40 text-violet-300'
+        return (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.06 }}
+            className={`rounded-lg border p-2.5 text-center ${color}`}
+          >
+            <div className="text-lg font-bold">{score}</div>
+            <div className="text-[8px] opacity-80 mt-0.5">{r.risk.length > 30 ? r.risk.slice(0, 28) + '...' : r.risk}</div>
+            <div className="flex items-center justify-center gap-1 mt-1 text-[7px] opacity-70">
+              <span>I:{r.impact}</span>
+              <span className="text-white/20">×</span>
+              <span>P:{r.likelihood}</span>
+            </div>
+          </motion.div>
+        )
+      })}
     </div>
   )
 }
@@ -427,11 +528,14 @@ export default function AIEngineeringPlanner() {
                       <h2 className="text-lg sm:text-xl font-bold text-white truncate">"{input}"</h2>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <StatusBadge status={plan.readiness.score >= 70 ? 'success' : plan.readiness.score >= 40 ? 'warning' : 'error'} label={`${plan.readiness.score}% Readiness`} />
                     <StatusBadge status={plan.impact.complexity === 'High' ? 'critical' : plan.impact.complexity === 'Medium' ? 'warning' : 'info'} label={plan.impact.complexity} />
                     <StatusBadge status={plan.impact.complexity === 'High' ? 'critical' : 'info'} label={`${plan.effort.totalStoryPoints} pts`} />
                     <span className="hidden sm:flex text-[9px] text-slate-700 border border-white/[0.06] rounded px-2 py-1">{plan.effort.engineeringHours}h est.</span>
+                    <span className={`px-2 py-1 rounded text-[9px] font-medium ${plan.impact.riskScore >= 70 ? 'bg-red-500/10 text-red-400 border border-red-500/20' : plan.impact.riskScore >= 40 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                      Health: {plan.impact.riskScore >= 70 ? '⚠ At Risk' : plan.impact.riskScore >= 40 ? '● Needs Attention' : '✓ Good'}
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -439,12 +543,12 @@ export default function AIEngineeringPlanner() {
               {/* Executive Summary Strip */}
               <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                 {[
-                  { label: 'Total Work Items', value: plan.summary.totalItems, icon: 'M9 4.5v7.5m0 0v7.5m0-7.5h7.5m-7.5 0H6', color: 'text-violet-300', bg: 'bg-violet-500/10' },
-                  { label: 'Completed', value: plan.summary.completedItems, icon: 'M4.5 12.75l6 6 9-13.5', color: 'text-green-400', bg: 'bg-green-500/10' },
-                  { label: 'In Progress', value: plan.summary.inProgressItems, icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-400', bg: 'bg-amber-500/10' },
-                  { label: 'Est. Duration', value: `${plan.summary.estimatedDays} days`, icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+                  { label: 'Total Work Items', value: plan.summary.totalItems, icon: 'M9 4.5v7.5m0 0v7.5m0-7.5h7.5m-7.5 0H6', color: 'text-violet-300', bg: 'bg-violet-500/10', suffix: '' },
+                  { label: 'Completed', value: plan.summary.completedItems, icon: 'M4.5 12.75l6 6 9-13.5', color: 'text-green-400', bg: 'bg-green-500/10', suffix: '' },
+                  { label: 'In Progress', value: plan.summary.inProgressItems, icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-400', bg: 'bg-amber-500/10', suffix: '' },
+                  { label: 'Est. Duration', value: plan.summary.estimatedDays, icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5', color: 'text-blue-400', bg: 'bg-blue-500/10', suffix: ' days' },
                 ].map((s, i) => (
-                  <div key={s.label} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-3 sm:p-4">
+                  <div key={s.label} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-3 sm:p-4 hover:border-violet-500/20 transition-all">
                     <div className="flex items-center gap-2 mb-2">
                       <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${s.bg}`}>
                         <svg className={`h-3.5 w-3.5 ${s.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -459,7 +563,7 @@ export default function AIEngineeringPlanner() {
                       transition={{ delay: 0.2 + i * 0.1 }}
                       className="text-2xl font-bold text-white"
                     >
-                      {typeof s.value === 'number' ? s.value : s.value}
+                      <AnimatedCounter value={typeof s.value === 'number' ? s.value : parseInt(s.value)} suffix={s.suffix || ''} delay={200 + i * 100} />
                     </motion.div>
                     {s.label === 'Completed' && (
                       <div className="mt-1.5 h-1 rounded-full bg-slate-800 overflow-hidden">
@@ -470,6 +574,9 @@ export default function AIEngineeringPlanner() {
                           className="h-full rounded-full bg-gradient-to-r from-green-500 to-emerald-400"
                         />
                       </div>
+                    )}
+                    {s.label === 'Est. Duration' && (
+                      <div className="text-[9px] text-slate-600 mt-0.5">{Math.ceil(plan.summary.estimatedDays / 7)} sprints</div>
                     )}
                   </div>
                 ))}
@@ -652,6 +759,89 @@ export default function AIEngineeringPlanner() {
                       </div>
                     </div>
 
+                    {/* Cost Estimation */}
+                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">$</div>
+                        <h2 className="text-sm font-semibold text-white">Cost Estimation</h2>
+                      </div>
+                      <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                              <div className="text-lg font-bold text-violet-300">${(plan.costEstimation.totalCost).toLocaleString()}</div>
+                              <div className="text-[9px] text-slate-600 mt-0.5">Total Cost</div>
+                            </div>
+                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                              <div className="text-lg font-bold text-white">{plan.effort.engineeringHours}</div>
+                              <div className="text-[9px] text-slate-600 mt-0.5">Engineering Hours</div>
+                            </div>
+                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                              <div className="text-lg font-bold text-white">${plan.costEstimation.hourlyRate}</div>
+                              <div className="text-[9px] text-slate-600 mt-0.5">Avg Hourly Rate</div>
+                            </div>
+                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                              <div className="text-lg font-bold text-green-400">${(plan.costEstimation.budget - plan.costEstimation.totalCost).toLocaleString()}</div>
+                              <div className="text-[9px] text-slate-600 mt-0.5">Under Budget</div>
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            {plan.costEstimation.phaseCosts.map((pc, i) => {
+                              const pct = (pc.cost / plan.costEstimation.budget) * 100
+                              return (
+                                <div key={i} className="flex items-center gap-3 text-xs">
+                                  <span className="text-slate-400 w-32 shrink-0 truncate">{pc.phase}</span>
+                                  <div className="flex-1 h-4 rounded bg-slate-800 overflow-hidden relative">
+                                    <motion.div
+                                      initial={{ width: 0 }}
+                                      animate={{ width: `${pct}%` }}
+                                      transition={{ duration: 0.6, delay: 0.2 + i * 0.08 }}
+                                      className="h-full rounded bg-gradient-to-r from-violet-500 to-brand"
+                                    />
+                                    <span className="absolute inset-0 flex items-center px-1.5 text-[8px] text-white/80">{pc.hours}h</span>
+                                  </div>
+                                  <span className="text-violet-300 w-20 text-right shrink-0">${pc.cost.toLocaleString()}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                        <div className="lg:w-48 rounded-lg border border-white/[0.06] bg-white/[0.02] p-4">
+                          <div className="text-[10px] text-slate-500 mb-2">Budget vs Actual</div>
+                          <div className="space-y-2">
+                            <div>
+                              <div className="flex justify-between text-[9px] text-slate-500 mb-0.5">
+                                <span>Budget</span>
+                                <span>${plan.costEstimation.budget.toLocaleString()}</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <div className="h-full rounded-full bg-emerald-500" style={{ width: '100%' }} />
+                              </div>
+                            </div>
+                            <div>
+                              <div className="flex justify-between text-[9px] text-slate-500 mb-0.5">
+                                <span>Estimated</span>
+                                <span>${plan.costEstimation.totalCost.toLocaleString()}</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${(plan.costEstimation.totalCost / plan.costEstimation.budget) * 100}%` }}
+                                  transition={{ duration: 0.8, delay: 0.4 }}
+                                  className="h-full rounded-full bg-violet-500"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-3 pt-3 border-t border-white/[0.06]">
+                            <div className="text-[10px] text-slate-500">Savings</div>
+                            <div className="text-lg font-bold text-green-400">${(plan.costEstimation.budget - plan.costEstimation.totalCost).toLocaleString()}</div>
+                            <div className="text-[8px] text-slate-600">{(100 - (plan.costEstimation.totalCost / plan.costEstimation.budget) * 100).toFixed(1)}% under budget</div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+
                     {/* Sprint Overview Cards */}
                     <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
                       <div className="flex items-center gap-2 mb-4">
@@ -662,8 +852,11 @@ export default function AIEngineeringPlanner() {
                         {plan.sprints.map((s, si) => {
                           const sprintItems = plan.workItems.filter(w => w.sprint === s.sprint)
                           const doneItems = sprintItems.filter(w => w.status === 'done').length
+                          const inProgItems = sprintItems.filter(w => w.status === 'in_progress').length
                           const totalItems = sprintItems.length
                           const pct = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0
+                          const totalPoints = sprintItems.reduce((a, w) => a + w.points, 0)
+                          const donePoints = sprintItems.filter(w => w.status === 'done').reduce((a, w) => a + w.points, 0)
                           return (
                             <div key={s.sprint} className={`rounded-lg border p-4 ${
                               s.status === 'active' ? 'border-violet-500/30 bg-violet-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'
@@ -689,39 +882,161 @@ export default function AIEngineeringPlanner() {
                                   className={`h-full rounded-full ${pct >= 100 ? 'bg-green-500' : pct > 0 ? 'bg-gradient-to-r from-violet-500 to-brand' : 'bg-slate-700'}`}
                                 />
                               </div>
+                              <div className="flex items-center gap-2 mt-2 text-[9px] text-slate-600">
+                                <span>Points: {donePoints}/{totalPoints}</span>
+                                <span className="text-slate-700">·</span>
+                                <span className={inProgItems > 0 ? 'text-violet-400' : 'text-slate-600'}>{inProgItems} active</span>
+                              </div>
                             </div>
                           )
                         })}
                       </div>
                     </div>
 
-                    {/* Risk Mitigation */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">7</div>
-                        <h2 className="text-sm font-semibold text-white">Risk Mitigation Strategy</h2>
-                      </div>
-                      <div className="grid gap-3">
-                        {plan.risks.map((r, i) => (
-                          <div key={i} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-                            <div className="flex items-start justify-between mb-1.5 flex-wrap gap-1">
-                              <div className="flex items-center gap-2 flex-1 min-w-0">
-                                <StatusBadge status={r.severity} label={r.severity} />
-                                <span className="text-xs font-medium text-slate-200">{r.risk}</span>
+                    {/* Risk Mitigation + Risk Forecast */}
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">7</div>
+                          <h2 className="text-sm font-semibold text-white">Risk Mitigation Strategy</h2>
+                        </div>
+                        <div className="space-y-3">
+                          {plan.risks.map((r, i) => (
+                            <div key={i} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 hover:border-violet-500/20 transition-colors">
+                              <div className="flex items-start justify-between mb-1.5 flex-wrap gap-1">
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  <StatusBadge status={r.severity} label={r.severity} />
+                                  <span className="text-xs font-medium text-slate-200">{r.risk}</span>
+                                </div>
+                                <StatusBadge status={r.probability === 'High' ? 'critical' : r.probability === 'Medium' ? 'warning' : 'info'} label={r.probability} />
                               </div>
-                              <StatusBadge status={r.probability === 'High' ? 'critical' : r.probability === 'Medium' ? 'warning' : 'info'} label={r.probability} />
+                              <div className="flex items-center gap-2 text-[10px] text-slate-500 flex-wrap">
+                                <span className="text-slate-600">Mitigation:</span>
+                                <span>{r.mitigation}</span>
+                                <span className="text-slate-700">·</span>
+                                <span className="text-slate-600">Owner:</span>
+                                <span>{r.owner}</span>
+                              </div>
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <span className="text-[8px] text-slate-700">Impact: {r.impact}/10</span>
+                                <span className="text-[8px] text-slate-700">·</span>
+                                <span className="text-[8px] text-slate-700">Likelihood: {r.likelihood}/10</span>
+                                <span className="text-[8px] text-slate-700">·</span>
+                                <span className={`text-[8px] font-medium ${r.impact * r.likelihood >= 50 ? 'text-red-400' : r.impact * r.likelihood >= 25 ? 'text-amber-400' : 'text-slate-500'}`}>
+                                  Score: {r.impact * r.likelihood}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-2 text-[10px] text-slate-500 flex-wrap">
-                              <span className="text-slate-600">Mitigation:</span>
-                              <span>{r.mitigation}</span>
-                              <span className="text-slate-700">·</span>
-                              <span className="text-slate-600">Owner:</span>
-                              <span>{r.owner}</span>
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">⚠</div>
+                          <h2 className="text-sm font-semibold text-white">Risk Forecast</h2>
+                        </div>
+                        <div className="space-y-2 mb-4">
+                          {plan.riskForecast.map((rf, i) => {
+                            const barColor = rf.risk >= 50 ? 'bg-red-500' : rf.risk >= 35 ? 'bg-amber-500' : 'bg-green-500'
+                            return (
+                              <div key={i} className="flex items-center gap-3">
+                                <span className="text-[9px] text-slate-500 w-20 shrink-0">Sprint {rf.sprint}</span>
+                                <div className="flex-1 h-3 rounded bg-slate-800 overflow-hidden relative">
+                                  <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${rf.risk}%` }}
+                                    transition={{ duration: 0.6, delay: 0.1 * i }}
+                                    className={`h-full rounded ${barColor}`}
+                                  />
+                                  <span className="absolute inset-0 flex items-center px-1.5 text-[8px] text-white/80">{rf.label}</span>
+                                </div>
+                                <span className={`text-[9px] font-medium w-8 text-right ${rf.risk >= 50 ? 'text-red-400' : rf.risk >= 35 ? 'text-amber-400' : 'text-green-400'}`}>{rf.risk}%</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+                          <div className="text-[10px] text-slate-500 mb-2">Probability × Impact Matrix</div>
+                          <RiskMatrix risks={plan.risks} />
+                        </div>
                       </div>
                     </div>
+
+                    {/* Release Readiness Checks */}
+                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">✓</div>
+                        <h2 className="text-sm font-semibold text-white">Release Readiness Score</h2>
+                      </div>
+                      <div className="grid gap-4 sm:grid-cols-[auto_1fr]">
+                        <div className="flex justify-center">
+                          <ReadinessGauge value={plan.readiness.score} />
+                        </div>
+                        <div className="space-y-2">
+                          {plan.readiness.checks.map((c, i) => (
+                            <motion.div
+                              key={c.label}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.2 + i * 0.06 }}
+                              className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5"
+                            >
+                              <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] ${
+                                c.pass ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                              }`}>
+                                {c.pass ? (
+                                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                ) : (
+                                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                )}
+                              </div>
+                              <span className="text-xs text-slate-300 flex-1">{c.label}</span>
+                              <span className={`text-[9px] font-medium ${c.pass ? 'text-green-400' : 'text-red-400'}`}>{c.pass ? 'Pass' : 'Fail'}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* AI Recommendations */}
+                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-violet-500/30 to-brand/30 text-[11px] font-bold text-violet-300">
+                          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
+                        </div>
+                        <h2 className="text-sm font-semibold text-white">AI Recommendations</h2>
+                      </div>
+                      <div className="grid gap-2">
+                        {plan.recommendations.map((rec, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 * i }}
+                            className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 hover:border-violet-500/20 transition-all"
+                          >
+                            <div className="flex items-start justify-between gap-2 mb-1.5">
+                              <div className="flex items-center gap-2 min-w-0 flex-1">
+                                <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
+                                  rec.priority === 'P0' ? 'bg-red-500/10 text-red-400' :
+                                  rec.priority === 'P1' ? 'bg-amber-500/10 text-amber-400' :
+                                  'bg-slate-500/10 text-slate-400'
+                                }`}>{rec.priority}</span>
+                                <span className="text-xs font-medium text-white truncate">{rec.title}</span>
+                              </div>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                <span className="text-[8px] text-slate-600 bg-slate-800/60 rounded px-1.5 py-0.5">{rec.effort}</span>
+                              </div>
+                            </div>
+                            <p className="text-[10px] text-slate-500 leading-relaxed mb-1.5">{rec.description}</p>
+                            <div className="flex items-center gap-1.5">
+                              <svg className="h-3 w-3 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                              <span className="text-[9px] text-violet-400">{rec.impact}</span>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
                   </motion.div>
                 )}
 
@@ -734,6 +1049,9 @@ export default function AIEngineeringPlanner() {
                       const done = items.filter(w => w.status === 'done')
                       const total = items.length
                       const donePct = total > 0 ? Math.round((done.length / total) * 100) : 0
+                      const totalPoints = items.reduce((a, w) => a + w.points, 0)
+                      const donePoints = items.filter(w => w.status === 'done').reduce((a, w) => a + w.points, 0)
+                      const remainingDays = sprint.sprint === 1 ? 8 : sprint.sprint === 2 ? 14 : 7
                       return (
                         <div key={sprint.sprint} className="rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 sm:p-5">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
@@ -744,7 +1062,7 @@ export default function AIEngineeringPlanner() {
                                 <p className="text-[10px] text-slate-600">{sprint.focus}</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <div className="flex items-center gap-1.5 text-[9px] text-slate-600">
                                 <span className={`rounded px-1.5 py-0.5 ${todo.length > 0 ? 'bg-slate-500/10 text-slate-400' : 'text-slate-700'}`}>{todo.length} todo</span>
                                 <span className={`rounded px-1.5 py-0.5 ${inProgress.length > 0 ? 'bg-violet-500/10 text-violet-400' : 'text-slate-700'}`}>{inProgress.length} active</span>
@@ -753,19 +1071,25 @@ export default function AIEngineeringPlanner() {
                               <StatusBadge status={sprint.status === 'active' ? 'running' : 'pending'} label={sprint.status} />
                             </div>
                           </div>
-                          {total > 0 && (
-                            <div className="flex items-center gap-2 mb-4">
-                              <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                                <motion.div
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${donePct}%` }}
-                                  transition={{ duration: 0.8, delay: 0.1 }}
-                                  className={`h-full rounded-full ${donePct >= 100 ? 'bg-green-500' : 'bg-gradient-to-r from-violet-500 to-brand'}`}
-                                />
-                              </div>
-                              <span className={`text-[10px] font-medium ${donePct >= 100 ? 'text-green-400' : 'text-violet-400'}`}>{donePct}%</span>
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${donePct}%` }}
+                                transition={{ duration: 0.8, delay: 0.1 }}
+                                className={`h-full rounded-full ${donePct >= 100 ? 'bg-green-500' : 'bg-gradient-to-r from-violet-500 to-brand'}`}
+                              />
                             </div>
-                          )}
+                            <span className={`text-[10px] font-medium ${donePct >= 100 ? 'text-green-400' : 'text-violet-400'}`}>{donePct}%</span>
+                            <span className="text-[9px] text-slate-600">{remainingDays}d remaining</span>
+                          </div>
+                          <div className="flex items-center gap-3 mb-4 text-[9px] text-slate-600">
+                            <span>Points: <span className="text-white/80">{donePoints}/{totalPoints}</span></span>
+                            <span className="text-slate-700">·</span>
+                            <span>Items: <span className="text-white/80">{done.length}/{total}</span></span>
+                            <span className="text-slate-700">·</span>
+                            <span className={donePct >= 50 ? 'text-green-400' : 'text-amber-400'}>{donePct >= 50 ? 'On track' : 'Needs attention'}</span>
+                          </div>
                           <div className="grid gap-3 sm:grid-cols-3">
                             <BoardColumn title="To Do" items={todo} accentColor="bg-slate-500" emptyText="All items moved" />
                             <BoardColumn title="In Progress" items={inProgress} accentColor="bg-violet-500" emptyText="Nothing in progress" />
@@ -809,6 +1133,39 @@ export default function AIEngineeringPlanner() {
                           </div>
                         ))}
                       </div>
+                      {/* Milestone markers */}
+                      <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2">
+                        <span className="text-[9px] text-slate-600 mr-1">Milestones:</span>
+                        {plan.milestones.map((m, i) => (
+                          <div key={i} className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[8px] font-medium whitespace-nowrap ${
+                            m.critical ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-white/[0.06] text-slate-400'
+                          }`}>
+                            <svg className={`h-3 w-3 ${m.critical ? 'text-amber-400' : 'text-slate-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            {m.label}
+                          </div>
+                        ))}
+                      </div>
+                      {/* Dependency visualization */}
+                      <div className="mb-4 p-3 rounded-lg border border-white/[0.06] bg-white/[0.02]">
+                        <div className="text-[10px] text-slate-500 mb-2">Phase Dependencies</div>
+                        <div className="flex items-center gap-1 overflow-x-auto pb-1">
+                          {plan.timeline.map((t, i) => (
+                            <div key={i} className="flex items-center gap-1">
+                              <div className={`rounded px-2 py-1 text-[8px] font-medium whitespace-nowrap border ${
+                                t.status === 'completed' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
+                                t.status === 'in_progress' ? 'bg-violet-500/10 border-violet-500/30 text-violet-400' :
+                                'bg-slate-800/60 border-slate-700/40 text-slate-500'
+                              }`}>
+                                {t.phase}
+                                <span className="ml-1 opacity-60">{t.progress}%</span>
+                              </div>
+                              {i < plan.timeline.length - 1 && (
+                                <svg className="h-3 w-4 text-slate-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                       {/* Overall progress bar */}
                       <div className="mb-4">
                         <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
@@ -834,6 +1191,7 @@ export default function AIEngineeringPlanner() {
                         <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-violet-500" /><span className="text-[9px] text-slate-600">In Progress</span></div>
                         <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-green-500" /><span className="text-[9px] text-slate-600">Completed</span></div>
                         <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-slate-700" /><span className="text-[9px] text-slate-600">Pending</span></div>
+                        <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" /><span className="text-[9px] text-slate-600">Critical Path</span></div>
                       </div>
                     </div>
                   </motion.div>
@@ -850,7 +1208,7 @@ export default function AIEngineeringPlanner() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[
                           { label: 'Total Engineers', value: plan.teams.reduce((a, t) => a + t.members, 0), icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
-                          { label: 'Total Capacity', value: `${Math.round(plan.teams.reduce((a, t) => a + t.load, 0) / plan.teams.length)}% avg`, icon: 'M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15' },
+                          { label: 'Avg Capacity', value: `${Math.round(plan.teams.reduce((a, t) => a + t.load, 0) / plan.teams.length)}%`, icon: 'M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15' },
                           { label: 'Story Points', value: plan.effort.totalStoryPoints, icon: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
                           { label: 'Est. Hours', value: plan.effort.engineeringHours, icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
                         ].map((s, i) => (
@@ -871,6 +1229,135 @@ export default function AIEngineeringPlanner() {
                         ))}
                       </div>
                     </motion.div>
+
+                    {/* Team Allocation Heatmap */}
+                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">◈</div>
+                        <h2 className="text-sm font-semibold text-white">Team Allocation Heatmap</h2>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="border-b border-white/[0.06]">
+                              <th className="text-left py-2 pr-4 text-[9px] text-slate-500 font-medium">Team</th>
+                              {plan.allocation.sprints.map(s => (
+                                <th key={s} className="text-center py-2 px-3 text-[9px] text-slate-500 font-medium">Sprint {s}</th>
+                              ))}
+                              <th className="text-center py-2 pl-3 text-[9px] text-slate-500 font-medium">Avg</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {plan.allocation.teams.map((team, ti) => {
+                              const row = plan.allocation.data[ti]
+                              const avg = Math.round(row.reduce((a, v) => a + v, 0) / row.length)
+                              return (
+                                <tr key={team} className="border-b border-white/[0.03]">
+                                  <td className="py-2.5 pr-4">
+                                    <div className="flex items-center gap-2">
+                                      <div className={`h-2 w-2 rounded-full ${
+                                        ti === 0 ? 'bg-red-500' : ti === 1 ? 'bg-yellow-500' : 'bg-green-500'
+                                      }`} />
+                                      <span className="text-xs text-slate-300">{team}</span>
+                                    </div>
+                                  </td>
+                                  {row.map((val, si) => {
+                                    const color = val >= 80 ? 'bg-red-500/25 text-red-300 border-red-500/30' : val >= 60 ? 'bg-amber-500/20 text-amber-300 border-amber-500/25' : val >= 30 ? 'bg-violet-500/15 text-violet-300 border-violet-500/20' : 'bg-slate-800/60 text-slate-500 border-slate-700/30'
+                                    const isOver = val > 100
+                                    return (
+                                      <td key={si} className={`text-center py-2.5 px-3 rounded-lg border ${color} relative`}>
+                                        <span className="font-medium">{val}%</span>
+                                        {isOver && <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-pulse" />}
+                                        <div className="mt-1 h-1 rounded-full bg-slate-800/60 overflow-hidden">
+                                          <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${Math.min(val, 100)}%` }}
+                                            transition={{ duration: 0.6, delay: 0.1 * ti + 0.05 * si }}
+                                            className={`h-full rounded-full ${val >= 80 ? 'bg-red-400' : val >= 60 ? 'bg-amber-400' : val >= 30 ? 'bg-violet-400' : 'bg-slate-600'}`}
+                                          />
+                                        </div>
+                                      </td>
+                                    )
+                                  })}
+                                  <td className="text-center py-2.5 pl-3">
+                                    <span className={`font-medium ${
+                                      avg >= 80 ? 'text-red-400' : avg >= 60 ? 'text-amber-400' : avg >= 30 ? 'text-violet-400' : 'text-slate-500'
+                                    }`}>{avg}%</span>
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/[0.06] text-[8px] text-slate-600">
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500/30" /> Over 80% (High)</span>
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-amber-500/30" /> 60-80% (Moderate)</span>
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-violet-500/30" /> 30-60% (Normal)</span>
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-slate-700" /> Under 30% (Low)</span>
+                      </div>
+                    </motion.div>
+
+                    {/* Resource Histogram */}
+                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">▨</div>
+                        <h2 className="text-sm font-semibold text-white">Resource Histogram — Engineers per Week</h2>
+                      </div>
+                      <div className="space-y-2">
+                        {[
+                          { week: 'Week 1', payments: 6, billing: 3, platform: 2 },
+                          { week: 'Week 2', payments: 7, billing: 4, platform: 2 },
+                          { week: 'Week 3', payments: 5, billing: 3, platform: 3 },
+                          { week: 'Week 4', payments: 3, billing: 2, platform: 2 },
+                          { week: 'Week 5', payments: 2, billing: 1, platform: 1 },
+                        ].map((w, i) => {
+                          const total = w.payments + w.billing + w.platform
+                          const maxVal = 12
+                          return (
+                            <div key={i} className="flex items-center gap-3">
+                              <span className="text-[9px] text-slate-500 w-14 shrink-0">{w.week}</span>
+                              <div className="flex-1 h-6 rounded bg-slate-800 overflow-hidden flex">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${(w.payments / maxVal) * 100}%` }}
+                                  transition={{ duration: 0.5, delay: 0.1 * i }}
+                                  className="h-full bg-gradient-to-r from-red-500 to-red-400 relative"
+                                  style={{ opacity: 0.85 }}
+                                >
+                                  <span className="absolute inset-0 flex items-center pl-1 text-[8px] text-white/90 font-medium">{w.payments}</span>
+                                </motion.div>
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${(w.billing / maxVal) * 100}%` }}
+                                  transition={{ duration: 0.5, delay: 0.15 + 0.1 * i }}
+                                  className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 relative"
+                                  style={{ opacity: 0.85 }}
+                                >
+                                  <span className="absolute inset-0 flex items-center pl-1 text-[8px] text-white/90 font-medium">{w.billing}</span>
+                                </motion.div>
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${(w.platform / maxVal) * 100}%` }}
+                                  transition={{ duration: 0.5, delay: 0.2 + 0.1 * i }}
+                                  className="h-full bg-gradient-to-r from-green-500 to-green-400 relative"
+                                  style={{ opacity: 0.85 }}
+                                >
+                                  <span className="absolute inset-0 flex items-center pl-1 text-[8px] text-white/90 font-medium">{w.platform}</span>
+                                </motion.div>
+                              </div>
+                              <span className="text-[9px] text-slate-600 w-8 text-right">{total}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/[0.06] text-[8px] text-slate-600">
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-red-500" /> Payments</span>
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-yellow-500" /> Billing</span>
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-green-500" /> Platform</span>
+                      </div>
+                    </motion.div>
+
                     {/* Team Cards */}
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {plan.teams.map((t, i) => (
@@ -879,7 +1366,7 @@ export default function AIEngineeringPlanner() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: i * 0.1 }}
-                          className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 hover:border-violet-500/20 transition-all group"
+                          className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 hover:border-violet-500/20 hover:shadow-lg hover:shadow-violet-500/5 transition-all group"
                         >
                           <div className="flex items-center gap-3 mb-4">
                             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${
@@ -889,6 +1376,12 @@ export default function AIEngineeringPlanner() {
                               <div className="text-sm font-semibold text-white">{t.name}</div>
                               <div className="text-[10px] text-violet-400">{t.role}</div>
                             </div>
+                            {t.load >= 80 && (
+                              <div className="flex items-center gap-1 rounded-full bg-red-500/10 border border-red-500/20 px-2 py-0.5">
+                                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+                                <span className="text-[8px] font-medium text-red-400">Over</span>
+                              </div>
+                            )}
                           </div>
                           <div className="space-y-2 mb-4">
                             <div className="flex items-center justify-between">

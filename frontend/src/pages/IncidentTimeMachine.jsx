@@ -256,7 +256,7 @@ function AnimatedStatCard({ value, label, color, delay = 200 }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: delay / 1000 + 0.3 }}
-      className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 backdrop-blur-xl hover:border-purple-500/30 hover:bg-white/[0.04] transition-all duration-300 group"
+                    className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 backdrop-blur-xl hover:border-purple-500/30 hover:bg-white/[0.04] transition-all duration-300 group"
     >
       <div className="flex items-center justify-between mb-3">
         <p className="text-[11px] font-mono font-medium text-slate-500 tracking-wide uppercase">{label}</p>
@@ -985,9 +985,9 @@ export default function IncidentTimeMachine() {
 
   return (
     <Layout>
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-3">
         <motion.div variants={item}>
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-4">
               <div className="relative">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 shadow-lg shadow-purple-500/25">
@@ -1078,14 +1078,14 @@ export default function IncidentTimeMachine() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
+                <div key={i} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 animate-pulse">
                   <div className="h-3 w-28 bg-slate-800 rounded mb-3" />
                   <div className="h-8 w-16 bg-slate-800 rounded mb-2" />
                   <div className="h-2 w-full bg-slate-800 rounded" />
                 </div>
               ))}
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
+            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 animate-pulse">
               <div className="h-3 w-40 bg-slate-800 rounded mb-4" />
               <div className="flex gap-4 overflow-hidden">
                 {Array.from({ length: 4 }).map((_, i) => (
@@ -1093,7 +1093,7 @@ export default function IncidentTimeMachine() {
                 ))}
               </div>
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
+            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 animate-pulse">
               <div className="h-3 w-32 bg-slate-800 rounded mb-4" />
               <div className="grid gap-3 sm:grid-cols-3">
                 {Array.from({ length: 3 }).map((_, i) => (
@@ -1111,7 +1111,7 @@ export default function IncidentTimeMachine() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               variants={container}
-              className="space-y-8"
+              className="space-y-3"
             >
               {/* 1. Stats */}
               <motion.div variants={item} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1203,7 +1203,7 @@ export default function IncidentTimeMachine() {
 
               {/* 3. Incident Replay Engine */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1223,7 +1223,7 @@ export default function IncidentTimeMachine() {
 
               {/* 4. Root Cause Journey */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-5">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1243,7 +1243,7 @@ export default function IncidentTimeMachine() {
 
               {/* 5. Recovery Analysis */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1259,7 +1259,7 @@ export default function IncidentTimeMachine() {
 
               {/* 6. Lessons Learned */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1279,7 +1279,7 @@ export default function IncidentTimeMachine() {
 
               {/* 7. Historical Comparisons */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1299,7 +1299,7 @@ export default function IncidentTimeMachine() {
 
               {/* 8. Pattern Detection */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1381,7 +1381,7 @@ export default function IncidentTimeMachine() {
 
               {/* 9. AI Future Prediction */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1401,7 +1401,7 @@ export default function IncidentTimeMachine() {
 
               {/* 10. Prevention Suggestions */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1467,7 +1467,7 @@ export default function IncidentTimeMachine() {
 
               {/* 11. Impact Forecast */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1516,7 +1516,7 @@ export default function IncidentTimeMachine() {
 
               {/* Historical Risk Evolution */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1532,7 +1532,7 @@ export default function IncidentTimeMachine() {
 
               {/* Historical Deployment Explorer */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -1551,7 +1551,7 @@ export default function IncidentTimeMachine() {
 
               {/* Time Navigation Controls */}
               <motion.div variants={item}>
-                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                       <svg className="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

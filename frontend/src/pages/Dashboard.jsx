@@ -261,7 +261,7 @@ function RiskHeatmap() {
     return { fill: '#34d399', text: 'text-emerald-400', bg: 'bg-emerald-500/20', label: 'Low' }
   }
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Risk Heatmap</h2>
         <div className="flex items-center gap-2">
@@ -357,7 +357,7 @@ function AlertsFeed() {
     return () => clearInterval(i)
   }, [acknowledged])
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">AI Alerts Feed</h2>
         <div className="flex items-center gap-2">
@@ -446,7 +446,7 @@ function ServiceHealthCard({ service, idx }) {
 function DeploymentTimeline() {
   const deployments = mockData.deployments
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Deployment Insights</h2>
         <div className="flex items-center gap-2">
@@ -511,7 +511,7 @@ function VelocityBarChart() {
   const avgPoints = Math.round(data.reduce((s, d) => s + d.points, 0) / data.length)
   const barWidth = 36; const gap = 10; const chartH = 140; const chartW = data.length * (barWidth + gap) + 20
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Engineering Productivity Trends</h2>
         <div className="flex items-center gap-2">
@@ -581,7 +581,7 @@ function ActivityTimeline() {
     alerted: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
   }
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Recent Activity Timeline</h2>
         <StatusBadge status="info" label="Live Feed" />
@@ -636,7 +636,7 @@ function PredictionCards() {
   const [flash, setFlash] = useState(null)
   useEffect(() => { const i = setInterval(() => { setFlash(Math.floor(Math.random() * 3)); setTimeout(() => setFlash(null), 300) }, 4000); return () => clearInterval(i) }, [])
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Prediction Engine</h2>
         <div className="flex items-center gap-1">
@@ -683,7 +683,7 @@ function BusinessImpactCalculator() {
   const [globalFlash, setGlobalFlash] = useState(false)
   useEffect(() => { const i = setInterval(() => { setGlobalFlash(true); setTimeout(() => setGlobalFlash(false), 200) }, 6000); return () => clearInterval(i) }, [])
   return (
-    <motion.div variants={item} className={`relative overflow-hidden rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5 ${globalFlash ? 'ring-1 ring-amber-500/30' : ''} transition-all duration-300`}>
+    <motion.div variants={item} className={`relative overflow-hidden rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4 ${globalFlash ? 'ring-1 ring-amber-500/30' : ''} transition-all duration-300`}>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(251,191,36,0.03),transparent_60%)]" />
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-3">
@@ -731,7 +731,7 @@ function BusinessImpactCalculator() {
 
 function IncidentsByService() {
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Incidents by Service</h2>
         <StatusBadge status="info" label="24h window" />
@@ -768,7 +768,7 @@ function IncidentsByService() {
 
 function SloSummary() {
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">SLO Summary</h2>
         <StatusBadge status="success" label={`${mockData.slos.filter(s => s.status === 'attaining').length}/${mockData.slos.length} Attaining`} />
@@ -846,7 +846,7 @@ function ChangeFailureRate() {
   useEffect(() => { const t = setTimeout(() => setAnim(true), 400); return () => clearTimeout(t) }, [])
   const data = mockData.changeFailureRate
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Change Failure Rate</h2>
         <div className="flex items-center gap-1.5">
@@ -976,7 +976,7 @@ function FooterBar() {
 
 function QuickActionPanel() {
   return (
-    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
+    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-[0.15em] font-mono">Quick Action Panel</h2>
         <StatusBadge status="info" label="SYS-OP TOOLS" />
@@ -1039,7 +1039,7 @@ export default function Dashboard() {
         </div>
 
         {/* 3. RISK HEATMAP + 4. AI ALERTS FEED — TWO COLUMN */}
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-3 lg:grid-cols-2">
           <RiskHeatmap />
           <AlertsFeed />
         </div>
@@ -1061,7 +1061,7 @@ export default function Dashboard() {
         </div>
 
         {/* 6. DEPLOYMENT INSIGHTS + 8. RECENT ACTIVITY TIMELINE — TWO COLUMN */}
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-3 lg:grid-cols-2">
           <DeploymentTimeline />
           <ActivityTimeline />
         </div>
@@ -1070,13 +1070,13 @@ export default function Dashboard() {
         <VelocityBarChart />
 
         {/* INCIDENTS BY SERVICE + SLO SUMMARY — TWO COLUMN */}
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-3 lg:grid-cols-2">
           <IncidentsByService />
           <SloSummary />
         </div>
 
         {/* CHANGE FAILURE RATE + ON-CALL BANNER */}
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-3 lg:grid-cols-2">
           <ChangeFailureRate />
           <OnCallBanner />
         </div>

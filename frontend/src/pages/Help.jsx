@@ -595,7 +595,7 @@ function SectionHeader({ title, subtitle, count }) {
 
 function SectionCard({ children, className = '' }) {
   return (
-    <div className={`rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all ${className}`}>
+    <div className={`rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all ${className}`}>
       {children}
     </div>
   )
@@ -618,7 +618,7 @@ export default function Help() {
 
   return (
     <Layout>
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-10 pb-16">
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-8">
         {/* Section 1: Search Experience */}
         <motion.div variants={item} className="space-y-6">
           <div className="text-center space-y-3 pt-4">

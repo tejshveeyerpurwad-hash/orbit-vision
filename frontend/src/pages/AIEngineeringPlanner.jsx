@@ -73,7 +73,7 @@ const mockPlan = {
   risks: [
     { risk: 'Circuit breaker misconfiguration may cause silent failures', severity: 'critical', mitigation: 'Add comprehensive integration tests with fault injection', owner: 'Payments Team', probability: 'Medium', impact: 9, likelihood: 7 },
     { risk: 'Retry queue overflow under peak load', severity: 'high', mitigation: 'Implement bounded retry queues with backpressure monitoring', owner: 'Platform Team', probability: 'High', impact: 8, likelihood: 6 },
-    { risk: 'Billing reconciliation delay during rollout', severity: 'medium', mitigation: 'Implement feature flag with gradual rollout (10% → 50% → 100%)', owner: 'Billing Team', probability: 'Low', impact: 5, likelihood: 3 },
+    { risk: 'Billing reconciliation delay during rollout', severity: 'medium', mitigation: 'Implement feature flag with gradual rollout (10% \u2192 50% \u2192 100%)', owner: 'Billing Team', probability: 'Low', impact: 5, likelihood: 3 },
     { risk: 'Database migration conflicts with existing transactions', severity: 'high', mitigation: 'Run migrations during low-traffic window with rollback plan', owner: 'Platform Team', probability: 'Medium', impact: 7, likelihood: 5 },
     { risk: 'Monitoring gaps for retry metrics', severity: 'medium', mitigation: 'Add Datadog dashboards and alerts for retry rates', owner: 'DevOps Team', probability: 'Low', impact: 4, likelihood: 4 },
   ],
@@ -133,11 +133,11 @@ const mockPlan = {
     ],
   },
   recommendations: [
-    { title: 'Add circuit breaker metrics dashboard', priority: 'P0', effort: '3 days', impact: 'Critical — prevents silent failures in production', description: 'Instrument circuit breaker state changes and expose via Prometheus metrics. Add Datadog dashboard for real-time monitoring of open/closed/half-open states with alert thresholds.' },
-    { title: 'Implement retry queue backpressure', priority: 'P0', effort: '5 days', impact: 'Critical — prevents queue overflow under load', description: 'Add adaptive rate limiting to retry queue consumer based on downstream latency. Use Semaphore pattern to bound concurrent retry executions and prevent resource exhaustion.' },
-    { title: 'Set up feature flag for gradual rollout', priority: 'P1', effort: '2 days', impact: 'High — enables safe staged deployment', description: 'Integrate with LaunchDarkly for percentage-based rollout of new retry logic. Implement kill switch capability to instantly fall back to legacy retry behavior.' },
-    { title: 'Create integration test suite for retry scenarios', priority: 'P1', effort: '4 days', impact: 'High — validates correctness across services', description: 'Build comprehensive integration tests covering network timeout, 5xx responses, rate limiting, and idempotency checks. Use testcontainers for dependent service simulation.' },
-    { title: 'Document runbook for retry failure escalation', priority: 'P2', effort: '1 day', impact: 'Medium — reduces MTTR during incidents', description: 'Create runbook with flowcharts for diagnosing retry failures, common alert responses, and escalation paths. Include Splunk queries and dashboard links.' },
+    { title: 'Add circuit breaker metrics dashboard', priority: 'P0', effort: '3 days', impact: 'Critical \u2014 prevents silent failures in production', description: 'Instrument circuit breaker state changes and expose via Prometheus metrics. Add Datadog dashboard for real-time monitoring of open/closed/half-open states with alert thresholds.' },
+    { title: 'Implement retry queue backpressure', priority: 'P0', effort: '5 days', impact: 'Critical \u2014 prevents queue overflow under load', description: 'Add adaptive rate limiting to retry queue consumer based on downstream latency. Use Semaphore pattern to bound concurrent retry executions and prevent resource exhaustion.' },
+    { title: 'Set up feature flag for gradual rollout', priority: 'P1', effort: '2 days', impact: 'High \u2014 enables safe staged deployment', description: 'Integrate with LaunchDarkly for percentage-based rollout of new retry logic. Implement kill switch capability to instantly fall back to legacy retry behavior.' },
+    { title: 'Create integration test suite for retry scenarios', priority: 'P1', effort: '4 days', impact: 'High \u2014 validates correctness across services', description: 'Build comprehensive integration tests covering network timeout, 5xx responses, rate limiting, and idempotency checks. Use testcontainers for dependent service simulation.' },
+    { title: 'Document runbook for retry failure escalation', priority: 'P2', effort: '1 day', impact: 'Medium \u2014 reduces MTTR during incidents', description: 'Create runbook with flowcharts for diagnosing retry failures, common alert responses, and escalation paths. Include Splunk queries and dashboard links.' },
   ],
   allocation: {
     teams: ['Payments', 'Billing', 'Platform'],
@@ -179,7 +179,7 @@ function ReadinessGauge({ value }) {
     const t = setTimeout(() => setPct(value), 400)
     return () => clearTimeout(t)
   }, [value])
-  const color = pct >= 80 ? '#22c55e' : pct >= 60 ? '#06b6d4' : pct >= 40 ? '#f59e0b' : '#ef4444'
+  const color = pct >= 80 ? '#22c55e' : pct >= 60 ? '#818cf8' : pct >= 40 ? '#f59e0b' : '#ef4444'
   const circumference = Math.PI * 60
   const offset = circumference - (pct / 100) * circumference
   return (
@@ -189,7 +189,7 @@ function ReadinessGauge({ value }) {
         <circle cx="68" cy="68" r="60" fill="none" stroke={color} strokeWidth="10" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} className="transition-all duration-1000 ease-out" />
       </svg>
       <div className="relative -mt-[76px] flex flex-col items-center">
-        <span className="text-3xl sm:text-4xl font-bold text-white">{pct}<span className="text-base sm:text-lg text-slate-500">%</span></span>
+        <span className="text-3xl sm:text-4xl font-bold text-white"><AnimatedCounter value={pct} delay={0} /><span className="text-base sm:text-lg text-slate-500">%</span></span>
         <span className="text-xs font-medium mt-1" style={{ color }}>{pct >= 80 ? 'Ready' : pct >= 60 ? 'On Track' : pct >= 40 ? 'Needs Work' : 'At Risk'}</span>
       </div>
     </div>
@@ -199,11 +199,11 @@ function ReadinessGauge({ value }) {
 function EffortBar({ label, points, hours, owner, totalPoints }) {
   const pct = totalPoints > 0 ? (points / totalPoints) * 100 : 0
   return (
-    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 hover:border-violet-500/20 transition-colors">
+    <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 hover:border-violet-500/30 transition-all group">
       <div className="flex items-center justify-between mb-1.5">
         <span className="text-xs font-medium text-slate-300 truncate mr-2">{label}</span>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[10px] font-semibold text-violet-300">{points} pts</span>
+          <span className="text-[10px] font-semibold text-violet-400">{points} pts</span>
           <span className="text-[9px] text-slate-600">{hours}h</span>
         </div>
       </div>
@@ -212,7 +212,7 @@ function EffortBar({ label, points, hours, owner, totalPoints }) {
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-brand"
+          className="h-full rounded-full bg-violet-500"
         />
       </div>
       <div className="mt-1 text-[9px] text-slate-600">{owner}</div>
@@ -285,15 +285,15 @@ function GanttBar({ phase, start, duration, status, progress, index }) {
 function SprintCard({ workItem }) {
   const typeColors = {
     feat: 'border-l-green-500/60 bg-green-500/[0.03]',
-    test: 'border-l-brand/60 bg-brand/[0.03]',
-    chore: 'border-l-yellow-500/60 bg-yellow-500/[0.03]',
+    test: 'border-l-indigo-500/60 bg-indigo-500/[0.03]',
+    chore: 'border-l-amber-500/60 bg-amber-500/[0.03]',
     docs: 'border-l-slate-500/60 bg-slate-500/[0.03]',
   }
   const tc = typeColors[workItem.type] || typeColors.chore
   const priorityColor = workItem.priority === 'P0' ? 'text-red-400' : workItem.priority === 'P1' ? 'text-yellow-400' : 'text-slate-500'
   const priorityBorder = workItem.priority === 'P0' ? 'border-l-red-500/60' : workItem.priority === 'P1' ? 'border-l-amber-500/60' : ''
   return (
-    <div className={`rounded-lg border border-white/[0.06] border-l-2 ${tc} ${priorityBorder} p-3 hover:border-white/[0.12] hover:shadow-lg hover:shadow-violet-500/5 transition-all group`}>
+    <div className={`rounded-lg border border-slate-800 border-l-2 ${tc} ${priorityBorder} p-3 hover:border-slate-700 hover:shadow-lg hover:shadow-violet-500/5 transition-all group`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <span className={`rounded px-1 py-0.5 text-[8px] font-bold uppercase ${priorityColor} bg-white/[0.04]`}>{workItem.priority}</span>
@@ -304,10 +304,13 @@ function SprintCard({ workItem }) {
       <div className="flex items-center gap-2 mt-2">
         <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
           workItem.type === 'feat' ? 'bg-green-500/10 text-green-400' :
-          workItem.type === 'test' ? 'bg-brand/10 text-brand-light' :
-          workItem.type === 'chore' ? 'bg-yellow-500/10 text-yellow-400' :
+          workItem.type === 'test' ? 'bg-indigo-500/10 text-indigo-400' :
+          workItem.type === 'chore' ? 'bg-amber-500/10 text-amber-400' :
           'bg-slate-500/10 text-slate-400'
         }`}>{workItem.type}</span>
+        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-700 text-[8px] font-bold text-slate-300">
+          {workItem.assignee.replace('@', '').charAt(0).toUpperCase()}
+        </div>
         <span className="text-[9px] text-slate-600">{workItem.assignee}</span>
       </div>
     </div>
@@ -316,7 +319,7 @@ function SprintCard({ workItem }) {
 
 function BoardColumn({ title, items, accentColor, emptyText }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-slate-900/40 p-4 min-h-[300px]">
+    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 min-h-[300px]">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className={`h-2 w-2 rounded-full ${accentColor}`} />
@@ -340,7 +343,7 @@ function BoardColumn({ title, items, accentColor, emptyText }) {
         {items.length === 0 && (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <svg className="h-6 w-6 text-slate-700 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-            <p className="text-[10px] text-slate-600">{emptyText || 'No items'}</p>
+            <p className="text-[10px] text-slate-600">{emptyText || 'Drag items here'}</p>
           </div>
         )}
       </div>
@@ -366,7 +369,7 @@ function RiskMatrix({ risks }) {
             <div className="text-[8px] opacity-80 mt-0.5">{r.risk.length > 30 ? r.risk.slice(0, 28) + '...' : r.risk}</div>
             <div className="flex items-center justify-center gap-1 mt-1 text-[7px] opacity-70">
               <span>I:{r.impact}</span>
-              <span className="text-white/20">×</span>
+              <span className="text-white/20">&times;</span>
               <span>P:{r.likelihood}</span>
             </div>
           </motion.div>
@@ -415,26 +418,29 @@ export default function AIEngineeringPlanner() {
     return (
       <Layout>
         <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
-          <motion.div variants={item}>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-brand shadow-lg shadow-violet-500/20">
-                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
-                </svg>
+          {/* Workspace Header */}
+          <motion.div variants={item} className="flex items-start gap-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-violet-500 shadow-lg shadow-violet-500/25">
+              <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-0.5">
+                <h1 className="text-3xl font-bold tracking-tight text-white">STRATEGIC PLANNING</h1>
+                <span className="rounded-full bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 text-[9px] font-semibold text-violet-400 tracking-wider uppercase">Pro</span>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">AI Engineering Planner</h1>
-                <p className="text-sm text-slate-500">From feature request to full engineering plan — powered by AI</p>
-              </div>
+              <p className="text-sm text-slate-500">AI-Powered Engineering Planning Suite</p>
             </div>
           </motion.div>
 
-          <motion.div variants={item} className="relative">
-            <div className="rounded-xl border border-white/[0.08] bg-slate-900/80 backdrop-blur-2xl p-4 sm:p-5">
+          {/* Planning Input */}
+          <motion.div variants={item}>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-5">
               <form onSubmit={e => { e.preventDefault(); generate(input) }}>
                 <div className="relative">
                   <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                   </svg>
                   <input
                     ref={inputRef}
@@ -443,20 +449,20 @@ export default function AIEngineeringPlanner() {
                     onChange={e => { setInput(e.target.value); setShowPresets(true) }}
                     onFocus={() => setShowPresets(true)}
                     onKeyDown={handleKey}
-                    placeholder='Describe a feature request, e.g. "Add payment retry support"'
-                    className="w-full rounded-xl border border-white/[0.06] bg-slate-800/60 py-3.5 pl-11 pr-40 text-sm text-white placeholder-slate-600 outline-none focus:border-violet-500/40 focus:bg-slate-800/80 transition-all"
+                    placeholder="Describe a feature to plan..."
+                    className="w-full rounded-xl border border-slate-800 bg-slate-950 py-3.5 pl-11 pr-44 text-sm text-white placeholder-slate-600 outline-none focus:border-violet-500/40 transition-all"
                     disabled={planning}
                   />
                   <div className="absolute inset-y-1.5 right-1.5 flex items-center gap-1">
                     <button
                       type="submit"
                       disabled={planning || !input.trim()}
-                      className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-violet-500 to-brand px-5 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/20"
+                      className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-violet-400 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/20"
                     >
                       {planning ? (
                         <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Generating</>
                       ) : (
-                        <><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" /></svg>Generate Plan</>
+                        <><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>Generate Plan</>
                       )}
                     </button>
                   </div>
@@ -464,7 +470,7 @@ export default function AIEngineeringPlanner() {
               </form>
               <AnimatePresence>
                 {showPresets && filtered.length > 0 && !planning && (
-                  <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="mt-2 rounded-xl border border-white/[0.06] bg-slate-800/80 overflow-hidden">
+                  <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="mt-2 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden">
                     {filtered.map((s, i) => (
                       <button key={s} type="button" className={`flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${i === selectedPreset ? 'bg-violet-500/10 text-violet-300' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white'}`} onClick={() => { setInput(s); setShowPresets(false); generate(s) }}>
                         <svg className="h-3.5 w-3.5 shrink-0 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
@@ -474,11 +480,25 @@ export default function AIEngineeringPlanner() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              <div className="flex items-center gap-2 mt-3 overflow-x-auto pb-1">
+                <span className="text-[9px] text-slate-600 font-medium mr-1">Popular:</span>
+                {presets.slice(0, 4).map((p, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => { setInput(p); setShowPresets(false); generate(p) }}
+                    className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[10px] text-slate-400 hover:border-violet-500/30 hover:text-violet-300 transition-all whitespace-nowrap"
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
 
+          {/* Empty state */}
           <motion.div variants={item} className="text-center py-16">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.06] bg-gradient-to-br from-violet-500/5 to-brand/5">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-800 bg-slate-900/50">
               <svg className="h-10 w-10 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
               </svg>
@@ -494,17 +514,42 @@ export default function AIEngineeringPlanner() {
   return (
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-        {/* Loading */}
+        {/* Loading Skeleton */}
         {planning && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse">
-                  <div className="h-3 w-20 skeleton rounded mb-3" /><div className="h-8 w-16 skeleton rounded mb-2" /><div className="h-2 skeleton rounded" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 animate-pulse">
+                  <div className="h-3 w-24 rounded bg-slate-800 mb-3" />
+                  <div className="h-8 w-16 rounded bg-slate-800 mb-2" />
+                  <div className="h-2 w-full rounded bg-slate-800" />
                 </div>
               ))}
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 animate-pulse"><div className="h-3 w-48 skeleton rounded mb-4" />{Array.from({ length: 3 }).map((_, j) => (<div key={j} className="h-14 skeleton rounded mb-2" />))}</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 animate-pulse">
+                <div className="h-3 w-40 rounded bg-slate-800 mb-4" />
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <div key={j} className="h-12 rounded bg-slate-800 mb-2" />
+                ))}
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 animate-pulse">
+                <div className="h-3 w-32 rounded bg-slate-800 mb-4" />
+                {Array.from({ length: 4 }).map((_, j) => (
+                  <div key={j} className="h-10 rounded bg-slate-800 mb-2" />
+                ))}
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 animate-pulse">
+                  <div className="h-3 w-28 rounded bg-slate-800 mb-3" />
+                  <div className="h-7 w-12 rounded bg-slate-800 mb-4" />
+                  <div className="h-2 w-full rounded bg-slate-800 mb-2" />
+                  <div className="h-2 w-3/4 rounded bg-slate-800" />
+                </div>
+              ))}
+            </div>
           </motion.div>
         )}
 
@@ -512,43 +557,44 @@ export default function AIEngineeringPlanner() {
         <AnimatePresence>
           {plan && !planning && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
-              {/* Plan Header */}
-              <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-900 to-slate-900/50 p-4 sm:p-5">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-brand/20 border border-violet-500/20">
-                      <svg className="h-5 w-5 text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" /></svg>
+              {/* Workspace Header */}
+              <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-violet-500 shadow-lg shadow-violet-500/25">
+                    <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h1 className="text-xl font-bold tracking-tight text-white">STRATEGIC PLANNING</h1>
+                      <span className="rounded-full bg-violet-500/10 border border-violet-500/20 px-1.5 py-0.5 text-[8px] font-semibold text-violet-400 tracking-wider uppercase">Pro</span>
                     </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-slate-500">Engineering Plan for</span>
-                        <span className="text-[9px] text-slate-700">•</span>
-                        <span className="text-[9px] text-slate-600">Generated {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                      </div>
-                      <h2 className="text-lg sm:text-xl font-bold text-white truncate">"{input}"</h2>
+                    <div className="flex items-center gap-2 text-[10px] text-slate-600">
+                      <span>Plan for &quot;{input}&quot;</span>
+                      <span className="text-slate-700">&middot;</span>
+                      <span>Generated {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <StatusBadge status={plan.readiness.score >= 70 ? 'success' : plan.readiness.score >= 40 ? 'warning' : 'error'} label={`${plan.readiness.score}% Readiness`} />
-                    <StatusBadge status={plan.impact.complexity === 'High' ? 'critical' : plan.impact.complexity === 'Medium' ? 'warning' : 'info'} label={plan.impact.complexity} />
-                    <StatusBadge status={plan.impact.complexity === 'High' ? 'critical' : 'info'} label={`${plan.effort.totalStoryPoints} pts`} />
-                    <span className="hidden sm:flex text-[9px] text-slate-700 border border-white/[0.06] rounded px-2 py-1">{plan.effort.engineeringHours}h est.</span>
-                    <span className={`px-2 py-1 rounded text-[9px] font-medium ${plan.impact.riskScore >= 70 ? 'bg-red-500/10 text-red-400 border border-red-500/20' : plan.impact.riskScore >= 40 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
-                      Health: {plan.impact.riskScore >= 70 ? '⚠ At Risk' : plan.impact.riskScore >= 40 ? '● Needs Attention' : '✓ Good'}
-                    </span>
-                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <StatusBadge status={plan.readiness.score >= 70 ? 'success' : plan.readiness.score >= 40 ? 'warning' : 'error'} label={`${plan.readiness.score}% Readiness`} />
+                  <StatusBadge status={plan.impact.complexity === 'High' ? 'critical' : plan.impact.complexity === 'Medium' ? 'warning' : 'info'} label={plan.impact.complexity} />
+                  <StatusBadge status="info" label={`${plan.effort.totalStoryPoints} pts`} />
+                  <span className="text-[9px] text-slate-600 border border-slate-800 rounded px-2 py-1">{plan.effort.engineeringHours}h est.</span>
                 </div>
               </motion.div>
 
-              {/* Executive Summary Strip */}
-              <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+              {/* Executive Summary Dashboard */}
+              <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                 {[
-                  { label: 'Total Work Items', value: plan.summary.totalItems, icon: 'M9 4.5v7.5m0 0v7.5m0-7.5h7.5m-7.5 0H6', color: 'text-violet-300', bg: 'bg-violet-500/10', suffix: '' },
-                  { label: 'Completed', value: plan.summary.completedItems, icon: 'M4.5 12.75l6 6 9-13.5', color: 'text-green-400', bg: 'bg-green-500/10', suffix: '' },
-                  { label: 'In Progress', value: plan.summary.inProgressItems, icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-400', bg: 'bg-amber-500/10', suffix: '' },
-                  { label: 'Est. Duration', value: plan.summary.estimatedDays, icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5', color: 'text-blue-400', bg: 'bg-blue-500/10', suffix: ' days' },
+                  { label: 'Total Story Points', value: plan.effort.totalStoryPoints, suffix: '', color: 'text-violet-400', bg: 'bg-violet-500/10', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z', sub: '' },
+                  { label: 'Engineering Hours', value: plan.effort.engineeringHours, suffix: 'h', color: 'text-indigo-400', bg: 'bg-indigo-500/10', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z', sub: '' },
+                  { label: 'Teams Assigned', value: plan.teams.length, suffix: '', color: 'text-green-400', bg: 'bg-green-500/10', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z', sub: 'across org' },
+                  { label: 'Sprint Duration', value: 2, suffix: ' weeks', color: 'text-amber-400', bg: 'bg-amber-500/10', icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5', sub: 'per sprint' },
+                  { label: 'Release Confidence', value: plan.effort.confidence === 'High' ? 85 : 60, suffix: '%', color: 'text-emerald-400', bg: 'bg-emerald-500/10', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', sub: 'on track' },
                 ].map((s, i) => (
-                  <div key={s.label} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-3 sm:p-4 hover:border-violet-500/20 transition-all">
+                  <div key={s.label} className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 hover:border-violet-500/20 hover:shadow-lg hover:shadow-violet-500/5 transition-all group">
                     <div className="flex items-center gap-2 mb-2">
                       <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${s.bg}`}>
                         <svg className={`h-3.5 w-3.5 ${s.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -560,37 +606,35 @@ export default function AIEngineeringPlanner() {
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 + i * 0.1 }}
-                      className="text-2xl font-bold text-white"
+                      transition={{ delay: 0.2 + i * 0.08 }}
+                      className={`text-2xl font-bold ${s.color}`}
                     >
-                      <AnimatedCounter value={typeof s.value === 'number' ? s.value : parseInt(s.value)} suffix={s.suffix || ''} delay={200 + i * 100} />
+                      <AnimatedCounter value={typeof s.value === 'number' ? s.value : 85} suffix={s.suffix || ''} delay={200 + i * 80} />
                     </motion.div>
-                    {s.label === 'Completed' && (
-                      <div className="mt-1.5 h-1 rounded-full bg-slate-800 overflow-hidden">
+                    {s.sub && <div className="text-[9px] text-slate-600 mt-0.5">{s.sub}</div>}
+                    {s.label === 'Release Confidence' && (
+                      <div className="mt-2 h-1 rounded-full bg-slate-800 overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
-                          animate={{ width: `${plan.summary.percentComplete}%` }}
+                          animate={{ width: `${plan.effort.confidence === 'High' ? 85 : 60}%` }}
                           transition={{ duration: 0.8, delay: 0.5 }}
-                          className="h-full rounded-full bg-gradient-to-r from-green-500 to-emerald-400"
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-400"
                         />
                       </div>
-                    )}
-                    {s.label === 'Est. Duration' && (
-                      <div className="text-[9px] text-slate-600 mt-0.5">{Math.ceil(plan.summary.estimatedDays / 7)} sprints</div>
                     )}
                   </div>
                 ))}
               </motion.div>
 
               {/* Tabs */}
-              <motion.div variants={item} className="flex gap-1 rounded-xl border border-white/[0.06] bg-slate-900/60 p-1 overflow-x-auto">
+              <motion.div variants={item} className="flex gap-1 rounded-xl border border-slate-800 bg-slate-900/80 p-1 overflow-x-auto">
                 {tabs.map(t => (
                   <button
                     key={t.id}
                     onClick={() => setActiveTab(t.id)}
-                    className={`flex items-center gap-1.5 rounded-lg px-3 sm:px-4 py-2 text-xs font-medium transition-all whitespace-nowrap ${
+                    className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium transition-all whitespace-nowrap ${
                       activeTab === t.id
-                        ? 'bg-gradient-to-r from-violet-500/15 to-brand/15 text-white shadow-sm'
+                        ? 'bg-violet-500/15 text-white shadow-sm'
                         : 'text-slate-500 hover:text-slate-300'
                     }`}
                   >
@@ -606,209 +650,63 @@ export default function AIEngineeringPlanner() {
               <AnimatePresence mode="wait">
                 {activeTab === 'overview' && (
                   <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} className="space-y-6">
-                    {/* Impact + Readiness */}
-                    <div className="grid gap-6 lg:grid-cols-[1fr_auto]">
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">1</div>
-                          <h2 className="text-sm font-semibold text-white">Orbit Impact Analysis</h2>
-                        </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                          <div className="rounded-lg border border-red-500/10 bg-red-500/[0.03] p-3">
-                            <span className="text-[10px] text-slate-600">Risk Score</span>
-                            <div className="flex items-baseline gap-1 mt-0.5">
-                              <span className="text-xl font-bold text-red-400">{plan.impact.riskScore}</span>
-                              <span className="text-[10px] text-slate-600">%</span>
-                            </div>
-                            <div className="mt-1.5 h-1 rounded-full bg-slate-800 overflow-hidden">
-                              <div className="h-full rounded-full bg-gradient-to-r from-red-500 to-orange-500" style={{ width: `${plan.impact.riskScore}%` }} />
-                            </div>
-                          </div>
-                          <div className="rounded-lg border border-orange-500/10 bg-orange-500/[0.03] p-3">
-                            <span className="text-[10px] text-slate-600">Blast Radius</span>
-                            <div className="text-xl font-bold text-orange-400 mt-0.5">{plan.impact.blastRadius}</div>
-                          </div>
-                          <div className="rounded-lg border border-yellow-500/10 bg-yellow-500/[0.03] p-3">
-                            <span className="text-[10px] text-slate-600">Complexity</span>
-                            <div className="text-xl font-bold text-yellow-400 mt-0.5">{plan.impact.complexity}</div>
-                          </div>
-                          <div className="rounded-lg border border-brand/10 bg-brand/[0.03] p-3">
-                            <span className="text-[10px] text-slate-600">Priority</span>
-                            <div className="text-xl font-bold text-brand-light mt-0.5">{plan.impact.priority}</div>
-                          </div>
-                        </div>
-                        <p className="text-xs text-slate-400 leading-relaxed">{plan.impact.summary}</p>
-                      </div>
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 lg:w-[200px]">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">10</div>
-                          <h2 className="text-sm font-semibold text-white">Release Readiness</h2>
-                        </div>
-                        <ReadinessGauge value={plan.readiness.score} />
-                      </div>
-                    </div>
 
-                    {/* Effort + Services */}
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">5</div>
-                          <h2 className="text-sm font-semibold text-white">Engineering Effort Estimate</h2>
-                        </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-                          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                            <div className="text-2xl font-bold text-white">{plan.effort.totalStoryPoints}</div>
-                            <div className="text-[9px] text-slate-600 mt-0.5">Story Points</div>
-                          </div>
-                          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                            <div className="text-2xl font-bold text-white">{plan.effort.engineeringHours}</div>
-                            <div className="text-[9px] text-slate-600 mt-0.5">Hours</div>
-                          </div>
-                          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                            <div className="text-2xl font-bold text-white">{plan.effort.engineers}</div>
-                            <div className="text-[9px] text-slate-600 mt-0.5">Engineers</div>
-                          </div>
-                          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                            <div className="text-2xl font-bold text-violet-300">{plan.effort.sprintDuration}</div>
-                            <div className="text-[9px] text-slate-600 mt-0.5">Per Sprint</div>
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          {plan.effort.breakdown.map((b, i) => (
-                            <EffortBar key={i} {...b} totalPoints={plan.effort.totalStoryPoints} />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">2</div>
-                          <h2 className="text-sm font-semibold text-white">Affected Services</h2>
-                        </div>
-                        <div className="space-y-2">
-                          {plan.services.map((s, i) => (
-                            <div key={i} className="group flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 hover:border-violet-500/20 transition-colors">
-                              <div className="flex items-center gap-3 min-w-0">
-                                <div className={`h-2 w-2 rounded-full shrink-0 ${
-                                  s.impact === 'critical' ? 'bg-red-500' : s.impact === 'high' ? 'bg-orange-500' : s.impact === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                                }`} />
-                                <div className="min-w-0">
-                                  <div className="text-xs font-medium text-white">{s.name}</div>
-                                  <div className="text-[10px] text-slate-600 mt-0.5 truncate">{s.changes}</div>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2 shrink-0 ml-2">
-                                <span className="text-[9px] text-slate-600">{s.files} files</span>
-                                <StatusBadge status={s.impact} label={`${s.risk}%`} />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Teams + Skills */}
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">3</div>
-                          <h2 className="text-sm font-semibold text-white">Affected Teams</h2>
-                        </div>
-                        <div className="space-y-2">
-                          {plan.teams.map((t, i) => (
-                            <div key={i} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
-                                  i === 0 ? 'bg-red-500/20 text-red-300' : i === 1 ? 'bg-yellow-500/20 text-yellow-300' : 'bg-green-500/20 text-green-300'
-                                }`}>{t.name[0]}</div>
-                                <div className="min-w-0">
-                                  <div className="text-xs font-medium text-white">{t.name}</div>
-                                  <div className="text-[10px] text-slate-600">{t.role} · {t.members} members</div>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2 shrink-0 ml-2">
-                                <TeamCapacityBar load={t.load} />
-                                <span className={`text-[10px] font-medium min-w-[36px] text-right ${
-                                  t.load >= 80 ? 'text-red-400' : t.load >= 60 ? 'text-yellow-400' : 'text-green-400'
-                                }`}>{t.load}%</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">4</div>
-                          <h2 className="text-sm font-semibold text-white">Required Skills</h2>
-                        </div>
-                        <div className="space-y-2">
-                          {plan.skills.map((s, i) => (
-                            <div key={i} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-                              <div className="flex items-center gap-3 min-w-0">
-                                <div className={`h-2 w-2 rounded-full shrink-0 ${s.required ? 'bg-violet-500' : 'bg-slate-600'}`} />
-                                <div className="min-w-0">
-                                  <div className="text-xs text-slate-300 truncate">{s.name}</div>
-                                  <div className="text-[10px] text-slate-600">{s.level}</div>
-                                </div>
-                              </div>
-                              <StatusBadge status={s.required ? 'info' : 'pending'} label={s.availability} />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Cost Estimation */}
-                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">$</div>
+                    {/* Cost Estimation Panel */}
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+                      <div className="flex items-center gap-2 mb-5">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">$</div>
                         <h2 className="text-sm font-semibold text-white">Cost Estimation</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">{plan.costEstimation.currency} &middot; ${plan.costEstimation.hourlyRate}/hr avg</span>
                       </div>
-                      <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
+                      <div className="grid gap-5 lg:grid-cols-[1fr_auto]">
                         <div className="space-y-3">
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                              <div className="text-lg font-bold text-violet-300">${(plan.costEstimation.totalCost).toLocaleString()}</div>
-                              <div className="text-[9px] text-slate-600 mt-0.5">Total Cost</div>
+                            <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-3 text-center">
+                              <div className="text-xl font-bold text-violet-400">
+                                <AnimatedCounter value={plan.costEstimation.totalCost} delay={100} />
+                              </div>
+                              <div className="text-[9px] text-slate-600 mt-0.5">Total Cost ($)</div>
                             </div>
-                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                              <div className="text-lg font-bold text-white">{plan.effort.engineeringHours}</div>
+                            <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-3 text-center">
+                              <div className="text-xl font-bold text-white">{plan.effort.engineeringHours}</div>
                               <div className="text-[9px] text-slate-600 mt-0.5">Engineering Hours</div>
                             </div>
-                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                              <div className="text-lg font-bold text-white">${plan.costEstimation.hourlyRate}</div>
-                              <div className="text-[9px] text-slate-600 mt-0.5">Avg Hourly Rate</div>
+                            <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-3 text-center">
+                              <div className="text-xl font-bold text-white">${plan.costEstimation.hourlyRate}</div>
+                              <div className="text-[9px] text-slate-600 mt-0.5">Hourly Rate</div>
                             </div>
-                            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                              <div className="text-lg font-bold text-green-400">${(plan.costEstimation.budget - plan.costEstimation.totalCost).toLocaleString()}</div>
+                            <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-3 text-center">
+                              <div className="text-xl font-bold text-green-400">
+                                <AnimatedCounter value={plan.costEstimation.budget - plan.costEstimation.totalCost} delay={200} />
+                              </div>
                               <div className="text-[9px] text-slate-600 mt-0.5">Under Budget</div>
                             </div>
                           </div>
                           <div className="space-y-1.5">
                             {plan.costEstimation.phaseCosts.map((pc, i) => {
-                              const pct = (pc.cost / plan.costEstimation.budget) * 100
+                              const pct = (pc.cost / plan.costEstimation.totalCost) * 100
                               return (
                                 <div key={i} className="flex items-center gap-3 text-xs">
                                   <span className="text-slate-400 w-32 shrink-0 truncate">{pc.phase}</span>
-                                  <div className="flex-1 h-4 rounded bg-slate-800 overflow-hidden relative">
+                                  <div className="flex-1 h-5 rounded bg-slate-800 overflow-hidden relative">
                                     <motion.div
                                       initial={{ width: 0 }}
                                       animate={{ width: `${pct}%` }}
                                       transition={{ duration: 0.6, delay: 0.2 + i * 0.08 }}
-                                      className="h-full rounded bg-gradient-to-r from-violet-500 to-brand"
+                                      className="h-full rounded bg-violet-500"
                                     />
                                     <span className="absolute inset-0 flex items-center px-1.5 text-[8px] text-white/80">{pc.hours}h</span>
                                   </div>
-                                  <span className="text-violet-300 w-20 text-right shrink-0">${pc.cost.toLocaleString()}</span>
+                                  <span className="text-violet-400 w-20 text-right shrink-0">${pc.cost.toLocaleString()}</span>
                                 </div>
                               )
                             })}
                           </div>
                         </div>
-                        <div className="lg:w-48 rounded-lg border border-white/[0.06] bg-white/[0.02] p-4">
-                          <div className="text-[10px] text-slate-500 mb-2">Budget vs Actual</div>
-                          <div className="space-y-2">
+                        <div className="lg:w-48 rounded-lg border border-slate-800 bg-slate-900/80 p-4">
+                          <div className="text-[10px] text-slate-500 mb-3 font-medium">Budget vs Actual</div>
+                          <div className="space-y-3">
                             <div>
                               <div className="flex justify-between text-[9px] text-slate-500 mb-0.5">
                                 <span>Budget</span>
@@ -833,115 +731,126 @@ export default function AIEngineeringPlanner() {
                               </div>
                             </div>
                           </div>
-                          <div className="mt-3 pt-3 border-t border-white/[0.06]">
+                          <div className="mt-3 pt-3 border-t border-slate-800">
                             <div className="text-[10px] text-slate-500">Savings</div>
-                            <div className="text-lg font-bold text-green-400">${(plan.costEstimation.budget - plan.costEstimation.totalCost).toLocaleString()}</div>
+                            <div className="text-lg font-bold text-green-400">
+                              <AnimatedCounter value={plan.costEstimation.budget - plan.costEstimation.totalCost} delay={400} />
+                            </div>
                             <div className="text-[8px] text-slate-600">{(100 - (plan.costEstimation.totalCost / plan.costEstimation.budget) * 100).toFixed(1)}% under budget</div>
                           </div>
                         </div>
                       </div>
                     </motion.div>
 
-                    {/* Sprint Overview Cards */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                    {/* Effort Breakdown */}
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">9</div>
-                        <h2 className="text-sm font-semibold text-white">Sprint Breakdown</h2>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">5</div>
+                        <h2 className="text-sm font-semibold text-white">Effort Breakdown</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">{plan.effort.totalStoryPoints} total pts &middot; {plan.effort.engineeringHours}h total</span>
                       </div>
-                      <div className="grid gap-3 sm:grid-cols-3">
-                        {plan.sprints.map((s, si) => {
-                          const sprintItems = plan.workItems.filter(w => w.sprint === s.sprint)
-                          const doneItems = sprintItems.filter(w => w.status === 'done').length
-                          const inProgItems = sprintItems.filter(w => w.status === 'in_progress').length
-                          const totalItems = sprintItems.length
-                          const pct = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0
-                          const totalPoints = sprintItems.reduce((a, w) => a + w.points, 0)
-                          const donePoints = sprintItems.filter(w => w.status === 'done').reduce((a, w) => a + w.points, 0)
-                          return (
-                            <div key={s.sprint} className={`rounded-lg border p-4 ${
-                              s.status === 'active' ? 'border-violet-500/30 bg-violet-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'
-                            }`}>
-                              <div className="flex items-center justify-between mb-1">
-                                <div className="flex items-center gap-2">
-                                  <span className={`h-2 w-2 rounded-full ${s.status === 'active' ? 'bg-violet-500 animate-pulse-soft' : 'bg-slate-600'}`} />
-                                  <span className="text-xs font-bold text-white">Sprint {s.sprint}</span>
+                      <div className="space-y-2">
+                        {plan.effort.breakdown.map((b, i) => (
+                          <EffortBar key={i} {...b} totalPoints={plan.effort.totalStoryPoints} />
+                        ))}
+                      </div>
+                    </motion.div>
+
+                    {/* Affected Services */}
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">2</div>
+                        <h2 className="text-sm font-semibold text-white">Affected Services</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">{plan.services.length} services impacted</span>
+                      </div>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {plan.services.map((s, i) => (
+                          <div key={i} className="rounded-lg border border-slate-800 bg-slate-900/80 p-4 hover:border-violet-500/30 transition-all group">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className={`h-3 w-3 rounded-full shrink-0 ${
+                                  s.impact === 'critical' ? 'bg-red-500' : s.impact === 'high' ? 'bg-orange-500' : s.impact === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                                }`} />
+                                <div>
+                                  <div className="text-sm font-medium text-white">{s.name}</div>
+                                  <div className="text-[9px] text-slate-600 mt-0.5">{s.changes}</div>
                                 </div>
-                                <StatusBadge status={s.status === 'active' ? 'info' : 'pending'} label={`${s.points} pts`} />
                               </div>
-                              <div className="text-sm font-semibold text-violet-300 mb-1">{s.name}</div>
-                              <p className="text-[10px] text-slate-500 leading-relaxed mb-3">{s.focus}</p>
-                              <div className="flex items-center justify-between text-[9px] text-slate-600 mb-1">
-                                <span>{doneItems}/{totalItems} items</span>
-                                <span className={pct >= 100 ? 'text-green-400' : pct > 0 ? 'text-violet-400' : 'text-slate-600'}>{pct}%</span>
-                              </div>
-                              <div className="h-1 rounded-full bg-slate-800 overflow-hidden">
+                              <StatusBadge status={s.impact} label={`${s.risk}%`} />
+                            </div>
+                            <div className="flex items-center gap-3 text-[10px] text-slate-600">
+                              <span>{s.files} files affected</span>
+                              <div className="flex-1 h-1 rounded-full bg-slate-800 overflow-hidden">
                                 <motion.div
                                   initial={{ width: 0 }}
-                                  animate={{ width: `${pct}%` }}
-                                  transition={{ duration: 0.8, delay: 0.3 + si * 0.1 }}
-                                  className={`h-full rounded-full ${pct >= 100 ? 'bg-green-500' : pct > 0 ? 'bg-gradient-to-r from-violet-500 to-brand' : 'bg-slate-700'}`}
+                                  animate={{ width: `${s.risk}%` }}
+                                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+                                  className={`h-full rounded-full ${s.risk >= 80 ? 'bg-red-500' : s.risk >= 60 ? 'bg-orange-500' : s.risk >= 40 ? 'bg-yellow-500' : 'bg-green-500'}`}
                                 />
                               </div>
-                              <div className="flex items-center gap-2 mt-2 text-[9px] text-slate-600">
-                                <span>Points: {donePoints}/{totalPoints}</span>
-                                <span className="text-slate-700">·</span>
-                                <span className={inProgItems > 0 ? 'text-violet-400' : 'text-slate-600'}>{inProgItems} active</span>
-                              </div>
+                              <span className={`font-medium ${s.risk >= 80 ? 'text-red-400' : s.risk >= 60 ? 'text-orange-400' : s.risk >= 40 ? 'text-yellow-400' : 'text-green-400'}`}>{s.risk}% risk</span>
                             </div>
-                          )
-                        })}
+                          </div>
+                        ))}
                       </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Risk Mitigation + Risk Forecast */}
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">7</div>
-                          <h2 className="text-sm font-semibold text-white">Risk Mitigation Strategy</h2>
-                        </div>
-                        <div className="space-y-3">
-                          {plan.risks.map((r, i) => (
-                            <div key={i} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 hover:border-violet-500/20 transition-colors">
-                              <div className="flex items-start justify-between mb-1.5 flex-wrap gap-1">
-                                <div className="flex items-center gap-2 flex-1 min-w-0">
-                                  <StatusBadge status={r.severity} label={r.severity} />
-                                  <span className="text-xs font-medium text-slate-200">{r.risk}</span>
+                    {/* Release Readiness */}
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">&check;</div>
+                        <h2 className="text-sm font-semibold text-white">Release Readiness</h2>
+                        <div className="flex-1" />
+                        <StatusBadge status={plan.readiness.level === 'On Track' ? 'success' : 'warning'} label={plan.readiness.level} />
+                      </div>
+                      <div className="grid gap-6 sm:grid-cols-[auto_1fr] items-center">
+                        <ReadinessGauge value={plan.readiness.score} />
+                        <div className="space-y-2">
+                          <div className="grid gap-2">
+                            {plan.readiness.checks.map((c, i) => (
+                              <motion.div
+                                key={c.label}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 + i * 0.06 }}
+                                className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-900/80 p-3"
+                              >
+                                <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] ${
+                                  c.pass ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                                }`}>
+                                  {c.pass ? (
+                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                  ) : (
+                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                  )}
                                 </div>
-                                <StatusBadge status={r.probability === 'High' ? 'critical' : r.probability === 'Medium' ? 'warning' : 'info'} label={r.probability} />
-                              </div>
-                              <div className="flex items-center gap-2 text-[10px] text-slate-500 flex-wrap">
-                                <span className="text-slate-600">Mitigation:</span>
-                                <span>{r.mitigation}</span>
-                                <span className="text-slate-700">·</span>
-                                <span className="text-slate-600">Owner:</span>
-                                <span>{r.owner}</span>
-                              </div>
-                              <div className="flex items-center gap-2 mt-1.5">
-                                <span className="text-[8px] text-slate-700">Impact: {r.impact}/10</span>
-                                <span className="text-[8px] text-slate-700">·</span>
-                                <span className="text-[8px] text-slate-700">Likelihood: {r.likelihood}/10</span>
-                                <span className="text-[8px] text-slate-700">·</span>
-                                <span className={`text-[8px] font-medium ${r.impact * r.likelihood >= 50 ? 'text-red-400' : r.impact * r.likelihood >= 25 ? 'text-amber-400' : 'text-slate-500'}`}>
-                                  Score: {r.impact * r.likelihood}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
+                                <span className="text-xs text-slate-300 flex-1">{c.label}</span>
+                                <span className={`text-[9px] font-medium ${c.pass ? 'text-green-400' : 'text-red-400'}`}>{c.pass ? 'Pass' : 'Fail'}</span>
+                              </motion.div>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                      <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">⚠</div>
-                          <h2 className="text-sm font-semibold text-white">Risk Forecast</h2>
-                        </div>
-                        <div className="space-y-2 mb-4">
+                    </motion.div>
+
+                    {/* Risk Forecast */}
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">&#9762;</div>
+                        <h2 className="text-sm font-semibold text-white">Risk Forecast</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">Sprint-by-sprint risk levels</span>
+                      </div>
+                      <div className="grid gap-5 lg:grid-cols-2">
+                        <div className="space-y-2">
                           {plan.riskForecast.map((rf, i) => {
                             const barColor = rf.risk >= 50 ? 'bg-red-500' : rf.risk >= 35 ? 'bg-amber-500' : 'bg-green-500'
                             return (
                               <div key={i} className="flex items-center gap-3">
                                 <span className="text-[9px] text-slate-500 w-20 shrink-0">Sprint {rf.sprint}</span>
-                                <div className="flex-1 h-3 rounded bg-slate-800 overflow-hidden relative">
+                                <div className="flex-1 h-4 rounded bg-slate-800 overflow-hidden relative">
                                   <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${rf.risk}%` }}
@@ -955,56 +864,22 @@ export default function AIEngineeringPlanner() {
                             )
                           })}
                         </div>
-                        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-                          <div className="text-[10px] text-slate-500 mb-2">Probability × Impact Matrix</div>
+                        <div>
+                          <div className="text-[10px] text-slate-500 mb-2">Probability &times; Impact Matrix</div>
                           <RiskMatrix risks={plan.risks} />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Release Readiness Checks */}
-                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">✓</div>
-                        <h2 className="text-sm font-semibold text-white">Release Readiness Score</h2>
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-[auto_1fr]">
-                        <div className="flex justify-center">
-                          <ReadinessGauge value={plan.readiness.score} />
-                        </div>
-                        <div className="space-y-2">
-                          {plan.readiness.checks.map((c, i) => (
-                            <motion.div
-                              key={c.label}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.2 + i * 0.06 }}
-                              className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5"
-                            >
-                              <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] ${
-                                c.pass ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                              }`}>
-                                {c.pass ? (
-                                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                                ) : (
-                                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                                )}
-                              </div>
-                              <span className="text-xs text-slate-300 flex-1">{c.label}</span>
-                              <span className={`text-[9px] font-medium ${c.pass ? 'text-green-400' : 'text-red-400'}`}>{c.pass ? 'Pass' : 'Fail'}</span>
-                            </motion.div>
-                          ))}
                         </div>
                       </div>
                     </motion.div>
 
                     {/* AI Recommendations */}
-                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-violet-500/30 to-brand/30 text-[11px] font-bold text-violet-300">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">
                           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
                         </div>
                         <h2 className="text-sm font-semibold text-white">AI Recommendations</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">{plan.recommendations.length} suggestions</span>
                       </div>
                       <div className="grid gap-2">
                         {plan.recommendations.map((rec, i) => (
@@ -1012,8 +887,8 @@ export default function AIEngineeringPlanner() {
                             key={i}
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 * i }}
-                            className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 hover:border-violet-500/20 transition-all"
+                            transition={{ delay: 0.08 * i }}
+                            className="rounded-lg border border-slate-800 bg-slate-900/80 p-4 hover:border-violet-500/30 transition-all group"
                           >
                             <div className="flex items-start justify-between gap-2 mb-1.5">
                               <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -1024,9 +899,7 @@ export default function AIEngineeringPlanner() {
                                 }`}>{rec.priority}</span>
                                 <span className="text-xs font-medium text-white truncate">{rec.title}</span>
                               </div>
-                              <div className="flex items-center gap-1.5 shrink-0">
-                                <span className="text-[8px] text-slate-600 bg-slate-800/60 rounded px-1.5 py-0.5">{rec.effort}</span>
-                              </div>
+                              <span className="text-[8px] text-slate-600 bg-slate-800/60 rounded px-1.5 py-0.5 shrink-0">{rec.effort}</span>
                             </div>
                             <p className="text-[10px] text-slate-500 leading-relaxed mb-1.5">{rec.description}</p>
                             <div className="flex items-center gap-1.5">
@@ -1037,6 +910,7 @@ export default function AIEngineeringPlanner() {
                         ))}
                       </div>
                     </motion.div>
+
                   </motion.div>
                 )}
 
@@ -1053,10 +927,10 @@ export default function AIEngineeringPlanner() {
                       const donePoints = items.filter(w => w.status === 'done').reduce((a, w) => a + w.points, 0)
                       const remainingDays = sprint.sprint === 1 ? 8 : sprint.sprint === 2 ? 14 : 7
                       return (
-                        <div key={sprint.sprint} className="rounded-xl border border-white/[0.06] bg-slate-900/30 p-4 sm:p-5">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div key={sprint.sprint} className="rounded-xl border border-slate-800 bg-slate-900/40 p-5">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                             <div className="flex items-center gap-3">
-                              <span className={`h-2.5 w-2.5 rounded-full ${sprint.status === 'active' ? 'bg-violet-500 animate-pulse-soft' : 'bg-slate-600'}`} />
+                              <span className={`h-3 w-3 rounded-full ${sprint.status === 'active' ? 'bg-violet-500 animate-pulse' : 'bg-slate-600'}`} />
                               <div>
                                 <h3 className="text-sm font-bold text-white">Sprint {sprint.sprint}: {sprint.name}</h3>
                                 <p className="text-[10px] text-slate-600">{sprint.focus}</p>
@@ -1064,11 +938,11 @@ export default function AIEngineeringPlanner() {
                             </div>
                             <div className="flex items-center gap-2 flex-wrap">
                               <div className="flex items-center gap-1.5 text-[9px] text-slate-600">
-                                <span className={`rounded px-1.5 py-0.5 ${todo.length > 0 ? 'bg-slate-500/10 text-slate-400' : 'text-slate-700'}`}>{todo.length} todo</span>
-                                <span className={`rounded px-1.5 py-0.5 ${inProgress.length > 0 ? 'bg-violet-500/10 text-violet-400' : 'text-slate-700'}`}>{inProgress.length} active</span>
-                                <span className={`rounded px-1.5 py-0.5 ${done.length > 0 ? 'bg-green-500/10 text-green-400' : 'text-slate-700'}`}>{done.length} done</span>
+                                <span className="bg-slate-800/60 rounded px-1.5 py-0.5">{todo.length} backlog</span>
+                                <span className="bg-violet-500/10 text-violet-400 rounded px-1.5 py-0.5">{inProgress.length} active</span>
+                                <span className="bg-green-500/10 text-green-400 rounded px-1.5 py-0.5">{done.length} done</span>
                               </div>
-                              <StatusBadge status={sprint.status === 'active' ? 'running' : 'pending'} label={sprint.status} />
+                              <StatusBadge status={sprint.status === 'active' ? 'running' : 'pending'} label={sprint.status === 'active' ? 'Active' : 'Planned'} />
                             </div>
                           </div>
                           <div className="flex items-center gap-3 mb-4">
@@ -1077,7 +951,7 @@ export default function AIEngineeringPlanner() {
                                 initial={{ width: 0 }}
                                 animate={{ width: `${donePct}%` }}
                                 transition={{ duration: 0.8, delay: 0.1 }}
-                                className={`h-full rounded-full ${donePct >= 100 ? 'bg-green-500' : 'bg-gradient-to-r from-violet-500 to-brand'}`}
+                                className={`h-full rounded-full ${donePct >= 100 ? 'bg-green-500' : 'bg-violet-500'}`}
                               />
                             </div>
                             <span className={`text-[10px] font-medium ${donePct >= 100 ? 'text-green-400' : 'text-violet-400'}`}>{donePct}%</span>
@@ -1085,13 +959,13 @@ export default function AIEngineeringPlanner() {
                           </div>
                           <div className="flex items-center gap-3 mb-4 text-[9px] text-slate-600">
                             <span>Points: <span className="text-white/80">{donePoints}/{totalPoints}</span></span>
-                            <span className="text-slate-700">·</span>
+                            <span className="text-slate-700">&middot;</span>
                             <span>Items: <span className="text-white/80">{done.length}/{total}</span></span>
-                            <span className="text-slate-700">·</span>
+                            <span className="text-slate-700">&middot;</span>
                             <span className={donePct >= 50 ? 'text-green-400' : 'text-amber-400'}>{donePct >= 50 ? 'On track' : 'Needs attention'}</span>
                           </div>
                           <div className="grid gap-3 sm:grid-cols-3">
-                            <BoardColumn title="To Do" items={todo} accentColor="bg-slate-500" emptyText="All items moved" />
+                            <BoardColumn title="Backlog" items={todo} accentColor="bg-slate-500" emptyText="No backlog items" />
                             <BoardColumn title="In Progress" items={inProgress} accentColor="bg-violet-500" emptyText="Nothing in progress" />
                             <BoardColumn title="Done" items={done} accentColor="bg-green-500" emptyText="No completed items" />
                           </div>
@@ -1103,50 +977,57 @@ export default function AIEngineeringPlanner() {
 
                 {activeTab === 'timeline' && (
                   <motion.div key="timeline" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} className="space-y-6">
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 sm:p-5">
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-5">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">6</div>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">6</div>
                         <h2 className="text-sm font-semibold text-white">Release Timeline</h2>
+                        <div className="flex-1" />
+                        <StatusBadge status="info" label={`${plan.timeline.length} phases`} />
                       </div>
-                      {/* Timeline stats */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
-                        {[
-                          { label: 'Total Phases', value: plan.timeline.length, color: 'text-violet-300' },
-                          { label: 'Completed', value: plan.timeline.filter(t => t.status === 'completed').length, color: 'text-green-400' },
-                          { label: 'In Progress', value: plan.timeline.filter(t => t.status === 'in_progress').length, color: 'text-amber-400' },
-                          { label: 'Pending', value: plan.timeline.filter(t => t.status === 'pending').length, color: 'text-slate-500' },
-                        ].map((s, i) => (
-                          <div key={s.label} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 text-center">
-                            <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
-                            <div className="text-[9px] text-slate-600">{s.label}</div>
-                          </div>
-                        ))}
+
+                      {/* Overall progress */}
+                      <div className="mb-5">
+                        <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                          <span>Overall Progress</span>
+                          <span className="text-violet-400 font-medium">{Math.round(plan.timeline.reduce((a, t) => a + t.progress, 0) / plan.timeline.length)}%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.round(plan.timeline.reduce((a, t) => a + t.progress, 0) / plan.timeline.length)}%` }}
+                            transition={{ duration: 1, delay: 0.2 }}
+                            className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-400"
+                          />
+                        </div>
                       </div>
+
                       {/* Sprint markers */}
                       <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2">
                         {plan.sprints.map(s => (
                           <div key={s.sprint} className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-[9px] font-medium whitespace-nowrap ${
-                            s.status === 'active' ? 'border-violet-500/30 bg-violet-500/10 text-violet-300' : 'border-white/[0.06] text-slate-500'
+                            s.status === 'active' ? 'border-violet-500/30 bg-violet-500/10 text-violet-300' : 'border-slate-800 text-slate-500'
                           }`}>
                             <span className={`h-1.5 w-1.5 rounded-full ${s.status === 'active' ? 'bg-violet-500' : 'bg-slate-600'}`} />
                             Sprint {s.sprint}: {s.name} ({s.points} pts)
                           </div>
                         ))}
                       </div>
+
                       {/* Milestone markers */}
                       <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2">
                         <span className="text-[9px] text-slate-600 mr-1">Milestones:</span>
                         {plan.milestones.map((m, i) => (
                           <div key={i} className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[8px] font-medium whitespace-nowrap ${
-                            m.critical ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-white/[0.06] text-slate-400'
+                            m.critical ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-slate-800 text-slate-400'
                           }`}>
-                            <svg className={`h-3 w-3 ${m.critical ? 'text-amber-400' : 'text-slate-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg className={`h-3 w-3 ${m.critical ? 'text-amber-400' : 'text-slate-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
                             {m.label}
                           </div>
                         ))}
                       </div>
+
                       {/* Dependency visualization */}
-                      <div className="mb-4 p-3 rounded-lg border border-white/[0.06] bg-white/[0.02]">
+                      <div className="mb-4 p-3 rounded-lg border border-slate-800 bg-slate-900/80">
                         <div className="text-[10px] text-slate-500 mb-2">Phase Dependencies</div>
                         <div className="flex items-center gap-1 overflow-x-auto pb-1">
                           {plan.timeline.map((t, i) => (
@@ -1166,28 +1047,35 @@ export default function AIEngineeringPlanner() {
                           ))}
                         </div>
                       </div>
-                      {/* Overall progress bar */}
-                      <div className="mb-4">
-                        <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
-                          <span>Overall Progress</span>
-                          <span>{Math.round(plan.timeline.reduce((a, t) => a + t.progress, 0) / plan.timeline.length)}%</span>
-                        </div>
-                        <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.round(plan.timeline.reduce((a, t) => a + t.progress, 0) / plan.timeline.length)}%` }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                            className="h-full rounded-full bg-gradient-to-r from-violet-500 to-brand"
-                          />
-                        </div>
+
+                      {/* Timeline stats */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
+                        {[
+                          { label: 'Total Phases', value: plan.timeline.length, color: 'text-violet-400' },
+                          { label: 'Completed', value: plan.timeline.filter(t => t.status === 'completed').length, color: 'text-green-400' },
+                          { label: 'In Progress', value: plan.timeline.filter(t => t.status === 'in_progress').length, color: 'text-amber-400' },
+                          { label: 'Pending', value: plan.timeline.filter(t => t.status === 'pending').length, color: 'text-slate-500' },
+                        ].map((s, i) => (
+                          <div key={s.label} className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5 text-center">
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.1 + i * 0.08 }}
+                              className={`text-xl font-bold ${s.color}`}
+                            ><AnimatedCounter value={s.value} delay={100 + i * 80} /></motion.div>
+                            <div className="text-[9px] text-slate-600">{s.label}</div>
+                          </div>
+                        ))}
                       </div>
+
                       <div className="relative">
                         {plan.timeline.map((t, i) => (
                           <GanttBar key={t.phase} {...t} index={i} />
                         ))}
                       </div>
+
                       {/* Legend */}
-                      <div className="flex items-center gap-4 mt-4 pt-3 border-t border-white/[0.06]">
+                      <div className="flex items-center gap-4 mt-4 pt-3 border-t border-slate-800">
                         <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-violet-500" /><span className="text-[9px] text-slate-600">In Progress</span></div>
                         <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-green-500" /><span className="text-[9px] text-slate-600">Completed</span></div>
                         <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-slate-700" /><span className="text-[9px] text-slate-600">Pending</span></div>
@@ -1199,10 +1087,11 @@ export default function AIEngineeringPlanner() {
 
                 {activeTab === 'resources' && (
                   <motion.div key="resources" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} className="space-y-6">
+
                     {/* Resource Summary */}
-                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4 sm:p-5">
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">✓</div>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">&check;</div>
                         <h2 className="text-sm font-semibold text-white">Resource Allocation Summary</h2>
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -1212,7 +1101,7 @@ export default function AIEngineeringPlanner() {
                           { label: 'Story Points', value: plan.effort.totalStoryPoints, icon: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
                           { label: 'Est. Hours', value: plan.effort.engineeringHours, icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
                         ].map((s, i) => (
-                          <div key={s.label} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+                          <div key={s.label} className="rounded-lg border border-slate-800 bg-slate-900/80 p-3">
                             <div className="flex items-center gap-1.5 mb-1">
                               <svg className="h-3 w-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
@@ -1224,22 +1113,91 @@ export default function AIEngineeringPlanner() {
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: 0.2 + i * 0.1 }}
                               className="text-lg font-bold text-white mt-0.5"
-                            >{s.value}</motion.div>
+                            >
+                              {typeof s.value === 'string' ? s.value : <AnimatedCounter value={s.value} delay={100 + i * 80} />}
+                            </motion.div>
                           </div>
                         ))}
                       </div>
                     </motion.div>
 
+                    {/* Team Cards */}
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {plan.teams.map((t, i) => {
+                        const sprintPoints = plan.workItems
+                          .filter(w => w.assignee.replace('@', '') === t.lead.replace('@', '') || (t.name === 'Payments' && ['@alice', '@dave'].includes(w.assignee)))
+                          .reduce((a, w) => a + w.points, 0)
+                        const completedPoints = plan.workItems
+                          .filter(w => w.assignee.replace('@', '') === t.lead.replace('@', '') || (t.name === 'Payments' && ['@alice', '@dave'].includes(w.assignee)))
+                          .filter(w => w.status === 'done')
+                          .reduce((a, w) => a + w.points, 0)
+                        const compPct = sprintPoints > 0 ? Math.round((completedPoints / sprintPoints) * 100) : 0
+                        return (
+                          <motion.div
+                            key={t.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 transition-all group"
+                          >
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${
+                                i === 0 ? 'bg-red-500/20 text-red-300' : i === 1 ? 'bg-amber-500/20 text-amber-300' : 'bg-green-500/20 text-green-300'
+                              }`}>{t.name[0]}{t.name[1]}</div>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-sm font-semibold text-white">{t.name}</div>
+                                <div className="text-[10px] text-violet-400">{t.role}</div>
+                              </div>
+                              {t.load >= 80 && (
+                                <div className="flex items-center gap-1 rounded-full bg-red-500/10 border border-red-500/20 px-2 py-0.5">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+                                  <span className="text-[8px] font-medium text-red-400">Over</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-2 mb-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[10px] text-slate-500">Capacity</span>
+                                <span className={`text-[10px] font-medium ${
+                                  t.load >= 80 ? 'text-red-400' : t.load >= 60 ? 'text-amber-400' : 'text-green-400'
+                                }`}>{t.load}%</span>
+                              </div>
+                              <TeamCapacityBar load={t.load} />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 mb-3">
+                              <div className="rounded bg-slate-800/60 p-2 text-center">
+                                <div className="text-xs font-bold text-white">{sprintPoints}</div>
+                                <div className="text-[8px] text-slate-600">Sprint Pts</div>
+                              </div>
+                              <div className="rounded bg-slate-800/60 p-2 text-center">
+                                <div className="text-xs font-bold text-green-400">{compPct}%</div>
+                                <div className="text-[8px] text-slate-600">Complete</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between text-[10px]">
+                              <div className="flex items-center gap-1.5">
+                                <svg className="h-3 w-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                                <span className="text-slate-600">{t.members} members</span>
+                              </div>
+                              <span className="text-slate-600">{t.lead}</span>
+                            </div>
+                          </motion.div>
+                        )
+                      })}
+                    </div>
+
                     {/* Team Allocation Heatmap */}
-                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">◈</div>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">&#9702;</div>
                         <h2 className="text-sm font-semibold text-white">Team Allocation Heatmap</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">Capacity % by sprint</span>
                       </div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-xs">
                           <thead>
-                            <tr className="border-b border-white/[0.06]">
+                            <tr className="border-b border-slate-800">
                               <th className="text-left py-2 pr-4 text-[9px] text-slate-500 font-medium">Team</th>
                               {plan.allocation.sprints.map(s => (
                                 <th key={s} className="text-center py-2 px-3 text-[9px] text-slate-500 font-medium">Sprint {s}</th>
@@ -1256,7 +1214,7 @@ export default function AIEngineeringPlanner() {
                                   <td className="py-2.5 pr-4">
                                     <div className="flex items-center gap-2">
                                       <div className={`h-2 w-2 rounded-full ${
-                                        ti === 0 ? 'bg-red-500' : ti === 1 ? 'bg-yellow-500' : 'bg-green-500'
+                                        ti === 0 ? 'bg-red-500' : ti === 1 ? 'bg-amber-500' : 'bg-green-500'
                                       }`} />
                                       <span className="text-xs text-slate-300">{team}</span>
                                     </div>
@@ -1290,7 +1248,7 @@ export default function AIEngineeringPlanner() {
                           </tbody>
                         </table>
                       </div>
-                      <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/[0.06] text-[8px] text-slate-600">
+                      <div className="flex items-center gap-3 mt-3 pt-2 border-t border-slate-800 text-[8px] text-slate-600">
                         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500/30" /> Over 80% (High)</span>
                         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-amber-500/30" /> 60-80% (Moderate)</span>
                         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-violet-500/30" /> 30-60% (Normal)</span>
@@ -1299,10 +1257,10 @@ export default function AIEngineeringPlanner() {
                     </motion.div>
 
                     {/* Resource Histogram */}
-                    <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                    <motion.div variants={item} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">▨</div>
-                        <h2 className="text-sm font-semibold text-white">Resource Histogram — Engineers per Week</h2>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">&#9636;</div>
+                        <h2 className="text-sm font-semibold text-white">Resource Histogram &mdash; Engineers per Week</h2>
                       </div>
                       <div className="space-y-2">
                         {[
@@ -1331,7 +1289,7 @@ export default function AIEngineeringPlanner() {
                                   initial={{ width: 0 }}
                                   animate={{ width: `${(w.billing / maxVal) * 100}%` }}
                                   transition={{ duration: 0.5, delay: 0.15 + 0.1 * i }}
-                                  className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 relative"
+                                  className="h-full bg-gradient-to-r from-amber-500 to-amber-400 relative"
                                   style={{ opacity: 0.85 }}
                                 >
                                   <span className="absolute inset-0 flex items-center pl-1 text-[8px] text-white/90 font-medium">{w.billing}</span>
@@ -1351,63 +1309,20 @@ export default function AIEngineeringPlanner() {
                           )
                         })}
                       </div>
-                      <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/[0.06] text-[8px] text-slate-600">
+                      <div className="flex items-center gap-3 mt-3 pt-2 border-t border-slate-800 text-[8px] text-slate-600">
                         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-red-500" /> Payments</span>
-                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-yellow-500" /> Billing</span>
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-amber-500" /> Billing</span>
                         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded bg-green-500" /> Platform</span>
                       </div>
                     </motion.div>
 
-                    {/* Team Cards */}
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                      {plan.teams.map((t, i) => (
-                        <motion.div
-                          key={t.name}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5 hover:border-violet-500/20 hover:shadow-lg hover:shadow-violet-500/5 transition-all group"
-                        >
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${
-                              i === 0 ? 'bg-red-500/20 text-red-300' : i === 1 ? 'bg-yellow-500/20 text-yellow-300' : 'bg-green-500/20 text-green-300'
-                            }`}>{t.name[0]}{t.name[1]}</div>
-                            <div className="min-w-0 flex-1">
-                              <div className="text-sm font-semibold text-white">{t.name}</div>
-                              <div className="text-[10px] text-violet-400">{t.role}</div>
-                            </div>
-                            {t.load >= 80 && (
-                              <div className="flex items-center gap-1 rounded-full bg-red-500/10 border border-red-500/20 px-2 py-0.5">
-                                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-                                <span className="text-[8px] font-medium text-red-400">Over</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="space-y-2 mb-4">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[10px] text-slate-500">Capacity</span>
-                              <span className={`text-[10px] font-medium ${
-                                t.load >= 80 ? 'text-red-400' : t.load >= 60 ? 'text-yellow-400' : 'text-green-400'
-                              }`}>{t.load}%</span>
-                            </div>
-                            <TeamCapacityBar load={t.load} />
-                          </div>
-                          <div className="flex items-center justify-between text-[10px]">
-                            <div className="flex items-center gap-1.5">
-                              <svg className="h-3 w-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
-                              <span className="text-slate-600">{t.members} members</span>
-                            </div>
-                            <span className="text-slate-600">{t.lead}</span>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Work Items by Sprint (for full list view) */}
-                    <div className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-5">
+                    {/* Work Items List */}
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-violet-500/20 text-[11px] font-bold text-violet-300">8</div>
-                        <h2 className="text-sm font-semibold text-white">GitLab Work Items</h2>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-400">8</div>
+                        <h2 className="text-sm font-semibold text-white">Work Items</h2>
+                        <div className="flex-1" />
+                        <span className="text-[9px] text-slate-600">{plan.workItems.length} items across {plan.sprints.length} sprints</span>
                       </div>
                       <div className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1 scrollbar-thin">
                         {plan.workItems.map((w, i) => (
@@ -1416,18 +1331,18 @@ export default function AIEngineeringPlanner() {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.03 }}
-                            className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 hover:border-violet-500/20 transition-colors"
+                            className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/80 p-2.5 hover:border-violet-500/30 transition-colors"
                           >
                             <div className="flex items-center gap-2 min-w-0 flex-1">
                               <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
                                 w.type === 'feat' ? 'bg-green-500/10 text-green-400' :
-                                w.type === 'test' ? 'bg-brand/10 text-brand-light' :
-                                w.type === 'chore' ? 'bg-yellow-500/10 text-yellow-400' :
+                                w.type === 'test' ? 'bg-indigo-500/10 text-indigo-400' :
+                                w.type === 'chore' ? 'bg-amber-500/10 text-amber-400' :
                                 'bg-slate-500/10 text-slate-400'
                               }`}>{w.type}</span>
                               <span className={`rounded px-1 py-0.5 text-[7px] font-bold ${
                                 w.priority === 'P0' ? 'bg-red-500/10 text-red-400' :
-                                w.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
+                                w.priority === 'P1' ? 'bg-amber-500/10 text-amber-400' :
                                 'bg-slate-500/10 text-slate-400'
                               }`}>{w.priority}</span>
                               <span className="text-xs text-slate-300 truncate">{w.title}</span>
@@ -1435,13 +1350,16 @@ export default function AIEngineeringPlanner() {
                             <div className="flex items-center gap-2 shrink-0 ml-2">
                               <span className="text-[9px] text-slate-700">S{w.sprint}</span>
                               <span className="text-[9px] text-slate-600">{w.points} pts</span>
-                              <span className="text-[9px] text-slate-600">{w.assignee}</span>
+                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-700 text-[8px] font-bold text-slate-300">
+                                {w.assignee.replace('@', '').charAt(0).toUpperCase()}
+                              </div>
                               <StatusBadge status={w.status === 'in_progress' ? 'running' : w.status} label={w.status === 'in_progress' ? 'In Progress' : w.status} />
                             </div>
                           </motion.div>
                         ))}
                       </div>
                     </div>
+
                   </motion.div>
                 )}
               </AnimatePresence>

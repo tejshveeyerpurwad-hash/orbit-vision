@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
-import ExecutiveBanner from '../components/ExecutiveBanner'
+import ExecutiveCommandHeader from '../components/ExecutiveCommandHeader'
 
 const mockData = {
   kpis: [
@@ -1935,11 +1935,7 @@ export default function Dashboard() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
       <motion.div initial="hidden" animate="show" variants={container} className="relative z-10 max-w-[2000px] mx-auto px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 space-y-1 sm:space-y-1.5">
-        <ExecutiveBanner currentPage="/dashboard" />
-        <CommandHeader />
-        <StatusTicker />
-        <KpiRibbon />
-        <DailyBriefingExpanded />
+        <ExecutiveCommandHeader />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1.5 sm:gap-2">
           {[
             { label: 'Total Incidents', value: 1423, suffix: '', prefix: '~', color: 'text-red-400', dot: 'bg-red-500', trend: 'up', pct: 3.7, description: 'Across all service tiers', sparkData: [54,82,73,91,68,87,78,95,84,92] },

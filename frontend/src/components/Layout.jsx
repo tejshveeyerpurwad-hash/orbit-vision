@@ -176,10 +176,22 @@ export default function Layout({ children }) {
         }
         .header-grid {
           background-image:
-            linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
-          background-size: 48px 48px;
+            linear-gradient(rgba(255,255,255,0.004) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.004) 1px, transparent 1px);
+          background-size: 64px 64px;
         }
+        @keyframes orbit-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes radar-sweep { 0% { transform: rotate(0deg); opacity: 0.4; } 50% { opacity: 0.15; } 100% { transform: rotate(360deg); opacity: 0.4; } }
+        @keyframes scan-line { 0% { top: -2px; } 100% { top: 100%; } }
+        .animate-orbit { animation: orbit-rotate 8s linear infinite; }
+        .animate-radar { animation: radar-sweep 6s ease-in-out infinite; }
+        .animate-scan { animation: scan-line 3s linear infinite; }
+        @keyframes data-stream { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .animate-data-stream { background-size: 200% 1px; animation: data-stream 3s linear infinite; }
+        @keyframes glitch-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .animate-glitch { animation: glitch-pulse 2s ease-in-out infinite; }
+        @keyframes border-rotate { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        .animate-border-rotate { background-size: 200% 200%; animation: border-rotate 3s linear infinite; }
         .animate-particle-flow { animation: particle-flow 1.8s ease-in-out infinite; }
         .animate-particle-flow-2 { animation: particle-flow 2.4s ease-in-out infinite; }
         .animate-particle-flow-3 { animation: particle-flow 3s ease-in-out infinite; }
@@ -318,47 +330,54 @@ export default function Layout({ children }) {
 
         {/* ===== COMMAND BAR — hidden in present mode ===== */}
         {!presentMode && (
-          <header className="sticky top-0 z-30 flex h-11 items-center gap-2 border-b border-white/[0.06] bg-slate-950/75 backdrop-blur-2xl px-2 sm:px-3 shadow-[0_1px_0_rgba(255,255,255,0.03),0_4px_24px_-8px_rgba(6,182,212,0.06)] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-500/20 before:to-transparent">
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-2 sm:gap-3 border-b border-white/[0.06] bg-slate-950/75 backdrop-blur-2xl px-2 sm:px-3 shadow-[0_1px_0_rgba(255,255,255,0.03),0_4px_24px_-8px_rgba(6,182,212,0.08)] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-cyan-500/20 before:to-transparent">
 
-            {/* HEADER ATMOSPHERE */}
+            {/* HEADER ATMOSPHERE — subtle blueprint texture */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-              <div className="absolute inset-0 header-grid opacity-40" />
-              <div className="absolute inset-0 transition-all duration-700 ease-out" style={{ background: `radial-gradient(ellipse 400px 50px at ${spotlightX}% 50%, rgba(6,182,212,0.08) 0%, transparent 70%)` }} />
-              <div className="absolute top-1/4 left-[10%] h-1 w-1 rounded-full bg-cyan-400/30 animate-float-particle" />
-              <div className="absolute top-1/3 left-[40%] h-0.5 w-0.5 rounded-full bg-blue-400/30 animate-float-particle-2" />
-              <div className="absolute top-1/2 left-[65%] h-0.5 w-0.5 rounded-full bg-cyan-300/20 animate-float-particle" style={{ animationDelay: '3s' }} />
-              <div className="absolute top-1/4 left-[88%] h-1 w-1 rounded-full bg-cyan-500/20 animate-float-particle-2" style={{ animationDelay: '5s' }} />
+              <div className="absolute inset-0 header-grid opacity-30" />
+              <div className="absolute inset-0 transition-all duration-700 ease-out" style={{ background: `radial-gradient(ellipse 500px 60px at ${spotlightX}% 50%, rgba(6,182,212,0.06) 0%, transparent 70%)` }} />
+              {/* Subtle animated particles */}
+              <div className="absolute top-1/4 left-[8%] h-1 w-1 rounded-full bg-cyan-400/20 animate-float-particle" />
+              <div className="absolute top-1/3 left-[35%] h-0.5 w-0.5 rounded-full bg-blue-400/20 animate-float-particle-2" />
+              <div className="absolute top-1/2 left-[70%] h-0.5 w-0.5 rounded-full bg-cyan-300/15 animate-float-particle" style={{ animationDelay: '3s' }} />
+              <div className="absolute bottom-1/4 left-[90%] h-1 w-1 rounded-full bg-cyan-500/15 animate-float-particle-2" style={{ animationDelay: '5s' }} />
+              {/* Radar sweep accent */}
+              <div className="absolute left-[35%] top-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-cyan-500/5 animate-radar" />
             </div>
 
             {/* LEFT: Logo + Status */}
-            <div className="flex items-center gap-2 shrink-0 relative z-10">
-              <button onClick={() => setSidebarOpen(true)} className="md:hidden rounded-lg p-1 text-slate-600 hover:bg-white/[0.06]">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0 relative z-10">
+              <button onClick={() => setSidebarOpen(true)} className="md:hidden rounded-lg p-1.5 text-slate-500 hover:bg-white/[0.06] hover:text-slate-300 transition-all">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
               </button>
-              <Link to="/" className="flex items-center gap-1.5 group shrink-0">
-                <div className="relative flex h-6 w-6 items-center justify-center">
-                  <div className="absolute h-6 w-6 rounded-full bg-brand/20 animate-ping-slow" />
-                  <div className="relative h-1.5 w-1.5 rounded-full bg-brand shadow-lg shadow-brand/50" />
+              <Link to="/" className="flex items-center gap-2 group shrink-0">
+                <div className="relative flex h-7 w-7 items-center justify-center">
+                  <div className="absolute h-7 w-7 rounded-full bg-brand/15 animate-ping-slow" />
+                  <div className="relative h-2 w-2 rounded-full bg-brand shadow-lg shadow-brand/50" />
+                  <div className="absolute h-4 w-4 rounded-full border border-brand/20 animate-orbit" />
                 </div>
-                <span className="text-[11px] font-bold tracking-tight hidden sm:inline">Orbit<span className="text-brand">Foresight</span></span>
+                <div className="hidden sm:flex flex-col">
+                  <span className="text-xs font-bold tracking-tight leading-none text-white">Orbit<span className="text-brand">Foresight</span></span>
+                  <span className="text-[6px] font-mono text-slate-600 tracking-wider mt-0.5">PREDICT BEFORE PRODUCTION</span>
+                </div>
               </Link>
-              <div className="h-4 w-px bg-white/[0.06]" />
-              <div className="hidden sm:flex items-center gap-1.5 rounded-md border border-emerald-500/15 bg-emerald-500/[0.04] px-1.5 py-0.5 shadow-[0_0_12px_-4px_rgba(52,211,153,0.12)]">
-                <span className="relative flex h-1.5 w-1.5">
+              <div className="h-6 w-px bg-white/[0.05]" />
+              <div className="hidden sm:flex items-center gap-1.5 rounded-md border border-emerald-500/15 bg-emerald-500/[0.04] px-2 py-1 shadow-[0_0_12px_-4px_rgba(52,211,153,0.12)]">
+                <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-                  <span className="absolute inline-flex h-full w-8 rounded-full bg-emerald-400/20 blur-sm" style={{ width: '10px', height: '10px', top: '-3.5px', left: '-3.5px' }} />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
                 </span>
-                <span className="text-[8px] font-mono text-emerald-300 font-semibold tracking-wider">LIVE</span>
+                <span className="text-[9px] font-mono text-emerald-300 font-semibold tracking-wider">LIVE</span>
               </div>
-              <div className="hidden sm:flex items-center gap-1">
-                <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-500" /></span>
-                <span className="text-[8px] font-mono text-cyan-400/80 font-semibold tracking-wider">AI</span>
+              <div className="hidden sm:flex items-center gap-1.5 rounded-md border border-cyan-500/12 bg-cyan-500/[0.03] px-2 py-1">
+                <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" /></span>
+                <span className="text-[9px] font-mono text-cyan-400/80 font-semibold tracking-wider">AI</span>
               </div>
             </div>
 
-            {/* CENTER: Premium workflow navigation with animated intelligence pipeline */}
-            <nav className="hidden md:flex items-center mx-auto relative z-10">
+            {/* CENTER: Workflow nav — NASA Mission Control centerpiece */}
+            <nav className="hidden md:flex items-center mx-auto relative z-10 h-full">
+              <div className="flex items-center gap-1 bg-white/[0.02] rounded-xl px-2 py-1 border border-white/[0.04]">
               {workflow.map((item, i) => {
                 const active = isActive(item.to)
                 const isDone = workflow.findIndex(n => isActive(n.to)) > i
@@ -366,22 +385,22 @@ export default function Layout({ children }) {
                   <div key={item.to} className="flex items-center">
                     <Link
                       to={item.to}
-                      className={`group relative flex items-center gap-1.5 rounded-lg px-2 py-1 text-[9px] font-medium whitespace-nowrap transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] ${
+                      className={`group relative flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium whitespace-nowrap transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] ${
                         active
-                          ? 'text-cyan-200 hover:text-white'
+                          ? 'text-cyan-200'
                           : 'text-slate-500 hover:text-slate-200'
                       }`}
                     >
-                      {/* Stage number with premium styling */}
-                      <span className={`relative z-10 flex h-4 w-4 items-center justify-center rounded-full text-[6px] font-bold font-mono transition-all duration-300 ${
+                      {/* Stage number — premium circle */}
+                      <span className={`relative z-10 flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold font-mono transition-all duration-300 ${
                         active
-                          ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30'
+                          ? 'bg-cyan-500/20 text-cyan-300 border-2 border-cyan-400/40 shadow-[0_0_12px_-2px_rgba(6,182,212,0.3)]'
                           : isDone
-                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
-                          : 'bg-slate-800/50 text-slate-600 border border-slate-700'
+                          ? 'bg-emerald-500/15 text-emerald-400 border-2 border-emerald-500/30'
+                          : 'bg-slate-800/50 text-slate-500 border border-slate-700/60'
                       }`}>
                         {isDone ? (
-                          <svg className="h-2 w-2 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <svg className="h-3 w-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                           </svg>
                         ) : (
@@ -389,75 +408,85 @@ export default function Layout({ children }) {
                         )}
                       </span>
 
+                      {/* Label */}
+                      <span className="relative z-10 text-xs font-semibold tracking-tight">{item.label}</span>
+
+                      {/* Description — visible on hover */}
+                      <span className="hidden xl:block relative z-10 text-[8px] text-slate-600 group-hover:text-slate-500 transition-colors ml-0.5 font-mono">{item.desc}</span>
+
                       {/* Active stage: animated gradient border glow + pulsing ring + neon shadow */}
                       {active && (
                         <>
                           <motion.div
                             layoutId="nav-glow"
-                            className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-500/12 to-blue-600/8 border border-cyan-400/25 shadow-[0_0_20px_-4px_rgba(6,182,212,0.15),inset_0_1px_0_rgba(255,255,255,0.06)]"
+                            className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-500/12 to-blue-600/8 border border-cyan-400/25 shadow-[0_0_24px_-6px_rgba(6,182,212,0.2),inset_0_1px_0_rgba(255,255,255,0.08)]"
                             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                           />
-                          <div className="absolute -inset-1.5 rounded-xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-cyan-500/20 animate-gradient-border opacity-60 blur-[3px]" />
+                          <div className="absolute -inset-1.5 rounded-xl bg-gradient-to-r from-cyan-500/25 via-blue-500/20 to-cyan-500/25 animate-gradient-border opacity-60 blur-[4px]" />
                           <motion.div
-                            animate={{ boxShadow: ['0 0 18px -4px rgba(6,182,212,0.15)', '0 0 35px -4px rgba(6,182,212,0.35)', '0 0 18px -4px rgba(6,182,212,0.15)'] }}
+                            animate={{ boxShadow: ['0 0 20px -4px rgba(6,182,212,0.2)', '0 0 40px -4px rgba(6,182,212,0.4)', '0 0 20px -4px rgba(6,182,212,0.2)'] }}
                             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                             className="absolute inset-0 rounded-lg"
                           />
+                          {/* Floating highlight */}
+                          <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent animate-glitch" />
                           {/* Live indicator dot */}
-                          <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5">
+                          <span className="absolute -top-1 -right-1 flex h-2 w-2">
                             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />
                           </span>
                         </>
                       )}
 
-                      {/* Hover glow + underline (inactive) */}
+                      {/* Hover glow (inactive) */}
                       {!active && (
                         <>
                           <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/[0.03] border border-white/[0.06]" />
-                          <div className="absolute bottom-0 left-2 right-2 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 scale-x-0 group-hover:scale-x-100 origin-center" />
+                          <div className="absolute bottom-0 left-3 right-3 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 scale-x-0 group-hover:scale-x-100 origin-center" />
                         </>
                       )}
-
-                      {/* Label */}
-                      <span className="relative z-10">{item.label}</span>
                     </Link>
 
-                    {/* Animated intelligence pipeline connector */}
+                    {/* Connector: premium intelligence pipeline */}
                     {i < workflow.length - 1 && (
-                      <div className="relative w-5 mx-0.5">
+                      <div className="relative w-7 sm:w-8 mx-1">
                         {/* Base connector line */}
-                        <div className={`h-px rounded-full transition-colors duration-500 ${
+                        <div className={`h-[2px] rounded-full transition-colors duration-500 ${
                           isDone
-                            ? 'bg-emerald-500/60'
+                            ? 'bg-emerald-500/50'
                             : active
-                            ? 'bg-gradient-to-r from-cyan-500/50 via-blue-500/30 to-slate-700'
+                            ? 'bg-gradient-to-r from-cyan-500/40 via-blue-500/25 to-slate-700'
                             : 'bg-slate-800'
                         }`} />
-                        {/* Flowing data packets (visible when reached or active) */}
+                        {/* Flowing data packets */}
                         {(isDone || active) && (
                           <div className="absolute inset-0 overflow-hidden">
-                            <div className="absolute top-1/2 -translate-y-1/2 h-1 w-1 rounded-full bg-cyan-400 shadow-[0_0_4px_rgba(6,182,212,0.6)] animate-data-packet" />
-                            <div className="absolute top-1/2 -translate-y-1/2 h-0.5 w-0.5 rounded-full bg-cyan-300 shadow-[0_0_3px_rgba(6,182,212,0.4)] animate-data-packet-2" />
-                            <div className="absolute top-1/2 -translate-y-1/2 h-0.5 w-0.5 rounded-full bg-blue-400 shadow-[0_0_3px_rgba(59,130,246,0.4)] animate-data-packet-3" />
+                            <div className="absolute top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)] animate-data-packet" />
+                            <div className="absolute top-1/2 -translate-y-1/2 h-1 w-1 rounded-full bg-cyan-300 shadow-[0_0_4px_rgba(6,182,212,0.4)] animate-data-packet-2" />
+                            <div className="absolute top-1/2 -translate-y-1/2 h-1 w-1 rounded-full bg-blue-400 shadow-[0_0_4px_rgba(59,130,246,0.4)] animate-data-packet-3" />
                           </div>
                         )}
                         {/* Completion checkpoint */}
                         {isDone && (
                           <div className="absolute -right-0.5 top-1/2 -translate-y-1/2">
-                            <div className="h-1 w-1 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
-                            <div className="absolute -inset-1 rounded-full bg-emerald-400/20 animate-ping" />
+                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+                            <div className="absolute -inset-1.5 rounded-full bg-emerald-400/20 animate-ping" />
                           </div>
+                        )}
+                        {/* Active gradient streaming line */}
+                        {active && (
+                          <div className="absolute inset-0 h-[2px] bg-gradient-to-r from-cyan-400/30 via-cyan-400/10 to-transparent animate-data-stream" />
                         )}
                       </div>
                     )}
                   </div>
                 )
               })}
+              </div>
             </nav>
 
-            {/* RIGHT: Premium glass stats + cyber present + mission hub */}
-            <div className="flex items-center gap-1.5 shrink-0 relative z-10">
+            {/* RIGHT: Premium glass stats + actions */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 relative z-10">
 
               {/* Premium glass stats badges */}
               <div className="hidden lg:flex items-center gap-2 mr-1">
@@ -467,22 +496,24 @@ export default function Layout({ children }) {
                   { label: 'ROI', value: '320%', color: 'amber', icon: 'M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941' },
                 ].map(s => {
                   const c = {
-                    cyan: { border: 'border-cyan-500/20', bg: 'bg-cyan-500/[0.04]', text: 'text-cyan-400', stext: 'text-cyan-600', hborder: 'hover:border-cyan-400/40', hbg: 'hover:bg-cyan-500/[0.08]', ping: 'bg-cyan-500' },
-                    emerald: { border: 'border-emerald-500/20', bg: 'bg-emerald-500/[0.04]', text: 'text-emerald-400', stext: 'text-emerald-600', hborder: 'hover:border-emerald-400/40', hbg: 'hover:bg-emerald-500/[0.08]', ping: 'bg-emerald-500' },
-                    amber: { border: 'border-amber-500/20', bg: 'bg-amber-500/[0.04]', text: 'text-amber-400', stext: 'text-amber-600', hborder: 'hover:border-amber-400/40', hbg: 'hover:bg-amber-500/[0.08]', ping: 'bg-amber-500' },
+                    cyan: { border: 'border-cyan-500/20', bg: 'bg-cyan-500/[0.05]', text: 'text-cyan-400', stext: 'text-cyan-600', hborder: 'hover:border-cyan-400/40', hbg: 'hover:bg-cyan-500/[0.08]', ping: 'bg-cyan-500', grad: 'from-cyan-500/10 to-blue-600/5' },
+                    emerald: { border: 'border-emerald-500/20', bg: 'bg-emerald-500/[0.05]', text: 'text-emerald-400', stext: 'text-emerald-600', hborder: 'hover:border-emerald-400/40', hbg: 'hover:bg-emerald-500/[0.08]', ping: 'bg-emerald-500', grad: 'from-emerald-500/10 to-teal-600/5' },
+                    amber: { border: 'border-amber-500/20', bg: 'bg-amber-500/[0.05]', text: 'text-amber-400', stext: 'text-amber-600', hborder: 'hover:border-amber-400/40', hbg: 'hover:bg-amber-500/[0.08]', ping: 'bg-amber-500', grad: 'from-amber-500/10 to-orange-600/5' },
                   }[s.color]
                   return (
-                    <div key={s.label} className={`group relative flex items-center gap-1.5 rounded-lg border ${c.border} ${c.bg} backdrop-blur-sm px-2.5 py-1 ${c.hborder} ${c.hbg} hover:translate-y-[-1px] hover:shadow-[0_0_24px_-10px_rgba(255,255,255,0.15)] transition-all duration-300 cursor-default`}>
-                      <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/[0.04] to-transparent" />
-                      <span className="relative flex h-1.5 w-1.5">
+                    <div key={s.label} className={`group relative flex items-center gap-2 rounded-lg border ${c.border} ${c.bg} backdrop-blur-sm px-2.5 py-1.5 ${c.hborder} ${c.hbg} hover:translate-y-[-1px] hover:shadow-[0_0_24px_-10px_rgba(255,255,255,0.15)] transition-all duration-300 cursor-default`}>
+                      <div className={`absolute inset-0 rounded-lg bg-gradient-to-br ${c.grad} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                      <span className="relative flex h-2 w-2">
                         <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${c.ping} opacity-60`} />
-                        <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${c.ping}`} />
+                        <span className={`relative inline-flex h-2 w-2 rounded-full ${c.ping}`} />
                       </span>
-                      <svg className={`h-2.5 w-2.5 ${c.text} opacity-50 group-hover:opacity-80 transition-opacity`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <svg className={`h-3 w-3 ${c.text} opacity-50 group-hover:opacity-80 transition-opacity relative z-10`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
                       </svg>
-                      <span className={`text-[7px] font-mono font-semibold ${c.stext}`}>{s.label}</span>
-                      <span className={`text-[10px] font-bold font-mono ${c.text} tabular-nums`}>{s.value}</span>
+                      <div className="relative z-10 flex flex-col items-start">
+                        <span className={`text-[10px] font-bold font-mono ${c.text} tabular-nums leading-none`}>{s.value}</span>
+                        <span className={`text-[6px] font-mono font-semibold ${c.stext} tracking-wider`}>{s.label}</span>
+                      </div>
                     </div>
                   )
                 })}
@@ -491,31 +522,31 @@ export default function Layout({ children }) {
               {/* Search */}
               <button
                 onClick={() => { setSearchOpen(!searchOpen) }}
-                className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2 py-1 text-[8px] text-slate-500 hover:border-cyan-500/30 hover:bg-cyan-500/[0.04] hover:text-cyan-300 hover:shadow-[0_0_12px_-4px_rgba(6,182,212,0.15)] transition-all duration-300 group"
+                className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1.5 text-[9px] text-slate-500 hover:border-cyan-500/30 hover:bg-cyan-500/[0.04] hover:text-cyan-300 hover:shadow-[0_0_12px_-4px_rgba(6,182,212,0.15)] transition-all duration-300 group"
               >
-                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
-                <span className="text-[6px] text-slate-700 border border-white/[0.06] rounded px-0.5 group-hover:border-cyan-500/20 group-hover:text-cyan-500/60 transition-all">⌘K</span>
+                <span className="text-[7px] text-slate-700 border border-white/[0.06] rounded px-0.5 group-hover:border-cyan-500/20 group-hover:text-cyan-500/60 transition-all">⌘K</span>
               </button>
 
               {/* Fullscreen */}
               <button
                 onClick={toggleFullscreen}
-                className="hidden sm:flex rounded-lg p-1 text-slate-600 hover:bg-white/[0.06] hover:text-cyan-400 hover:shadow-[0_0_12px_-4px_rgba(6,182,212,0.12)] transition-all duration-300"
+                className="hidden sm:flex rounded-lg p-1.5 text-slate-500 hover:bg-white/[0.06] hover:text-cyan-400 hover:shadow-[0_0_12px_-4px_rgba(6,182,212,0.12)] transition-all duration-300"
                 title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
               >
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   {isFullscreen
                     ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
                     : <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />}
                 </svg>
               </button>
 
-              {/* Premium present button with shine sweep */}
+              {/* Present button with shine sweep */}
               <button
                 onClick={togglePresentMode}
-                className={`group relative overflow-hidden flex items-center gap-1 rounded-lg border px-2 py-1 text-[8px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] ${
+                className={`group relative overflow-hidden flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[9px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] ${
                   presentMode
                     ? 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200 shadow-[0_0_20px_-4px_rgba(6,182,212,0.25)]'
                     : 'hidden sm:flex border-cyan-500/20 text-slate-500 hover:text-cyan-300 hover:border-cyan-400/30 hover:bg-cyan-500/[0.05] hover:shadow-[0_0_24px_-6px_rgba(6,182,212,0.25)]'
@@ -524,30 +555,30 @@ export default function Layout({ children }) {
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   <div className="absolute -inset-4 w-12 bg-gradient-to-r from-transparent via-white/12 to-transparent animate-shine-sweep skew-y-[25deg]" />
                 </div>
-                <svg className="h-3 w-3 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="h-3.5 w-3.5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
                 </svg>
                 <span className="relative z-10">Present</span>
               </button>
 
-              {/* Mission Status Hub — replaces Impact button */}
+              {/* Mission Status Hub */}
               <div className="group relative">
-                <div className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 px-2 py-1 cursor-default hover:border-cyan-400/30 hover:shadow-[0_0_24px_-8px_rgba(6,182,212,0.2)] transition-all duration-300">
-                  <div className="relative flex h-3.5 w-3.5 items-center justify-center">
-                    <svg className="absolute inset-0 h-3.5 w-3.5 -rotate-90" viewBox="0 0 14 14">
-                      <circle cx="7" cy="7" r="5.5" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.5" />
-                      <circle cx="7" cy="7" r="5.5" fill="none" stroke="rgb(6,182,212)" strokeWidth="1.5" strokeDasharray={`${(currentSlideIdx >= 0 ? ((currentSlideIdx + 1) / workflow.length) * 100 : 0)} 100`} strokeLinecap="round" className="transition-all duration-500" />
+                <div className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 px-2.5 py-1.5 cursor-default hover:border-cyan-400/30 hover:shadow-[0_0_24px_-8px_rgba(6,182,212,0.2)] transition-all duration-300">
+                  <div className="relative flex h-4 w-4 items-center justify-center">
+                    <svg className="absolute inset-0 h-4 w-4 -rotate-90" viewBox="0 0 16 16">
+                      <circle cx="8" cy="8" r="6.5" fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="1.8" />
+                      <circle cx="8" cy="8" r="6.5" fill="none" stroke="rgb(6,182,212)" strokeWidth="1.8" strokeDasharray={`${(currentSlideIdx >= 0 ? ((currentSlideIdx + 1) / workflow.length) * 100 : 0)} 100`} strokeLinecap="round" className="transition-all duration-500" />
                     </svg>
-                    <span className="text-[5px] font-bold font-mono text-cyan-300 tabular-nums">{currentSlideIdx >= 0 ? Math.round(((currentSlideIdx + 1) / workflow.length) * 100) : 0}%</span>
+                    <span className="text-[6px] font-bold font-mono text-cyan-300 tabular-nums">{currentSlideIdx >= 0 ? Math.round(((currentSlideIdx + 1) / workflow.length) * 100) : 0}%</span>
                   </div>
-                  <span className="text-[7px] font-mono font-semibold text-cyan-400">Mission</span>
+                  <span className="text-[8px] font-mono font-semibold text-cyan-400 tracking-tight">Mission</span>
                 </div>
-                {/* Hover checklist dropdown */}
+                {/* Dropdown */}
                 <div className="absolute right-0 top-full mt-1.5 w-52 origin-top-right opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50">
                   <div className="rounded-xl border border-white/[0.08] bg-slate-950/95 backdrop-blur-2xl shadow-2xl shadow-black/50 p-2.5">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[7px] font-mono font-bold text-slate-400 uppercase tracking-wider">Mission Status</span>
-                      <span className="text-[7px] font-mono text-cyan-400 font-semibold tabular-nums">{currentSlideIdx >= 0 ? Math.round(((currentSlideIdx + 1) / workflow.length) * 100) : 0}%</span>
+                      <span className="text-[8px] font-mono font-bold text-slate-400 uppercase tracking-wider">Mission Status</span>
+                      <span className="text-[8px] font-mono text-cyan-400 font-semibold tabular-nums">{currentSlideIdx >= 0 ? Math.round(((currentSlideIdx + 1) / workflow.length) * 100) : 0}%</span>
                     </div>
                     <div className="h-0.5 rounded-full bg-slate-800 mb-2.5 overflow-hidden">
                       <motion.div
@@ -572,8 +603,8 @@ export default function Layout({ children }) {
                                 <div className="h-1 w-1 rounded-full bg-slate-600" />
                               )}
                             </div>
-                            <span className="text-[7px] font-mono">{w.label}</span>
-                            {isNow && <span className="ml-auto text-[5px] font-mono text-cyan-400/60">ACTIVE</span>}
+                            <span className="text-[8px] font-mono">{w.label}</span>
+                            {isNow && <span className="ml-auto text-[6px] font-mono text-cyan-400/60">ACTIVE</span>}
                           </div>
                         )
                       })}
@@ -583,26 +614,25 @@ export default function Layout({ children }) {
               </div>
 
               {/* Avatar */}
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-brand to-brand-dark text-[7px] font-bold text-white shadow-[0_0_12px_-2px_rgba(139,92,246,0.25)]">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-brand to-brand-dark text-[8px] font-bold text-white shadow-[0_0_16px_-2px_rgba(139,92,246,0.35)] ring-1 ring-white/[0.06]">
                 OF
               </div>
             </div>
           </header>
         )}
 
-        {/* Executive story bar + live intelligence ribbon + prev/next — hidden in present mode */}
+        {/* Executive context bar — premium narrative + step controls */}
         {!presentMode && (
-          <div className="sticky top-11 z-20 border-b border-white/[0.04] bg-slate-950/70 backdrop-blur-xl overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.03)]">
-            {/* Live intelligence ribbon (auto-scrolling ticker) */}
-            <div className="relative h-4 overflow-hidden border-b border-white/[0.02] bg-gradient-to-r from-cyan-500/[0.02] via-blue-600/[0.02] to-cyan-500/[0.02]">
+          <div className="sticky top-14 z-20 border-b border-white/[0.04] bg-slate-950/70 backdrop-blur-xl overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.03)]">
+            {/* Live intelligence ribbon */}
+            <div className="relative h-5 overflow-hidden border-b border-white/[0.02] bg-gradient-to-r from-cyan-500/[0.02] via-blue-600/[0.02] to-cyan-500/[0.02]">
               <div className="absolute inset-0 flex items-center">
                 <div className="flex items-center gap-6 whitespace-nowrap animate-ticker-scroll will-change-transform pr-6">
-                  {/* Duplicate for seamless scroll */}
                   {[0, 1].flatMap(dup => (
                     <div key={dup} className="flex items-center gap-6">
                       {storyNarrative.map((story, i) => (
                         <div key={i} className="flex items-center gap-3">
-                          <span className={`text-[6px] font-mono whitespace-nowrap ${
+                          <span className={`text-[7px] font-mono whitespace-nowrap tracking-tight ${
                             i === currentSlideIdx
                               ? 'text-cyan-300 font-semibold'
                               : i < currentSlideIdx
@@ -622,52 +652,69 @@ export default function Layout({ children }) {
                   ))}
                 </div>
               </div>
-              {/* Fade edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-950/80 to-transparent pointer-events-none" />
-              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-950/80 to-transparent pointer-events-none" />
+              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-slate-950/90 to-transparent pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-slate-950/90 to-transparent pointer-events-none" />
             </div>
 
-            {/* Bottom row: prev/next + context */}
-            <div className="flex items-center justify-between gap-2 px-2 sm:px-3 py-1">
-              <div className="flex items-center gap-1 min-w-0 overflow-x-auto scrollbar-none flex-1">
-                <svg className="h-2 w-2 text-cyan-400/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                </svg>
-                <span className="text-[7px] font-mono text-slate-600/80 tracking-wider shrink-0">CURRENT MISSION</span>
-                <span className="text-[7px] font-mono text-cyan-300 font-semibold shrink-0">{workflow[currentSlideIdx >= 0 ? currentSlideIdx : 0]?.label || 'Situation'}</span>
-              </div>
-
-              {/* Prev / Next step buttons */}
-              <div className="flex items-center gap-1 shrink-0">
-                {currentSlideIdx > 0 && (
-                  <Link
-                    to={workflow[currentSlideIdx - 1].to}
-                    className="flex items-center gap-1 rounded-md border border-white/[0.04] bg-white/[0.02] px-1.5 py-0.5 text-[7px] font-mono text-slate-500 hover:text-cyan-300 hover:border-cyan-500/20 hover:bg-cyan-500/[0.04] transition-all"
-                  >
-                    <svg className="h-2 w-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                    {workflow[currentSlideIdx - 1].label}
-                  </Link>
+            {/* Bottom row: narrative context + step navigation */}
+            <div className="flex items-center justify-between gap-3 px-3 sm:px-4 py-1.5">
+              {/* Left: current mission context */}
+              <div className="flex items-center gap-2 min-w-0 overflow-x-auto scrollbar-none flex-1">
+                {currentSlideIdx === 0 && (
+                  <div className="flex items-center gap-1.5 rounded-md bg-cyan-500/[0.06] border border-cyan-500/12 px-1.5 py-0.5">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                    </span>
+                    <span className="text-[7px] font-mono text-cyan-300 font-semibold">Anomaly Detected</span>
+                  </div>
                 )}
-                {currentSlideIdx < workflow.length - 1 && (
-                  <Link
-                    to={workflow[currentSlideIdx + 1].to}
-                    className="flex items-center gap-1 rounded-md bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/15 px-1.5 py-0.5 text-[7px] font-mono text-cyan-300 hover:text-white hover:border-cyan-400/30 hover:shadow-[0_0_12px_-4px_rgba(6,182,212,0.15)] transition-all"
-                  >
-                    Next: {workflow[currentSlideIdx + 1].label}
-                    <svg className="h-2 w-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </Link>
+                {currentSlideIdx > 0 && currentSlideIdx < workflow.length - 1 && (
+                  <div className="flex items-center gap-1.5 rounded-md bg-amber-500/[0.06] border border-amber-500/12 px-1.5 py-0.5">
+                    <span className="text-[7px] font-mono text-amber-300 font-semibold">Step {currentSlideIdx + 1} of {workflow.length}</span>
+                  </div>
                 )}
                 {currentSlideIdx === workflow.length - 1 && (
-                  <div className="flex items-center gap-1.5 rounded-md border border-emerald-500/15 bg-emerald-500/[0.04] px-1.5 py-0.5">
+                  <div className="flex items-center gap-1.5 rounded-md bg-emerald-500/[0.06] border border-emerald-500/12 px-1.5 py-0.5">
                     <svg className="h-2 w-2 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                     </svg>
                     <span className="text-[7px] font-mono text-emerald-400 font-semibold">Mission Complete</span>
                   </div>
+                )}
+                <svg className="h-2.5 w-2.5 text-cyan-400/50 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                </svg>
+                <span className="text-[8px] font-mono text-slate-500 tracking-wider shrink-0">CURRENT MISSION</span>
+                <span className="text-[9px] font-semibold font-mono text-white shrink-0">{workflow[currentSlideIdx >= 0 ? currentSlideIdx : 0]?.label || 'Situation'}</span>
+                <span className="hidden sm:block text-[7px] font-mono text-slate-600 shrink-0 truncate">— {workflow[currentSlideIdx >= 0 ? currentSlideIdx : 0]?.desc || 'What is happening right now?'}</span>
+              </div>
+
+              {/* Right: step navigation */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                {currentSlideIdx > 0 && (
+                  <Link
+                    to={workflow[currentSlideIdx - 1].to}
+                    className="flex items-center gap-1 rounded-md border border-white/[0.05] bg-white/[0.02] px-2 py-1 text-[8px] font-mono text-slate-500 hover:text-cyan-300 hover:border-cyan-500/20 hover:bg-cyan-500/[0.05] transition-all group"
+                  >
+                    <svg className="h-2.5 w-2.5 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    <span className="hidden sm:inline">{workflow[currentSlideIdx - 1].label}</span>
+                    <span className="sm:hidden">Prev</span>
+                  </Link>
+                )}
+                {currentSlideIdx < workflow.length - 1 && (
+                  <Link
+                    to={workflow[currentSlideIdx + 1].to}
+                    className="flex items-center gap-1 rounded-md bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/15 px-2 py-1 text-[8px] font-mono text-cyan-300 hover:text-white hover:border-cyan-400/30 hover:shadow-[0_0_14px_-4px_rgba(6,182,212,0.2)] transition-all group"
+                  >
+                    <span className="hidden sm:inline">Next: {workflow[currentSlideIdx + 1].label}</span>
+                    <span className="sm:hidden">Next</span>
+                    <svg className="h-2.5 w-2.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </Link>
                 )}
               </div>
             </div>

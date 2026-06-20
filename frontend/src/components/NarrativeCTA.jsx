@@ -23,32 +23,32 @@ const pageCTAs = {
   '/dashboard': {
     primary: { to: '/intelligence', label: 'Investigate Root Cause', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z' },
     secondary: { to: '/intelligence', label: 'Open Intelligence Center' },
-    narrative: 'System anomalies detected across 6 services. AI analysis suggests coordinated incident pattern. Follow the investigation from detection to executive action.',
+    narrative: 'System anomalies detected across 6 services with 96% AI confidence. 3 critical risks identified — payment error rate spike, Redis memory pressure, billing dependency timeout. Begin investigation to trace root cause.',
   },
   '/intelligence': {
     primary: { to: '/time-machine', label: 'Replay Historical Incident', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
     secondary: { to: '/time-machine', label: 'Open Time Machine' },
-    narrative: 'Root cause isolated in payment processing pipeline. Historical analysis reveals 3 prior occurrences with identical error signatures. Time to replay the incident timeline.',
+    narrative: 'Root cause isolated in payment processing pipeline — missing circuit breaker in retry loop. 8 failure modes across 4 services with 94% correlation. Proceed to historical replay for pattern confirmation.',
   },
   '/time-machine': {
     primary: { to: '/knowledge-graph', label: 'View Dependency Blast Radius', icon: 'M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z' },
     secondary: { to: '/knowledge-graph', label: 'Open Knowledge Graph' },
-    narrative: 'Incident pattern confirmed across 3 recurrences. Propagating error cascade now mapped — 12 downstream services at risk. Visualize the full dependency blast radius.',
+    narrative: 'Incident pattern confirmed across 3 recurrences over 6 weeks. 91% pattern match — retry queue overflow repeats every 4-6 weeks. Visualize dependency blast radius to quantify impact.',
   },
   '/knowledge-graph': {
     primary: { to: '/cto-report', label: 'Generate Business Impact Report', icon: 'M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z' },
     secondary: { to: '/cto-report', label: 'Open CTO Report' },
-    narrative: 'Dependency graph reveals $340K blast radius across 4 critical services. 8 high-risk paths identified. Generate actionable executive report with remediation roadmap.',
+    narrative: 'Dependency graph reveals $340K blast radius across 4 critical services. 7 propagation paths with 92% accuracy. Generate CTO report with remediation roadmap for executive decision.',
   },
   '/cto-report': {
     primary: { to: '/execution-planner', label: 'Create Execution Plan', icon: 'M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z' },
     secondary: { to: '/execution-planner', label: 'Open Execution Planner' },
-    narrative: 'Business impact quantified at $288K monthly savings with 94% confidence. 3 strategic recommendations approved. Proceed to create detailed execution plan with milestones and owners.',
+    narrative: 'Business impact quantified at $288K monthly savings with 320% ROI. 87% confidence across 6 risk vectors. 5 mitigation plans with clear owners and timelines. Proceed to execution planning.',
   },
   '/execution-planner': {
     primary: null,
     secondary: null,
-    narrative: 'End-to-end AI investigation complete. From anomaly detection to execution plan — $1.088M total business value identified across 6 incident categories.',
+    narrative: 'End-to-end AI investigation complete. From anomaly detection to execution plan — $1.088M total business value identified. 42% completion across 3 sprints with 82% quality score.',
     terminal: true,
   },
 }

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
+import ExecutiveBanner from '../components/ExecutiveBanner'
 
 const presets = [
   'Add payment retry support',
@@ -515,7 +516,8 @@ export default function OrbitExecutionPlanner() {
 
   return (
     <Layout>
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-6 pb-12">
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-8">
+        <ExecutiveBanner currentPage="/execution-planner" />
         {/* ===== HEADER ===== */}
         <motion.div variants={item}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -576,7 +578,7 @@ export default function OrbitExecutionPlanner() {
         {/* ===== LOADING SKELETON ===== */}
         {loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-            <div className="grid gap-3 sm:grid-cols-6">
+            <div className="grid gap-2 sm:grid-cols-6">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="rounded-xl border border-white/[0.06] bg-slate-950/50 p-4 animate-pulse">
                   <div className="h-3 w-16 bg-slate-800 rounded mb-3" /><div className="h-7 w-12 bg-slate-800 rounded mb-2" /><div className="h-2 bg-slate-800 rounded" />
@@ -592,14 +594,14 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 1: EXECUTIVE DELIVERY SUMMARY ===== */}
             <motion.div variants={item} id="exec-summary" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-gradient-to-br from-slate-950 to-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20 border border-amber-500/20">
                   <svg className="h-4 w-4 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
                 </div>
                 <h2 className="text-sm font-bold text-white">Executive Delivery Summary</h2>
                 <StatusBadge status={d.overview.onTrack ? 'success' : 'error'} label={d.overview.onTrack ? 'On Track' : 'At Risk'} />
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
                 <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="rounded-xl border border-white/[0.06] bg-slate-900/60 p-3">
                   <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Total Services</div>
                   <div className="text-2xl font-bold text-white"><AnimatedCounter value={d.overview.totalServices} /></div>
@@ -635,7 +637,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 2: SPRINT PROGRESS DASHBOARD ===== */}
             <motion.div variants={item} id="sprint-progress" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20 border border-emerald-500/20">
                   <svg className="h-4 w-4 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
                 </div>
@@ -655,7 +657,7 @@ export default function OrbitExecutionPlanner() {
                   <AnimatedGauge value={d.overview.deploymentReadiness} label="Deploy Readiness" sub="release gate" />
                 </div>
               </div>
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-2 sm:grid-cols-3">
                 {(d.sprints || []).map(s => {
                   if (!s || typeof s !== 'object') return null
                   const sPts = s?.points || {}
@@ -694,7 +696,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 3: INTERACTIVE KANBAN BOARD ===== */}
             <motion.div variants={item} id="kanban" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/20 border border-blue-500/20">
                   <svg className="h-4 w-4 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 4.5v7.5m0 0v7.5m0-7.5h7.5m-7.5 0H6" /></svg>
                 </div>
@@ -782,13 +784,13 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 4: TEAM CAPACITY & WORKLOAD ===== */}
             <motion.div variants={item} id="team-capacity" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 border border-violet-500/20">
                   <svg className="h-4 w-4 text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                 </div>
                 <h2 className="text-sm font-bold text-white">Team Capacity & Workload</h2>
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-2 lg:grid-cols-2">
                 <div className="grid gap-4">
                   {(d.teams || []).map((t, i) => {
                     if (!t || typeof t !== 'object') return null
@@ -860,7 +862,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 5: MILESTONE TIMELINE ===== */}
             <motion.div variants={item} id="milestones" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/20 border border-rose-500/20">
                   <svg className="h-4 w-4 text-rose-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
@@ -903,7 +905,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 6: RELEASE READINESS CENTER ===== */}
             <motion.div variants={item} id="readiness" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/20 border border-cyan-500/20">
                   <svg className="h-4 w-4 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
@@ -955,7 +957,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 7: DEPLOYMENT SCHEDULE ===== */}
             <motion.div variants={item} id="deployments" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/20 border border-purple-500/20">
                   <svg className="h-4 w-4 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                 </div>
@@ -968,7 +970,7 @@ export default function OrbitExecutionPlanner() {
               </div>
               <div className="relative">
                 <div className="absolute left-[18px] top-3 bottom-3 w-px bg-gradient-to-b from-emerald-500/40 via-amber-500/40 to-slate-700/40" />
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                   {(d.deployments || []).map((dep, i) => {
                     if (!dep || typeof dep !== 'object') return null
                     const depStatus = String(dep?.status ?? '')
@@ -987,7 +989,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 8: BLOCKERS & ESCALATIONS ===== */}
             <motion.div variants={item} id="blockers" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/20 border border-red-500/20">
                   <svg className="h-4 w-4 text-red-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
                 </div>
@@ -997,7 +999,7 @@ export default function OrbitExecutionPlanner() {
                   <StatusBadge status="warning" label={`${(d.blockers || []).filter(b => b?.status === 'open').length} open`} />
                 </div>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                 {(d.blockers || []).map((b, i) => (
                   <BlockerCard key={b?.title || i} blocker={b} index={i} expanded={expandedBlocker === i} onToggle={() => setExpandedBlocker(expandedBlocker === i ? null : i)} />
                 ))}
@@ -1006,7 +1008,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 9: RISK TRACKING MATRIX ===== */}
             <motion.div variants={item} id="risks" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-500/20 border border-yellow-500/20">
                   <svg className="h-4 w-4 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                 </div>
@@ -1052,13 +1054,13 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 10: DELIVERY FORECAST ENGINE ===== */}
             <motion.div variants={item} id="forecast" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20 border border-amber-500/20">
                   <svg className="h-4 w-4 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
                 </div>
                 <h2 className="text-sm font-bold text-white">Delivery Forecast Engine</h2>
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-2 lg:grid-cols-2">
                 <div className="rounded-xl border border-white/[0.06] bg-slate-900/60 p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-xs font-semibold text-white">Sprint Burndown</h3>
@@ -1114,7 +1116,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 11: AI RECOMMENDATIONS ===== */}
             <motion.div variants={item} id="ai-rec" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/20 border border-indigo-500/20">
                   <svg className="h-4 w-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
                 </div>
@@ -1153,7 +1155,7 @@ export default function OrbitExecutionPlanner() {
 
             {/* ===== SECTION 12: RECENT ACTIVITY FEED ===== */}
             <motion.div variants={item} id="activity" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/20 border border-teal-500/20">
                   <svg className="h-4 w-4 text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>

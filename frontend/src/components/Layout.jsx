@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { JourneyNav } from './NarrativeCTA'
+import QuickActionBar from './QuickActionBar'
 
 const centerNav = [
   { to: '/dashboard', label: 'Dashboard', shortcut: '⌘1' },
@@ -222,6 +223,8 @@ export default function Layout({ children }) {
             </div>
           </div>
         </main>
+
+        <QuickActionBar currentPage={pathname} />
 
         {/* Footer */}
         <footer className="border-t border-white/[0.04] px-4 sm:px-6 lg:px-8 py-4">

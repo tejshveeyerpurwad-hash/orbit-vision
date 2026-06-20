@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
+import ExecutiveBanner from '../components/ExecutiveBanner'
 
 const presets = [
   'Add payment retry support',
@@ -423,7 +424,9 @@ export default function IntelligenceCenter() {
 
   return (
     <Layout>
-      <motion.div variants={container} initial="hidden" animate="show"           className="space-y-2 pb-8">
+      <motion.div variants={container} initial="hidden" animate="show"           className="space-y-2 pb-4">
+
+        <ExecutiveBanner currentPage="/intelligence" />
 
         {/* ===== SECTION 1: CASE COMMAND HEADER (COMPACT) ===== */}
         <motion.div variants={item} className="glass-card">

@@ -4,6 +4,7 @@ import ReactFlow, { Background, Controls, MiniMap, useNodesState, useEdgesState,
 import 'reactflow/dist/style.css'
 import Layout from '../components/Layout'
 import NarrativeCTA from '../components/NarrativeCTA'
+import ExecutiveBanner from '../components/ExecutiveBanner'
 
 const initialNodes = [
   { id: 'gateway', position: { x: 475, y: 50 }, data: { label: 'API Gateway', type: 'API', risk: 'medium', team: 'Platform', deps: ['Payments', 'Auth', 'Billing'] } },
@@ -648,6 +649,9 @@ const edgeTypes = { animated: AnimatedEdge }
 export default function KnowledgeGraph() {
   return (
     <Layout>
+      <div className="px-2 sm:px-3 pt-2">
+        <ExecutiveBanner currentPage="/knowledge-graph" />
+      </div>
       <div className="-m-4 sm:-m-6 lg:-m-8" style={{ height: 'calc(100vh - 3.5rem)', maxWidth: '100vw' }}>
         <div className="flex flex-col h-full">
           <ReactFlowProvider>

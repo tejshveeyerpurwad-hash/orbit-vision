@@ -205,53 +205,58 @@ function AnimatedGauge({ value, label, sub }) {
 }
 
 function AnimatedCounter({ value, suffix = '', decimals = 0, className = '' }) {
+  const safeValue = typeof value === 'number' && !isNaN(value) ? Math.max(0, value) : 0
   const [count, setCount] = useState(0)
   useEffect(() => {
     let start = 0
     const duration = 1200
-    const step = Math.max(1, Math.floor(value / 30))
+    const step = Math.max(1, Math.floor(safeValue / 30))
     const timer = setInterval(() => {
       start += step
-      if (start >= value) { setCount(value); clearInterval(timer) }
+      if (start >= safeValue) { setCount(safeValue); clearInterval(timer) }
       else setCount(start)
-    }, duration / (value / step))
+    }, Math.max(10, duration / Math.max(1, safeValue / step)))
     return () => clearInterval(timer)
-  }, [value])
+  }, [safeValue])
   return <span className={className}>{count.toFixed(decimals)}{suffix}</span>
 }
 
 function WorkItemCard({ item }) {
+  if (!item || typeof item !== 'object') return null
   const typeColors = {
     feat: 'border-l-emerald-500/60 bg-emerald-500/[0.03]',
     test: 'border-l-amber-500/60 bg-amber-500/[0.03]',
     chore: 'border-l-yellow-500/60 bg-yellow-500/[0.03]',
     docs: 'border-l-slate-500/60 bg-slate-500/[0.03]',
   }
-  const tc = typeColors[item.type] || typeColors.chore
-  const statusDot = item.status === 'done' ? 'bg-emerald-500' : item.status === 'in_progress' ? 'bg-amber-500' : 'bg-slate-600'
+  const itemType = String(item?.type ?? '')
+  const tc = typeColors[itemType] || typeColors.chore
+  const itemStatus = String(item?.status ?? '')
+  const statusDot = itemStatus === 'done' ? 'bg-emerald-500' : itemStatus === 'in_progress' ? 'bg-amber-500' : 'bg-slate-600'
+  const itemTitle = typeof item?.title === 'object' ? JSON.stringify(item.title) : String(item?.title ?? '')
   return (
     <div className={`rounded-lg border border-white/[0.06] border-l-2 ${tc} p-2.5 hover:border-white/[0.12] transition-all`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${statusDot}`} />
-          <span className="text-xs text-slate-300 truncate">{item.title}</span>
+          <span className="text-xs text-slate-300 truncate">{itemTitle}</span>
         </div>
-        <span className="text-[9px] text-slate-600 shrink-0">{item.points} pts</span>
+        <span className="text-[9px] text-slate-600 shrink-0">{item?.points ?? 0} pts</span>
       </div>
       <div className="flex items-center gap-1.5 mt-1.5">
         <span className={`rounded px-1.5 py-0.5 text-[7px] font-bold ${
-          item.type === 'feat' ? 'bg-emerald-500/10 text-emerald-400' :
-          item.type === 'test' ? 'bg-amber-500/10 text-amber-400' :
-          item.type === 'chore' ? 'bg-yellow-500/10 text-yellow-400' :
+          itemType === 'feat' ? 'bg-emerald-500/10 text-emerald-400' :
+          itemType === 'test' ? 'bg-amber-500/10 text-amber-400' :
+          itemType === 'chore' ? 'bg-yellow-500/10 text-yellow-400' :
           'bg-slate-500/10 text-slate-400'
-        }`}>{item.type}</span>
+        }`}>{itemType || '?'}</span>
         <span className={`rounded px-1 py-0.5 text-[7px] font-bold ${
-          item.priority === 'P0' ? 'bg-red-500/10 text-red-400' :
-          item.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
+          String(item?.priority ?? '') === 'P0' ? 'bg-red-500/10 text-red-400' :
+          String(item?.priority ?? '') === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
           'bg-slate-500/10 text-slate-400'
-        }`}>{item.priority}</span>
-        <span className="text-[9px] text-slate-600">{item.assignee}</span>
-        <span className="ml-auto text-[9px] text-slate-700">S{item.sprint}</span>
+        }`}>{String(item?.priority ?? '')}</span>
+        <span className="text-[9px] text-slate-600">{String(item?.assignee ?? '')}</span>
+        <span className="ml-auto text-[9px] text-slate-700">S{item?.sprint ?? ''}</span>
       </div>
     </div>
   )
@@ -262,35 +267,40 @@ function BurndownChart({ totalPoints }) {
   const chartW = svgW - pad.left - pad.right; const chartH = svgH - pad.top - pad.bottom
   const sprintDays = [0, 5, 10, 14]
   const completedByDay = [0, 8, 13, 14]
-  const maxY = totalPoints
+  const safeMax = typeof totalPoints === 'number' && totalPoints > 0 ? totalPoints : 34
+  const maxY = safeMax
   const idealX1 = pad.left; const idealY1 = pad.top
   const idealX2 = pad.left + chartW; const idealY2 = pad.top + chartH
   const actualPoints = sprintDays.map((d, i) => ({ x: pad.left + (d / 14) * chartW, y: pad.top + chartH - (completedByDay[i] / maxY) * chartH }))
   const actualPath = actualPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')
+  const lastPt = actualPoints[actualPoints.length - 1]
   return (
     <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full max-w-full h-auto">
       <line x1={idealX1} y1={idealY1} x2={idealX2} y2={idealY2} stroke="#4b5563" strokeWidth="1.5" strokeDasharray="4 3" />
       <motion.path d={actualPath} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, ease: 'easeInOut' }} />
-      {actualPoints.map((p, i) => (
-        <motion.circle key={i} cx={p.x} cy={p.y} r="4" fill="#f59e0b" stroke="#1e293b" strokeWidth="1.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 + i * 0.2 }} />
+      {(actualPoints || []).map((p, i) => (
+        <motion.circle key={i} cx={p?.x} cy={p?.y} r="4" fill="#f59e0b" stroke="#1e293b" strokeWidth="1.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 + i * 0.2 }} />
       ))}
-      {sprintDays.map((d, i) => (
+      {(sprintDays || []).map((d, i) => (
         <text key={i} x={pad.left + (d / 14) * chartW} y={svgH - 6} textAnchor="middle" fill="#64748b" fontSize="9">Day {d}</text>
       ))}
       {[0, maxY / 2, maxY].map((v, i) => (
         <text key={i} x={pad.left - 6} y={pad.top + chartH - (v / maxY) * chartH + 3} textAnchor="end" fill="#64748b" fontSize="9">{v}pts</text>
       ))}
       <text x={idealX2 - 50} y={idealY1 - 6} fill="#4b5563" fontSize="8" fontStyle="italic">Ideal</text>
-      <text x={actualPoints[actualPoints.length - 1].x + 6} y={actualPoints[actualPoints.length - 1].y + 3} fill="#f59e0b" fontSize="8" fontStyle="italic">Actual</text>
+      {lastPt && <text x={lastPt.x + 6} y={lastPt.y + 3} fill="#f59e0b" fontSize="8" fontStyle="italic">Actual</text>}
     </svg>
   )
 }
 
 function DeploymentCard({ dep, index }) {
-  const envColor = dep.env === 'production' ? 'border-l-purple-500/60 bg-purple-500/[0.03]' : 'border-l-cyan-500/60 bg-cyan-500/[0.03]'
-  const statusIcon = dep.status === 'successful' ? 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z' :
-    dep.status === 'running' ? 'M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182' :
-    dep.status === 'failed' ? 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z' :
+  if (!dep || typeof dep !== 'object') return null
+  const depEnv = String(dep?.env ?? '')
+  const depStatus = String(dep?.status ?? '')
+  const envColor = depEnv === 'production' ? 'border-l-purple-500/60 bg-purple-500/[0.03]' : 'border-l-cyan-500/60 bg-cyan-500/[0.03]'
+  const statusIcon = depStatus === 'successful' ? 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z' :
+    depStatus === 'running' ? 'M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182' :
+    depStatus === 'failed' ? 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z' :
     'M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z'
   return (
     <motion.div
@@ -302,30 +312,34 @@ function DeploymentCard({ dep, index }) {
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <svg className={`h-4 w-4 shrink-0 ${
-            dep.status === 'successful' ? 'text-emerald-400' :
-            dep.status === 'running' ? 'text-amber-400 animate-spin' :
-            dep.status === 'failed' ? 'text-red-400' : 'text-slate-500'
+            depStatus === 'successful' ? 'text-emerald-400' :
+            depStatus === 'running' ? 'text-amber-400 animate-spin' :
+            depStatus === 'failed' ? 'text-red-400' : 'text-slate-500'
           }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d={statusIcon} />
           </svg>
-          <span className="text-xs font-semibold text-white truncate">{dep.name}</span>
+          <span className="text-xs font-semibold text-white truncate">{String(dep?.name ?? '')}</span>
         </div>
-        <StatusBadge status={dep.status === 'running' ? 'running' : dep.status} label={dep.status} />
+        <StatusBadge status={depStatus === 'running' ? 'running' : depStatus} label={depStatus} />
       </div>
       <div className="flex items-center gap-3 text-[10px] text-slate-500 flex-wrap">
-        <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${dep.env === 'production' ? 'bg-purple-500/10 text-purple-400' : 'bg-cyan-500/10 text-cyan-400'}`}>{dep.env}</span>
-        <span>{dep.date}</span>
-        <span>{dep.duration}</span>
-        <span>{dep.changes} changes</span>
-        <span className="text-slate-600">Teams: {dep.teams.join(', ')}</span>
+        <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${depEnv === 'production' ? 'bg-purple-500/10 text-purple-400' : 'bg-cyan-500/10 text-cyan-400'}`}>{depEnv || '?'}</span>
+        <span>{String(dep?.date ?? '')}</span>
+        <span>{String(dep?.duration ?? '')}</span>
+        <span>{dep?.changes ?? 0} changes</span>
+        <span className="text-slate-600">Teams: {(dep?.teams || []).join(', ')}</span>
       </div>
     </motion.div>
   )
 }
 
 function BlockerCard({ blocker, index, expanded, onToggle }) {
-  const sevColor = blocker.severity === 'critical' ? 'border-l-red-500/60' : blocker.severity === 'high' ? 'border-l-orange-500/60' : 'border-l-yellow-500/60'
-  const sevBg = blocker.severity === 'critical' ? 'bg-red-500/10 text-red-400' : blocker.severity === 'high' ? 'bg-orange-500/10 text-orange-400' : 'bg-yellow-500/10 text-yellow-400'
+  if (!blocker || typeof blocker !== 'object') return null
+  const blkSev = String(blocker?.severity ?? '')
+  const blkStatus = String(blocker?.status ?? '')
+  const sevColor = blkSev === 'critical' ? 'border-l-red-500/60' : blkSev === 'high' ? 'border-l-orange-500/60' : 'border-l-yellow-500/60'
+  const sevBg = blkSev === 'critical' ? 'bg-red-500/10 text-red-400' : blkSev === 'high' ? 'bg-orange-500/10 text-orange-400' : 'bg-yellow-500/10 text-yellow-400'
+  const blkProgress = typeof blocker?.progress === 'number' ? blocker.progress : 0
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -337,37 +351,37 @@ function BlockerCard({ blocker, index, expanded, onToggle }) {
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <svg className={`h-3.5 w-3.5 shrink-0 ${
-            blocker.severity === 'critical' ? 'text-red-400' : blocker.severity === 'high' ? 'text-orange-400' : 'text-yellow-400'
+            blkSev === 'critical' ? 'text-red-400' : blkSev === 'high' ? 'text-orange-400' : 'text-yellow-400'
           }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
           </svg>
-          <span className="text-xs font-semibold text-slate-200 truncate">{blocker.title}</span>
+          <span className="text-xs font-semibold text-slate-200 truncate">{String(blocker?.title ?? '')}</span>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${sevBg}`}>{blocker.severity}</span>
-          <StatusBadge status={blocker.status === 'resolved' ? 'success' : blocker.status === 'resolving' ? 'warning' : 'critical'} label={blocker.status} />
+          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${sevBg}`}>{blkSev}</span>
+          <StatusBadge status={blkStatus === 'resolved' ? 'success' : blkStatus === 'resolving' ? 'warning' : 'critical'} label={blkStatus} />
           <svg className={`h-3.5 w-3.5 text-slate-600 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>
         </div>
       </div>
-      <p className="text-[10px] text-slate-500 mb-2 leading-relaxed">{blocker.desc}</p>
+      <p className="text-[10px] text-slate-500 mb-2 leading-relaxed">{String(blocker?.desc ?? '')}</p>
       <AnimatePresence>
         {expanded && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
             <div className="flex items-center gap-3 text-[9px] text-slate-600 mb-2 flex-wrap pt-1 border-t border-white/[0.06]">
-              <span>Owner: {blocker.owner}</span>
-              <span>Raised: {blocker.raisedDate}</span>
-              <span>Linked: {blocker.linkedItems.join(', ')}</span>
+              <span>Owner: {String(blocker?.owner ?? '')}</span>
+              <span>Raised: {String(blocker?.raisedDate ?? '')}</span>
+              <span>Linked: {(blocker?.linkedItems || []).join(', ')}</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex-1">
-                <div className="flex justify-between text-[8px] text-slate-600 mb-1"><span>Resolution Progress</span><span>{blocker.progress}%</span></div>
+                <div className="flex justify-between text-[8px] text-slate-600 mb-1"><span>Resolution Progress</span><span>{blkProgress}%</span></div>
                 <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                  <motion.div initial={{ width: 0 }} animate={{ width: `${blocker.progress}%` }} transition={{ duration: 0.8, delay: index * 0.1 }} className={`h-full rounded-full ${blocker.progress >= 100 ? 'bg-emerald-500' : blocker.progress >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <motion.div initial={{ width: 0 }} animate={{ width: `${blkProgress}%` }} transition={{ duration: 0.8, delay: index * 0.1 }} className={`h-full rounded-full ${blkProgress >= 100 ? 'bg-emerald-500' : blkProgress >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
                 </div>
               </div>
-              {blocker.status !== 'resolved' && (
+              {blkStatus !== 'resolved' && (
                 <div className="flex gap-1 shrink-0" onClick={e => e.stopPropagation()}>
                   <button className="rounded bg-white/[0.06] px-2 py-1 text-[8px] font-medium text-slate-400 hover:bg-white/[0.1] hover:text-white transition-colors">Resolve</button>
                   <button className="rounded bg-white/[0.06] px-2 py-1 text-[8px] font-medium text-slate-400 hover:bg-white/[0.1] hover:text-white transition-colors">Assign</button>
@@ -382,8 +396,12 @@ function BlockerCard({ blocker, index, expanded, onToggle }) {
 }
 
 function FeatureCard({ feature, index }) {
-  const priorityColor = feature.priority === 'P0' ? 'bg-red-500/10 text-red-400' : feature.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-slate-500/10 text-slate-400'
-  const statusColor = feature.status === 'done' ? 'text-emerald-400' : feature.status === 'in_progress' ? 'text-amber-400' : 'text-slate-500'
+  if (!feature || typeof feature !== 'object') return null
+  const featPriority = String(feature?.priority ?? '')
+  const featStatus = String(feature?.status ?? '')
+  const priorityColor = featPriority === 'P0' ? 'bg-red-500/10 text-red-400' : featPriority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-slate-500/10 text-slate-400'
+  const statusColor = featStatus === 'done' ? 'text-emerald-400' : featStatus === 'in_progress' ? 'text-amber-400' : 'text-slate-500'
+  const featProgress = typeof feature?.progress === 'number' ? feature.progress : 0
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -393,43 +411,47 @@ function FeatureCard({ feature, index }) {
     >
       <div className="flex items-center justify-between mb-1.5">
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${feature.status === 'done' ? 'bg-emerald-500' : feature.status === 'in_progress' ? 'bg-amber-500' : 'bg-slate-600'}`} />
-          <span className="text-xs font-medium text-slate-200 truncate">{feature.name}</span>
-          <span className={`rounded px-1.5 py-0.5 text-[7px] font-bold shrink-0 ${priorityColor}`}>{feature.priority}</span>
+          <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${featStatus === 'done' ? 'bg-emerald-500' : featStatus === 'in_progress' ? 'bg-amber-500' : 'bg-slate-600'}`} />
+          <span className="text-xs font-medium text-slate-200 truncate">{typeof feature?.name === 'object' ? JSON.stringify(feature.name) : String(feature?.name ?? '')}</span>
+          <span className={`rounded px-1.5 py-0.5 text-[7px] font-bold shrink-0 ${priorityColor}`}>{featPriority}</span>
         </div>
-        <span className="text-[9px] text-slate-600 shrink-0">{feature.progress}%</span>
+        <span className="text-[9px] text-slate-600 shrink-0">{featProgress}%</span>
       </div>
       <div className="flex items-center gap-2 mb-1.5">
-        <span className="text-[9px] text-slate-600">{feature.owner}</span>
-        <span className={`text-[9px] ${statusColor}`}>{feature.status.replace('_', ' ')}</span>
-        <span className="text-[9px] text-slate-700">Sprint {feature.sprint}</span>
+        <span className="text-[9px] text-slate-600">{String(feature?.owner ?? '')}</span>
+        <span className={`text-[9px] ${statusColor}`}>{featStatus.replace('_', ' ')}</span>
+        <span className="text-[9px] text-slate-700">Sprint {feature?.sprint ?? ''}</span>
       </div>
       <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
-        <motion.div initial={{ width: 0 }} animate={{ width: `${feature.progress}%` }} transition={{ duration: 0.6, delay: index * 0.05 }} className={`h-full rounded-full ${feature.progress >= 100 ? 'bg-emerald-500' : feature.progress >= 50 ? 'bg-amber-500' : 'bg-slate-600'}`} />
+        <motion.div initial={{ width: 0 }} animate={{ width: `${featProgress}%` }} transition={{ duration: 0.6, delay: index * 0.05 }} className={`h-full rounded-full ${featProgress >= 100 ? 'bg-emerald-500' : featProgress >= 50 ? 'bg-amber-500' : 'bg-slate-600'}`} />
       </div>
     </motion.div>
   )
 }
 
 function VelocityChart({ velocity, avgVelocity }) {
-  const maxPts = Math.max(...velocity.map(v => v.points), 20)
+  const safeVelocity = Array.isArray(velocity) ? velocity : []
+  const safeAvg = typeof avgVelocity === 'number' && !isNaN(avgVelocity) ? avgVelocity : 0
+  const maxPts = safeVelocity.length > 0 ? Math.max(...safeVelocity.map(v => typeof v?.points === 'number' ? v.points : 0), 5) : 20
+  const safeMaxPts = maxPts > 0 ? maxPts : 20
   const barW = 40; const gap = 16; const chartH = 140
   return (
-    <svg viewBox={`0 0 ${velocity.length * (barW + gap) + 40} ${chartH + 40}`} className="w-full max-w-full h-auto">
-      <line x1="30" y1={chartH} x2={velocity.length * (barW + gap) + 30} y2={chartH} stroke="#334155" strokeWidth="1" />
-      {[0, Math.round(maxPts / 2), maxPts].map((v, i) => (
-        <text key={i} x="28" y={chartH - (v / maxPts) * chartH + 3} textAnchor="end" fill="#64748b" fontSize="9">{v}</text>
+    <svg viewBox={`0 0 ${safeVelocity.length * (barW + gap) + 60 || 100} ${chartH + 40}`} className="w-full max-w-full h-auto">
+      <line x1="30" y1={chartH} x2={Math.max(30, safeVelocity.length * (barW + gap) + 30)} y2={chartH} stroke="#334155" strokeWidth="1" />
+      {[0, Math.round(safeMaxPts / 2), safeMaxPts].map((v, i) => (
+        <text key={i} x="28" y={chartH - (v / safeMaxPts) * chartH + 3} textAnchor="end" fill="#64748b" fontSize="9">{v}</text>
       ))}
-      <line x1="30" y1={chartH - (avgVelocity / maxPts) * chartH} x2={velocity.length * (barW + gap) + 30} y2={chartH - (avgVelocity / maxPts) * chartH} stroke="#f59e0b" strokeWidth="1" strokeDasharray="3 2" opacity="0.5" />
-      <text x={velocity.length * (barW + gap) + 32} y={chartH - (avgVelocity / maxPts) * chartH + 2} fill="#f59e0b" fontSize="8" opacity="0.6">avg</text>
-      {velocity.map((v, i) => {
-        const barH = (v.points / maxPts) * chartH
+      <line x1="30" y1={chartH - (safeAvg / safeMaxPts) * chartH} x2={Math.max(30, safeVelocity.length * (barW + gap) + 30)} y2={chartH - (safeAvg / safeMaxPts) * chartH} stroke="#f59e0b" strokeWidth="1" strokeDasharray="3 2" opacity="0.5" />
+      <text x={Math.max(30, safeVelocity.length * (barW + gap) + 32)} y={chartH - (safeAvg / safeMaxPts) * chartH + 2} fill="#f59e0b" fontSize="8" opacity="0.6">avg</text>
+      {safeVelocity.map((v, i) => {
+        const pts = typeof v?.points === 'number' ? v.points : 0
+        const barH = (pts / safeMaxPts) * chartH
         const x = 32 + i * (barW + gap)
         return (
-          <g key={i}>
+          <g key={v?.sprint ?? i}>
             <motion.rect x={x} y={chartH - barH} width={barW} height={barH} rx="3" fill="#f59e0b" fillOpacity="0.8" initial={{ height: 0, y: chartH }} animate={{ height: barH, y: chartH - barH }} transition={{ duration: 0.6, delay: i * 0.1 }} />
-            <text x={x + barW / 2} y={chartH - barH - 5} textAnchor="middle" fill="#e2e8f0" fontSize="11" fontWeight="bold">{v.points}</text>
-            <text x={x + barW / 2} y={chartH + 14} textAnchor="middle" fill="#64748b" fontSize="9">{v.name}</text>
+            <text x={x + barW / 2} y={chartH - barH - 5} textAnchor="middle" fill="#e2e8f0" fontSize="11" fontWeight="bold">{pts}</text>
+            <text x={x + barW / 2} y={chartH + 14} textAnchor="middle" fill="#64748b" fontSize="9">{v?.name || ''}</text>
           </g>
         )
       })}
@@ -634,28 +656,35 @@ export default function OrbitExecutionPlanner() {
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
-                {d.sprints.map(s => {
-                  const pct = s.points.total > 0 ? Math.round((s.points.completed / s.points.total) * 100) : 0
+                {(d.sprints || []).map(s => {
+                  if (!s || typeof s !== 'object') return null
+                  const sPts = s?.points || {}
+                  const total = typeof sPts.total === 'number' ? sPts.total : 0
+                  const completed = typeof sPts.completed === 'number' ? sPts.completed : 0
+                  const pct = total > 0 ? Math.round((completed / total) * 100) : 0
+                  const sStatus = String(s?.status ?? '')
+                  const members = s?.members || []
                   return (
-                    <motion.div key={s.sprint} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: s.sprint * 0.06 }} className={`rounded-lg border p-4 ${s.status === 'active' ? 'border-amber-500/30 bg-amber-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'}`}>
+                    <motion.div key={s?.sprint ?? Math.random()} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (s?.sprint ?? 0) * 0.06 }} className={`rounded-lg border p-4 ${sStatus === 'active' ? 'border-amber-500/30 bg-amber-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'}`}>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <span className={`h-2 w-2 rounded-full ${s.status === 'active' ? 'bg-amber-500 animate-pulse' : 'bg-slate-600'}`} />
-                          <span className="text-xs font-bold text-white">{s.name}</span>
+                          <span className={`h-2 w-2 rounded-full ${sStatus === 'active' ? 'bg-amber-500 animate-pulse' : 'bg-slate-600'}`} />
+                          <span className="text-xs font-bold text-white">{String(s?.name ?? '')}</span>
                         </div>
-                        <StatusBadge status={s.status === 'active' ? 'running' : s.status} label={s.status === 'active' ? `Day ${14 - s.daysRemaining}` : 'Planned'} />
+                        <StatusBadge status={sStatus === 'active' ? 'running' : sStatus} label={sStatus === 'active' ? `Day ${14 - (s?.daysRemaining ?? 0)}` : 'Planned'} />
                       </div>
                       <div className="grid grid-cols-2 gap-2 mb-3 text-[10px] text-slate-500">
-                        <span>{s.points.completed}/{s.points.total} points</span>
-                        <span className="text-right">{s.daysRemaining}d remaining</span>
-                        <span>{s.members.length} members</span>
+                        <span>{completed}/{total} points</span>
+                        <span className="text-right">{s?.daysRemaining ?? 0}d remaining</span>
+                        <span>{members.length} members</span>
                         <span className="text-right">{pct}% done</span>
                       </div>
-                      <AnimatedProgress value={pct} color={s.status === 'active' ? 'bg-amber-500' : 'bg-slate-600'} size="sm" />
+                      <AnimatedProgress value={pct} color={sStatus === 'active' ? 'bg-amber-500' : 'bg-slate-600'} size="sm" />
                       <div className="flex items-center gap-1 mt-2">
-                        {s.members.map(m => (
-                          <span key={m} className="rounded-full bg-slate-800 px-1.5 py-0.5 text-[8px] text-slate-400 font-mono">{m}</span>
-                        ))}
+                        {members.map(m => {
+                          const key = typeof m === 'string' ? m : Math.random()
+                          return <span key={key} className="rounded-full bg-slate-800 px-1.5 py-0.5 text-[8px] text-slate-400 font-mono">{typeof m === 'string' ? m : JSON.stringify(m)}</span>
+                        })}
                       </div>
                     </motion.div>
                   )
@@ -672,24 +701,30 @@ export default function OrbitExecutionPlanner() {
                 <h2 className="text-sm font-bold text-white">Interactive Kanban Board</h2>
               </div>
               <div className="space-y-6">
-                {d.sprints.map(s => {
-                  const todo = s.items.filter(w => w.status === 'todo')
-                  const inProgress = s.items.filter(w => w.status === 'in_progress')
-                  const done = s.items.filter(w => w.status === 'done')
-                  const pct = s.points.total > 0 ? Math.round((s.points.completed / s.points.total) * 100) : 0
+                {(d.sprints || []).map(s => {
+                  if (!s || typeof s !== 'object') return null
+                  const sPts = s?.points || {}
+                  const total = typeof sPts.total === 'number' ? sPts.total : 0
+                  const completed = typeof sPts.completed === 'number' ? sPts.completed : 0
+                  const sItems = s?.items || []
+                  const todo = sItems.filter(w => w && (w?.status === 'todo'))
+                  const inProgress = sItems.filter(w => w && (w?.status === 'in_progress'))
+                  const done = sItems.filter(w => w && (w?.status === 'done'))
+                  const pct = total > 0 ? Math.round((completed / total) * 100) : 0
+                  const sStatus = String(s?.status ?? '')
                   return (
-                    <motion.div key={s.sprint} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: s.sprint * 0.05 }} className="rounded-xl border border-white/[0.06] bg-slate-950/30 p-4">
+                    <motion.div key={s?.sprint ?? Math.random()} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (s?.sprint ?? 0) * 0.05 }} className="rounded-xl border border-white/[0.06] bg-slate-950/30 p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <span className={`h-2.5 w-2.5 rounded-full ${s.status === 'active' ? 'bg-amber-500 animate-pulse' : 'bg-slate-600'}`} />
+                          <span className={`h-2.5 w-2.5 rounded-full ${sStatus === 'active' ? 'bg-amber-500 animate-pulse' : 'bg-slate-600'}`} />
                           <div>
-                            <h3 className="text-sm font-bold text-white">Sprint {s.sprint}: {s.name}</h3>
-                            <p className="text-[10px] text-slate-600">{s.focus}</p>
+                            <h3 className="text-sm font-bold text-white">Sprint {s?.sprint ?? ''}: {String(s?.name ?? '')}</h3>
+                            <p className="text-[10px] text-slate-600">{String(s?.focus ?? '')}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <StatusBadge status={s.status === 'active' ? 'running' : 'pending'} label={s.status === 'active' ? `${s.daysRemaining}d left` : s.status} />
-                          <span className="text-[10px] text-slate-500">{s.points.completed}/{s.points.total} pts</span>
+                          <StatusBadge status={sStatus === 'active' ? 'running' : 'pending'} label={sStatus === 'active' ? `${s?.daysRemaining ?? 0}d left` : sStatus} />
+                          <span className="text-[10px] text-slate-500">{completed}/{total} pts</span>
                         </div>
                       </div>
                       <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden mb-4">
@@ -705,7 +740,7 @@ export default function OrbitExecutionPlanner() {
                             <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-slate-500">{todo.length}</span>
                           </div>
                           <div className="space-y-1.5">
-                            {todo.length > 0 ? todo.map((item, i) => <WorkItemCard key={item.title} item={item} />) : (
+                            {todo.length > 0 ? todo.map((item, i) => <WorkItemCard key={item?.title || i} item={item} />) : (
                               <div className="flex flex-col items-center justify-center h-20 text-slate-600 text-[10px]"><svg className="h-5 w-5 mb-1 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 11.625l2.25-2.25M12 11.625l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>No items</div>
                             )}
                           </div>
@@ -719,7 +754,7 @@ export default function OrbitExecutionPlanner() {
                             <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-slate-500">{inProgress.length}</span>
                           </div>
                           <div className="space-y-1.5">
-                            {inProgress.length > 0 ? inProgress.map((item, i) => <WorkItemCard key={item.title} item={item} />) : (
+                            {inProgress.length > 0 ? inProgress.map((item, i) => <WorkItemCard key={item?.title || i} item={item} />) : (
                               <div className="flex flex-col items-center justify-center h-20 text-slate-600 text-[10px]"><svg className="h-5 w-5 mb-1 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>No items</div>
                             )}
                           </div>
@@ -733,7 +768,7 @@ export default function OrbitExecutionPlanner() {
                             <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-slate-500">{done.length}</span>
                           </div>
                           <div className="space-y-1.5">
-                            {done.length > 0 ? done.map((item, i) => <WorkItemCard key={item.title} item={item} />) : (
+                            {done.length > 0 ? done.map((item, i) => <WorkItemCard key={item?.title || i} item={item} />) : (
                               <div className="flex flex-col items-center justify-center h-20 text-slate-600 text-[10px]"><svg className="h-5 w-5 mb-1 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>No items</div>
                             )}
                           </div>
@@ -755,35 +790,39 @@ export default function OrbitExecutionPlanner() {
               </div>
               <div className="grid gap-4 lg:grid-cols-2">
                 <div className="grid gap-4">
-                  {d.teams.map((t, i) => {
-                    const loadPct = t.sprintPoints > 0 ? Math.round((t.completedPoints / t.sprintPoints) * 100) : 0
-                    const isOverloaded = t.load >= 80
+                  {(d.teams || []).map((t, i) => {
+                    if (!t || typeof t !== 'object') return null
+                    const sprintPts = typeof t?.sprintPoints === 'number' ? t.sprintPoints : 0
+                    const compPts = typeof t?.completedPoints === 'number' ? t.completedPoints : 0
+                    const loadPct = sprintPts > 0 ? Math.round((compPts / sprintPts) * 100) : 0
+                    const teamLoad = typeof t?.load === 'number' ? t.load : 0
+                    const isOverloaded = teamLoad >= 80
                     return (
-                      <motion.div key={t.name} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className={`rounded-lg border p-4 ${isOverloaded ? 'border-red-500/30 bg-red-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'}`}>
+                      <motion.div key={t?.name || i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className={`rounded-lg border p-4 ${isOverloaded ? 'border-red-500/30 bg-red-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'}`}>
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-3">
-                            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${i === 0 ? 'bg-amber-500/20 text-amber-300' : i === 1 ? 'bg-blue-500/20 text-blue-300' : 'bg-emerald-500/20 text-emerald-300'}`}>{t.name[0]}</div>
+                            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${i === 0 ? 'bg-amber-500/20 text-amber-300' : i === 1 ? 'bg-blue-500/20 text-blue-300' : 'bg-emerald-500/20 text-emerald-300'}`}>{String(t?.name ?? '')[0] || '?'}</div>
                             <div>
-                              <div className="text-sm font-semibold text-white">{t.name}</div>
-                              <div className="text-[9px] text-slate-600">{t.role}</div>
+                              <div className="text-sm font-semibold text-white">{String(t?.name ?? '')}</div>
+                              <div className="text-[9px] text-slate-600">{String(t?.role ?? '')}</div>
                             </div>
                           </div>
                           {isOverloaded && <span className="rounded bg-red-500/10 px-1.5 py-0.5 text-[8px] font-bold text-red-400 animate-pulse">OVERLOADED</span>}
                         </div>
                         <div className="flex items-center gap-2 text-[10px] text-slate-500 mb-2">
-                          <span>{t.members} members</span>
+                          <span>{t?.members ?? 0} members</span>
                           <span className="text-slate-700">&middot;</span>
-                          <span>Lead: {t.lead}</span>
+                          <span>Lead: {String(t?.lead ?? '')}</span>
                         </div>
                         <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1.5">
-                          <span>{t.completedPoints}/{t.sprintPoints} sprint pts</span>
-                          <span className={isOverloaded ? 'text-red-400 font-bold' : t.load >= 60 ? 'text-yellow-400' : 'text-emerald-400'}>{t.load}% load</span>
+                          <span>{compPts}/{sprintPts} sprint pts</span>
+                          <span className={isOverloaded ? 'text-red-400 font-bold' : teamLoad >= 60 ? 'text-yellow-400' : 'text-emerald-400'}>{teamLoad}% load</span>
                         </div>
                         <div className="h-2 rounded-full bg-slate-800 overflow-hidden mb-1.5">
-                          <motion.div initial={{ width: 0 }} animate={{ width: `${loadPct}%` }} transition={{ duration: 0.6, delay: i * 0.08 }} className={`h-full rounded-full ${t.load >= 80 ? 'bg-red-500' : t.load >= 60 ? 'bg-yellow-500' : 'bg-emerald-500'}`} />
+                          <motion.div initial={{ width: 0 }} animate={{ width: `${loadPct}%` }} transition={{ duration: 0.6, delay: i * 0.08 }} className={`h-full rounded-full ${teamLoad >= 80 ? 'bg-red-500' : teamLoad >= 60 ? 'bg-yellow-500' : 'bg-emerald-500'}`} />
                         </div>
                         <div className="h-1 rounded-full bg-slate-800/50 overflow-hidden">
-                          <motion.div initial={{ width: 0 }} animate={{ width: `${t.load}%` }} transition={{ duration: 0.6, delay: i * 0.1 }} className={`h-full rounded-full ${t.load >= 80 ? 'bg-red-500/50' : t.load >= 60 ? 'bg-yellow-500/50' : 'bg-emerald-500/50'}`} />
+                          <motion.div initial={{ width: 0 }} animate={{ width: `${teamLoad}%` }} transition={{ duration: 0.6, delay: i * 0.1 }} className={`h-full rounded-full ${teamLoad >= 80 ? 'bg-red-500/50' : teamLoad >= 60 ? 'bg-yellow-500/50' : 'bg-emerald-500/50'}`} />
                         </div>
                       </motion.div>
                     )
@@ -796,17 +835,20 @@ export default function OrbitExecutionPlanner() {
                     {[0, 9, 18].map((v, i) => (
                       <text key={i} x="56" y={150 - (v / 18) * 130 + 3} textAnchor="end" fill="#64748b" fontSize="9">{v}</text>
                     ))}
-                    {d.teams.map((t, i) => {
-                      const barH = (t.sprintPoints / 18) * 130
+                    {(d.teams || []).map((t, i) => {
+                      if (!t || typeof t !== 'object') return null
+                      const sprintPts = typeof t?.sprintPoints === 'number' ? t.sprintPoints : 0
+                      const compPts = typeof t?.completedPoints === 'number' ? t.completedPoints : 0
+                      const barH = (sprintPts / 18) * 130
                       const x = 75 + i * 70
                       const colors = ['#f59e0b', '#3b82f6', '#10b981']
-                      const completedH = (t.completedPoints / 18) * 130
+                      const completedH = (compPts / 18) * 130
                       return (
-                        <g key={t.name}>
+                        <g key={t?.name || i}>
                           <motion.rect x={x} y={150 - barH} width="36" height={barH} rx="3" fill={colors[i]} fillOpacity="0.15" initial={{ height: 0, y: 150 }} animate={{ height: barH, y: 150 - barH }} transition={{ duration: 0.6, delay: i * 0.1 }} />
                           <motion.rect x={x} y={150 - completedH} width="36" height={completedH} rx="3" fill={colors[i]} fillOpacity="0.8" initial={{ height: 0, y: 150 }} animate={{ height: completedH, y: 150 - completedH }} transition={{ duration: 0.6, delay: i * 0.15 }} />
-                          <text x={x + 18} y={150 - barH - 5} textAnchor="middle" fill="#e2e8f0" fontSize="10" fontWeight="bold">{t.completedPoints}/{t.sprintPoints}</text>
-                          <text x={x + 18} y={167} textAnchor="middle" fill="#64748b" fontSize="9">{t.name}</text>
+                          <text x={x + 18} y={150 - barH - 5} textAnchor="middle" fill="#e2e8f0" fontSize="10" fontWeight="bold">{compPts}/{sprintPts}</text>
+                          <text x={x + 18} y={167} textAnchor="middle" fill="#64748b" fontSize="9">{String(t?.name ?? '')}</text>
                         </g>
                       )
                     })}
@@ -827,28 +869,30 @@ export default function OrbitExecutionPlanner() {
               <div className="relative">
                 <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-slate-800" />
                 <div className="space-y-0">
-                  {d.milestones.map((m, i) => {
-                    const statusColor = m.status === 'done' ? 'border-emerald-500 bg-emerald-500' : m.status === 'in_progress' ? 'border-amber-500 bg-amber-500' : 'border-slate-600 bg-slate-800'
-                    const glowColor = m.status === 'done' ? 'shadow-emerald-500/30' : m.status === 'in_progress' ? 'shadow-amber-500/30' : 'shadow-transparent'
+                  {(d.milestones || []).map((m, i) => {
+                    if (!m || typeof m !== 'object') return null
+                    const mStatus = String(m?.status ?? '')
+                    const statusColor = mStatus === 'done' ? 'border-emerald-500 bg-emerald-500' : mStatus === 'in_progress' ? 'border-amber-500 bg-amber-500' : 'border-slate-600 bg-slate-800'
+                    const glowColor = mStatus === 'done' ? 'shadow-emerald-500/30' : mStatus === 'in_progress' ? 'shadow-amber-500/30' : 'shadow-transparent'
                     return (
-                      <motion.div key={m.name} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative flex items-start gap-5 pb-8 last:pb-0">
+                      <motion.div key={m?.name || i} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative flex items-start gap-5 pb-8 last:pb-0">
                         <div className={`relative z-10 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-sm border-2 ${statusColor} shadow-lg ${glowColor} rotate-45 mt-1`}>
-                          {m.status === 'done' && (
+                          {mStatus === 'done' && (
                             <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.3 + i * 0.1 }} className="h-3 w-3 -rotate-45 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                             </motion.svg>
                           )}
-                          {m.status === 'in_progress' && (
+                          {mStatus === 'in_progress' && (
                             <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="h-1.5 w-1.5 -rotate-45 rounded-full bg-white" />
                           )}
                         </div>
                         <div className="flex-1 min-w-0 -mt-0.5">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-semibold text-slate-200">{m.name}</span>
-                            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[8px] font-medium text-slate-500">{m.sprint}</span>
-                            <StatusBadge status={m.status === 'done' ? 'success' : m.status === 'in_progress' ? 'running' : 'pending'} label={m.status === 'in_progress' ? 'In Progress' : m.status === 'done' ? 'Done' : 'Planned'} />
+                            <span className="text-sm font-semibold text-slate-200">{typeof m?.name === 'object' ? JSON.stringify(m.name) : String(m?.name ?? '')}</span>
+                            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[8px] font-medium text-slate-500">{String(m?.sprint ?? '')}</span>
+                            <StatusBadge status={mStatus === 'done' ? 'success' : mStatus === 'in_progress' ? 'running' : 'pending'} label={mStatus === 'in_progress' ? 'In Progress' : mStatus === 'done' ? 'Done' : 'Planned'} />
                           </div>
-                          <p className="text-[10px] text-slate-600 mt-1">{m.desc}</p>
+                          <p className="text-[10px] text-slate-600 mt-1">{typeof m?.desc === 'object' ? JSON.stringify(m.desc) : String(m?.desc ?? '')}</p>
                         </div>
                       </motion.div>
                     )
@@ -864,40 +908,45 @@ export default function OrbitExecutionPlanner() {
                   <svg className="h-4 w-4 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 <h2 className="text-sm font-bold text-white">Release Readiness Center</h2>
-                <StatusBadge status={d.readinessChecks.filter(c => c.status === 'pass').length >= d.readinessChecks.length / 2 ? 'success' : 'warning'} label={`${d.readinessChecks.filter(c => c.status === 'pass').length}/${d.readinessChecks.length} passed`} />
+                <StatusBadge status={(d.readinessChecks || []).filter(c => c?.status === 'pass').length >= (d.readinessChecks || []).length / 2 ? 'success' : 'warning'} label={`${(d.readinessChecks || []).filter(c => c?.status === 'pass').length}/${(d.readinessChecks || []).length} passed`} />
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-5">
-                {d.readinessChecks.map((c, i) => (
-                  <motion.div key={c.name} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }} className={`rounded-lg border p-4 flex items-center gap-3 transition-all ${c.status === 'pass' ? 'border-emerald-500/20 bg-emerald-500/[0.03]' : 'border-red-500/20 bg-red-500/[0.03]'}`}>
-                    <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${c.status === 'pass' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
-                      {c.status === 'pass' ? (
-                        <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.3 + i * 0.05 }} className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </motion.svg>
-                      ) : (
-                        <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.3 + i * 0.05 }} className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </motion.svg>
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-xs font-medium text-slate-200 truncate">{c.name}</div>
-                      <div className="text-[9px] text-slate-600">{c.category}</div>
-                    </div>
-                    <span className={`text-[10px] font-bold shrink-0 ${c.status === 'pass' ? 'text-emerald-400' : 'text-red-400'}`}>{c.status === 'pass' ? 'PASS' : 'FAIL'}</span>
-                  </motion.div>
-                ))}
+                {(d.readinessChecks || []).map((c, i) => {
+                  if (!c || typeof c !== 'object') return null
+                  const cStatus = String(c?.status ?? '')
+                  const isPass = cStatus === 'pass'
+                  return (
+                    <motion.div key={c?.name || i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }} className={`rounded-lg border p-4 flex items-center gap-3 transition-all ${isPass ? 'border-emerald-500/20 bg-emerald-500/[0.03]' : 'border-red-500/20 bg-red-500/[0.03]'}`}>
+                      <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${isPass ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                        {isPass ? (
+                          <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.3 + i * 0.05 }} className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                          </motion.svg>
+                        ) : (
+                          <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.3 + i * 0.05 }} className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </motion.svg>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-medium text-slate-200 truncate">{typeof c?.name === 'object' ? JSON.stringify(c.name) : String(c?.name ?? '')}</div>
+                        <div className="text-[9px] text-slate-600">{String(c?.category ?? '')}</div>
+                      </div>
+                      <span className={`text-[10px] font-bold shrink-0 ${isPass ? 'text-emerald-400' : 'text-red-400'}`}>{isPass ? 'PASS' : 'FAIL'}</span>
+                    </motion.div>
+                  )
+                })}
               </div>
               <div className="rounded-lg border border-white/[0.06] bg-slate-900/40 p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] text-slate-600">Overall Readiness Score</span>
-                    <span className="text-lg font-bold text-white">{d.readinessChecks.filter(c => c.status === 'pass').length}/{d.readinessChecks.length}</span>
-                    <span className="text-lg font-bold text-amber-300">({Math.round(d.readinessChecks.filter(c => c.status === 'pass').length / d.readinessChecks.length * 100)}%)</span>
+                    <span className="text-lg font-bold text-white">{(d.readinessChecks || []).filter(c => c?.status === 'pass').length}/{(d.readinessChecks || []).length}</span>
+                    <span className="text-lg font-bold text-amber-300">({Math.round((d.readinessChecks || []).filter(c => c?.status === 'pass').length / Math.max(1, (d.readinessChecks || []).length) * 100)}%)</span>
                   </div>
                   <div className="w-48">
                     <div className="h-2.5 rounded-full bg-slate-800 overflow-hidden">
-                      <motion.div initial={{ width: 0 }} animate={{ width: `${Math.round(d.readinessChecks.filter(c => c.status === 'pass').length / d.readinessChecks.length * 100)}%` }} transition={{ duration: 1 }} className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500" />
+                      <motion.div initial={{ width: 0 }} animate={{ width: `${Math.round((d.readinessChecks || []).filter(c => c?.status === 'pass').length / Math.max(1, (d.readinessChecks || []).length) * 100)}%` }} transition={{ duration: 1 }} className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500" />
                     </div>
                   </div>
                 </div>
@@ -919,16 +968,20 @@ export default function OrbitExecutionPlanner() {
               </div>
               <div className="relative">
                 <div className="absolute left-[18px] top-3 bottom-3 w-px bg-gradient-to-b from-emerald-500/40 via-amber-500/40 to-slate-700/40" />
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {d.deployments.map((dep, i) => (
-                    <div key={dep.name} className="relative pl-12">
-                      <div className={`absolute left-[10px] top-3 h-4 w-4 rounded-full border-2 flex items-center justify-center ${dep.status === 'successful' ? 'border-emerald-500 bg-emerald-500/20' : dep.status === 'running' ? 'border-amber-500 bg-amber-500/20' : dep.status === 'failed' ? 'border-red-500 bg-red-500/20' : 'border-slate-600 bg-slate-800'}`}>
-                        <div className={`h-2 w-2 rounded-full ${dep.status === 'successful' ? 'bg-emerald-500' : dep.status === 'running' ? 'bg-amber-500 animate-pulse' : dep.status === 'failed' ? 'bg-red-500' : 'bg-slate-600'}`} />
+              <div className="grid gap-3 sm:grid-cols-2">
+                  {(d.deployments || []).map((dep, i) => {
+                    if (!dep || typeof dep !== 'object') return null
+                    const depStatus = String(dep?.status ?? '')
+                    return (
+                      <div key={dep?.name || i} className="relative pl-12">
+                        <div className={`absolute left-[10px] top-3 h-4 w-4 rounded-full border-2 flex items-center justify-center ${depStatus === 'successful' ? 'border-emerald-500 bg-emerald-500/20' : depStatus === 'running' ? 'border-amber-500 bg-amber-500/20' : depStatus === 'failed' ? 'border-red-500 bg-red-500/20' : 'border-slate-600 bg-slate-800'}`}>
+                          <div className={`h-2 w-2 rounded-full ${depStatus === 'successful' ? 'bg-emerald-500' : depStatus === 'running' ? 'bg-amber-500 animate-pulse' : depStatus === 'failed' ? 'bg-red-500' : 'bg-slate-600'}`} />
+                        </div>
+                        <DeploymentCard dep={dep} index={i} />
                       </div>
-                      <DeploymentCard dep={dep} index={i} />
-                    </div>
-                  ))}
-                </div>
+                    )
+                  })}
+              </div>
               </div>
             </motion.div>
 
@@ -940,13 +993,13 @@ export default function OrbitExecutionPlanner() {
                 </div>
                 <h2 className="text-sm font-bold text-white">Blockers & Escalations</h2>
                 <div className="flex items-center gap-2 ml-auto text-[10px] text-slate-500">
-                  <StatusBadge status="critical" label={`${d.blockers.filter(b => b.severity === 'critical').length} critical`} />
-                  <StatusBadge status="warning" label={`${d.blockers.filter(b => b.status === 'open').length} open`} />
+                  <StatusBadge status="critical" label={`${(d.blockers || []).filter(b => b?.severity === 'critical').length} critical`} />
+                  <StatusBadge status="warning" label={`${(d.blockers || []).filter(b => b?.status === 'open').length} open`} />
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                {d.blockers.map((b, i) => (
-                  <BlockerCard key={b.title} blocker={b} index={i} expanded={expandedBlocker === i} onToggle={() => setExpandedBlocker(expandedBlocker === i ? null : i)} />
+                {(d.blockers || []).map((b, i) => (
+                  <BlockerCard key={b?.title || i} blocker={b} index={i} expanded={expandedBlocker === i} onToggle={() => setExpandedBlocker(expandedBlocker === i ? null : i)} />
                 ))}
               </div>
             </motion.div>
@@ -958,36 +1011,38 @@ export default function OrbitExecutionPlanner() {
                   <svg className="h-4 w-4 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                 </div>
                 <h2 className="text-sm font-bold text-white">Risk Tracking Matrix</h2>
-                <StatusBadge status={d.risks.some(r => r.severity === 'critical' && r.status === 'active') ? 'critical' : 'safe'} label={`${d.risks.filter(r => r.status === 'active').length} active`} />
+                <StatusBadge status={(d.risks || []).some(r => String(r?.severity ?? '') === 'critical' && String(r?.status ?? '') === 'active') ? 'critical' : 'safe'} label={`${(d.risks || []).filter(r => String(r?.status ?? '') === 'active').length} active`} />
               </div>
               <div className="grid gap-3">
-                {d.risks.map((r, i) => {
-                  const sevPct = r.severity === 'critical' ? 90 : r.severity === 'high' ? 65 : 35
+                {(d.risks || []).map((r, i) => {
+                  if (!r || typeof r !== 'object') return null
+                  const rSev = String(r?.severity ?? '')
+                  const sevPct = rSev === 'critical' ? 90 : rSev === 'high' ? 65 : 35
                   return (
-                    <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4">
+                    <motion.div key={r?.name || r?.risk || i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4">
                       <div className="flex items-start justify-between mb-2 flex-wrap gap-1">
                         <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <StatusBadge status={r.severity} label={r.severity} />
-                          <span className="text-xs font-medium text-slate-200">{r.risk}</span>
+                          <StatusBadge status={rSev} label={rSev} />
+                          <span className="text-xs font-medium text-slate-200">{typeof r?.risk === 'object' ? JSON.stringify(r.risk) : String(r?.risk ?? '')}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <StatusBadge status={r.status === 'mitigated' ? 'success' : 'warning'} label={r.status} />
-                          <StatusBadge status={r.probability === 'High' ? 'critical' : r.probability === 'Medium' ? 'warning' : 'info'} label={r.probability} />
+                          <StatusBadge status={String(r?.status ?? '') === 'mitigated' ? 'success' : 'warning'} label={String(r?.status ?? '')} />
+                          <StatusBadge status={String(r?.probability ?? '') === 'High' ? 'critical' : String(r?.probability ?? '') === 'Medium' ? 'warning' : 'info'} label={String(r?.probability ?? '')} />
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-[10px] text-slate-500 flex-wrap mb-3">
                         <span className="text-slate-600">Mitigation:</span>
-                        <span>{r.mitigation}</span>
+                        <span>{typeof r?.mitigation === 'object' ? JSON.stringify(r.mitigation) : String(r?.mitigation ?? '')}</span>
                         <span className="text-slate-700">&middot;</span>
                         <span className="text-slate-600">Owner:</span>
-                        <span>{r.owner}</span>
+                        <span>{String(r?.owner ?? '')}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-[9px] text-slate-600 shrink-0 w-16">Severity</span>
                         <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
-                          <motion.div initial={{ width: 0 }} animate={{ width: `${sevPct}%` }} transition={{ duration: 0.8, delay: i * 0.05 }} className={`h-full rounded-full ${r.severity === 'critical' ? 'bg-red-500' : r.severity === 'high' ? 'bg-orange-500' : 'bg-yellow-500'}`} />
+                          <motion.div initial={{ width: 0 }} animate={{ width: `${sevPct}%` }} transition={{ duration: 0.8, delay: i * 0.05 }} className={`h-full rounded-full ${rSev === 'critical' ? 'bg-red-500' : rSev === 'high' ? 'bg-orange-500' : 'bg-yellow-500'}`} />
                         </div>
-                        <span className={`text-[10px] font-bold shrink-0 w-12 text-right ${r.severity === 'critical' ? 'text-red-400' : r.severity === 'high' ? 'text-orange-400' : 'text-yellow-400'}`}>{sevPct}%</span>
+                        <span className={`text-[10px] font-bold shrink-0 w-12 text-right ${rSev === 'critical' ? 'text-red-400' : rSev === 'high' ? 'text-orange-400' : 'text-yellow-400'}`}>{sevPct}%</span>
                       </div>
                     </motion.div>
                   )
@@ -1040,15 +1095,18 @@ export default function OrbitExecutionPlanner() {
                       <span className="flex items-center gap-1"><span className="h-0.5 w-3 border-b border-dashed border-amber-500/50" /> Avg</span>
                     </div>
                   </div>
-                  <VelocityChart velocity={d.velocity} avgVelocity={Math.round(d.velocity.reduce((a, v) => a + v.points, 0) / d.velocity.length)} />
+                  <VelocityChart velocity={d.velocity} avgVelocity={Array.isArray(d.velocity) && d.velocity.length > 0 ? Math.round(d.velocity.reduce((a, v) => a + (typeof v?.points === 'number' ? v.points : 0), 0) / d.velocity.length) : 0} />
                   <div className="grid grid-cols-3 gap-2 mt-3">
-                    {d.velocity.map((v, i) => (
-                      <div key={v.sprint} className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
-                        <div className="text-[8px] text-slate-600">Sprint {v.sprint}</div>
-                        <div className="text-base font-bold text-white"><AnimatedCounter value={v.points} /></div>
-                        <div className="text-[7px] text-slate-600">points</div>
-                      </div>
-                    ))}
+                    {(d.velocity || []).map((v, i) => {
+                      if (!v || typeof v !== 'object') return null
+                      return (
+                        <div key={v?.sprint ?? i} className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
+                          <div className="text-[8px] text-slate-600">Sprint {v?.sprint ?? ''}</div>
+                          <div className="text-base font-bold text-white"><AnimatedCounter value={typeof v?.points === 'number' ? v.points : 0} /></div>
+                          <div className="text-[7px] text-slate-600">points</div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </div>
@@ -1064,26 +1122,28 @@ export default function OrbitExecutionPlanner() {
                 <StatusBadge status="info" label={`${d.aiRecommendations.length} insights`} />
               </div>
               <div className="grid gap-3">
-                {d.aiRecommendations.map((rec, i) => {
-                  const borderColor = rec.priority === 'P0' ? 'border-l-red-500/60' : rec.priority === 'P1' ? 'border-l-yellow-500/60' : 'border-l-slate-500/60'
-                  const priColor = rec.priority === 'P0' ? 'bg-red-500/10 text-red-400' : rec.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-slate-500/10 text-slate-400'
+                {(d.aiRecommendations || []).map((rec, i) => {
+                  if (!rec || typeof rec !== 'object') return null
+                  const recPriority = String(rec?.priority ?? '')
+                  const borderColor = recPriority === 'P0' ? 'border-l-red-500/60' : recPriority === 'P1' ? 'border-l-yellow-500/60' : 'border-l-slate-500/60'
+                  const priColor = recPriority === 'P0' ? 'bg-red-500/10 text-red-400' : recPriority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-slate-500/10 text-slate-400'
                   return (
-                    <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={`rounded-lg border border-white/[0.06] border-l-2 ${borderColor} bg-white/[0.02] p-3.5 hover:border-white/[0.12] transition-all`}>
+                    <motion.div key={rec?.action || i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={`rounded-lg border border-white/[0.06] border-l-2 ${borderColor} bg-white/[0.02] p-3.5 hover:border-white/[0.12] transition-all`}>
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${priColor}`}>{rec.priority}</span>
-                          <span className="text-xs font-medium text-slate-200">{rec.action}</span>
+                          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${priColor}`}>{recPriority}</span>
+                          <span className="text-xs font-medium text-slate-200">{typeof rec?.action === 'object' ? JSON.stringify(rec.action) : String(rec?.action ?? '')}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 text-[10px] text-slate-500 flex-wrap">
                         <span className="text-slate-600">Impact:</span>
-                        <span>{rec.impact}</span>
+                        <span>{typeof rec?.impact === 'object' ? JSON.stringify(rec.impact) : String(rec?.impact ?? '')}</span>
                         <span className="text-slate-700">&middot;</span>
                         <span className="text-slate-600">Effort:</span>
-                        <span className="font-medium text-slate-400">{rec.effort}</span>
+                        <span className="font-medium text-slate-400">{String(rec?.effort ?? '')}</span>
                         <span className="text-slate-700">&middot;</span>
                         <span className="text-slate-600">Owner:</span>
-                        <span>{rec.owner}</span>
+                        <span>{String(rec?.owner ?? '')}</span>
                       </div>
                     </motion.div>
                   )
@@ -1102,7 +1162,9 @@ export default function OrbitExecutionPlanner() {
               <div className="relative">
                 <div className="absolute left-[11px] top-2 bottom-2 w-px bg-slate-800" />
                 <div className="space-y-0">
-                  {d.activityFeed.map((act, i) => {
+                  {(d.activityFeed || []).map((act, i) => {
+                    if (!act || typeof act !== 'object') return null
+                    const actAction = String(act?.action ?? '')
                     const actionIcons = {
                       deployed: 'M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z',
                       merged: 'M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z',
@@ -1117,20 +1179,20 @@ export default function OrbitExecutionPlanner() {
                       completed: 'text-emerald-400 bg-emerald-500/20',
                       started: 'text-amber-400 bg-amber-500/20',
                     }
-                    const ic = iconColor[act.action] || iconColor.started
-                    const ai = actionIcons[act.action] || actionIcons.started
+                    const ic = iconColor[actAction] || iconColor.started
+                    const ai = actionIcons[actAction] || actionIcons.started
                     return (
-                      <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="relative flex items-start gap-4 pb-4 last:pb-0 pl-8">
+                      <motion.div key={act?.actor + actAction + (act?.timestamp || i)} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="relative flex items-start gap-4 pb-4 last:pb-0 pl-8">
                         <div className={`absolute left-0 top-1 flex h-5 w-5 items-center justify-center rounded-full ${ic}`}>
                           <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d={ai} /></svg>
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[10px] font-medium text-slate-200">{act.actor}</span>
-                            <span className="text-[10px] text-slate-500">{act.action}</span>
-                            <span className="text-[10px] text-slate-400 truncate">{act.target}</span>
+                            <span className="text-[10px] font-medium text-slate-200">{String(act?.actor ?? '')}</span>
+                            <span className="text-[10px] text-slate-500">{actAction}</span>
+                            <span className="text-[10px] text-slate-400 truncate">{typeof act?.target === 'object' ? JSON.stringify(act.target) : String(act?.target ?? '')}</span>
                           </div>
-                          <span className="text-[8px] text-slate-700">{act.timestamp}</span>
+                          <span className="text-[8px] text-slate-700">{String(act?.timestamp ?? '')}</span>
                         </div>
                       </motion.div>
                     )

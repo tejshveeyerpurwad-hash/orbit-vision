@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://orbit-vision-six.vercel.app" target="_blank"><img src="https://img.shields.io/badge/LIVE_DEMO-06b6d4?style=for-the-badge&logo=vercel&labelColor=0f172a&color=06b6d4" alt="Live Demo"/></a>
+  <a href="https://orbit-foresight.vercel.app" target="_blank"><img src="https://img.shields.io/badge/LIVE_DEMO-06b6d4?style=for-the-badge&logo=vercel&labelColor=0f172a&color=06b6d4" alt="Live Demo"/></a>
   <a href="https://github.com/tejshveeyerpurwad-hash/orbit-vision" target="_blank"><img src="https://img.shields.io/badge/VIEW_ON_GITHUB-0f172a?style=for-the-badge&logo=github&labelColor=0f172a&color=0f172a" alt="GitHub"/></a>
-  <a href="https://orbit-vision-six.vercel.app/cto-report" target="_blank"><img src="https://img.shields.io/badge/ARCHITECTURE-8b5cf6?style=for-the-badge&logo=react&labelColor=0f172a&color=8b5cf6" alt="Architecture"/></a>
+  <a href="https://orbit-foresight.vercel.app/cto-report" target="_blank"><img src="https://img.shields.io/badge/ARCHITECTURE-8b5cf6?style=for-the-badge&logo=react&labelColor=0f172a&color=8b5cf6" alt="Architecture"/></a>
   <a href="#demo"><img src="https://img.shields.io/badge/WATCH_DEMO-ef4444?style=for-the-badge&logo=youtube&labelColor=0f172a&color=ef4444" alt="Demo Video"/></a>
 </p>
 
@@ -29,6 +29,12 @@
   <img src="https://img.shields.io/badge/FastAPI-2024?style=flat-square&logo=fastapi&labelColor=0f172a&color=009688" alt="FastAPI"/>
   <img src="https://img.shields.io/badge/Python_3-2024?style=flat-square&logo=python&labelColor=0f172a&color=3776AB" alt="Python 3"/>
   <img src="https://img.shields.io/badge/Vercel-Deployed-000?style=flat-square&logo=vercel&labelColor=0f172a&color=000" alt="Vercel"/>
+</p>
+
+<br/>
+
+<p align="center">
+  <img src="docs/assets/executive-impact.svg" alt="Orbit Foresight Projected Engineering Impact" width="100%" style="max-width: 900px; border-radius: 16px;"/>
 </p>
 
 <br/>
@@ -268,7 +274,7 @@ flowchart TB
 
 ### 90 seconds to understand why this wins.
 
-> Use the live demo at **[orbit-vision-six.vercel.app](https://orbit-vision-six.vercel.app)** — no login required.
+> Use the live demo at **[orbit-foresight.vercel.app](https://orbit-foresight.vercel.app)** — no login required.
 
 <br/>
 
@@ -385,5 +391,5 @@ Simulate any failure scenario before it happens. Watch blast radius propagate ac
 
 <p align="center">
   <br/>
-  <a href="https://orbit-vision-six.vercel.app" target="_blank"><img src="https://img.shields.io/badge/TRY_THE_LIVE_DEMO-06b6d4?style=for-the-badge&logo=vercel&labelColor=0f172a&color=06b6d4" alt="Try the Live Demo"/></a>
+  <a href="https://orbit-foresight.vercel.app" target="_blank"><img src="https://img.shields.io/badge/TRY_THE_LIVE_DEMO-06b6d4?style=for-the-badge&logo=vercel&labelColor=0f172a&color=06b6d4" alt="Try the Live Demo"/></a>
 </p>

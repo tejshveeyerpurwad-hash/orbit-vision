@@ -65,19 +65,13 @@ The gap between *monitoring* and *intelligence* is the single largest source of 
 
 ```mermaid
 flowchart LR
-    A["Code Change"]:::input --> B["AI Investigation Engine"]:::ai
-    B --> C["Digital Twin Builder"]:::core
-    C --> D["Knowledge Graph"]:::core
-    D --> E["Impact Analysis"]:::core
-    E --> F["Executive Report"]:::output
-    F --> G["Remediation Plan"]:::output
-    G --> H["Deployment Decision"]:::decision
-
-    classDef input fill:#3b82f6,stroke:#60a5fa,color:#fff
-    classDef ai fill:#8b5cf6,stroke:#a78bfa,color:#fff
-    classDef core fill:#06b6d4,stroke:#22d3ee,color:#fff
-    classDef output fill:#10b981,stroke:#34d399,color:#fff
-    classDef decision fill:#f59e0b,stroke:#fbbf24,color:#fff
+    A["Code Change"] --> B["AI Investigation Engine"]
+    B --> C["Digital Twin Builder"]
+    C --> D["Knowledge Graph"]
+    D --> E["Impact Analysis"]
+    E --> F["Executive Report"]
+    F --> G["Remediation Plan"]
+    G --> H["Deployment Decision"]
 ```
 
 Six interconnected intelligence engines work in sequence — from anomaly detection through to executive action — transforming raw telemetry into strategic decisions in under 30 seconds.
@@ -224,48 +218,42 @@ Full forensic timeline reconstruction for every incident. Engineers replay any p
 
 ```mermaid
 flowchart TB
-    subgraph Input["Signal Ingestion"]
-        A1["Deployments"]:::input
-        A2["Incidents"]:::input
-        A3["Dependencies"]:::input
-        A4["Metrics"]:::input
+    subgraph InputLayer["Signal Ingestion"]
+        A1["Deployments"]
+        A2["Incidents"]
+        A3["Dependencies"]
+        A4["Metrics"]
     end
 
-    subgraph Intelligence["AI Intelligence Engine"]
-        B1["Risk Scoring"]:::ai
-        B2["Pattern Correlation"]:::ai
-        B3["Anomaly Detection"]:::ai
-        B4["Root Cause Analysis"]:::ai
+    subgraph IntelligenceLayer["AI Intelligence Engine"]
+        B1["Risk Scoring"]
+        B2["Pattern Correlation"]
+        B3["Anomaly Detection"]
+        B4["Root Cause Analysis"]
     end
 
-    subgraph Graph["Knowledge Graph"]
-        C1["Service Topology"]:::graph
-        C2["Dependency Mapping"]:::graph
-        C3["Risk Propagation"]:::graph
+    subgraph KnowledgeLayer["Knowledge Graph"]
+        C1["Service Topology"]
+        C2["Dependency Mapping"]
+        C3["Risk Propagation"]
     end
 
-    subgraph Impact["Business Impact Layer"]
-        D1["Revenue Exposure"]:::impact
-        D2["Customer Impact"]:::impact
-        D3["SLA Risk"]:::impact
+    subgraph ImpactLayer["Business Impact Layer"]
+        D1["Revenue Exposure"]
+        D2["Customer Impact"]
+        D3["SLA Risk"]
     end
 
-    subgraph Executive["Executive Interface"]
-        E1["Command Center"]:::ui
-        E2["CTO Reports"]:::ui
-        E3["Remediation Planner"]:::ui
+    subgraph ExecutiveLayer["Executive Interface"]
+        E1["Command Center"]
+        E2["CTO Reports"]
+        E3["Remediation Planner"]
     end
 
-    Input --> Intelligence
-    Intelligence --> Graph
-    Graph --> Impact
-    Impact --> Executive
-
-    classDef input fill:#3b82f6,stroke:#60a5fa,color:#fff
-    classDef ai fill:#8b5cf6,stroke:#a78bfa,color:#fff
-    classDef graph fill:#10b981,stroke:#34d399,color:#fff
-    classDef impact fill:#f59e0b,stroke:#fbbf24,color:#fff
-    classDef ui fill:#06b6d4,stroke:#22d3ee,color:#fff
+    InputLayer --> IntelligenceLayer
+    IntelligenceLayer --> KnowledgeLayer
+    KnowledgeLayer --> ImpactLayer
+    ImpactLayer --> ExecutiveLayer
 ```
 
 ---

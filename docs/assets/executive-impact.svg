@@ -1,0 +1,246 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="1"/>
+    </radialGradient>
+    <linearGradient id="header-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="purple-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="blue-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="amber-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="pink-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+
+    <filter id="card-glow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
+      <feOffset dx="0" dy="2" result="offsetBlur"/>
+      <feMerge>
+        <feMergeNode in="offsetBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="card-bg-blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+    </filter>
+
+    <filter id="ambient-glow-cyan">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#06b6d4" flood-opacity="0.15"/>
+    </filter>
+    <filter id="ambient-glow-purple">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#8b5cf6" flood-opacity="0.15"/>
+    </filter>
+    <filter id="ambient-glow-blue">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#3b82f6" flood-opacity="0.15"/>
+    </filter>
+    <filter id="ambient-glow-emerald">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#10b981" flood-opacity="0.15"/>
+    </filter>
+    <filter id="ambient-glow-amber">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#f59e0b" flood-opacity="0.12"/>
+    </filter>
+    <filter id="ambient-glow-pink">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#ec4899" flood-opacity="0.12"/>
+    </filter>
+
+    <linearGradient id="card-border-cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="card-border-purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="card-border-blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="card-border-emerald" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="card-border-amber" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="card-border-pink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <linearGradient id="ring-track" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+
+    <filter id="ring-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="720" fill="url(#bg-glow)"/>
+
+  <!-- Grid lines -->
+  <g opacity="0.03">
+    <line x1="0" y1="120" x2="1200" y2="120" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="0" y1="240" x2="1200" y2="240" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="0" y1="360" x2="1200" y2="360" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="0" y1="480" x2="1200" y2="480" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="240" y1="0" x2="240" y2="720" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="480" y1="0" x2="480" y2="720" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="720" y1="0" x2="720" y2="720" stroke="#06b6d4" stroke-width="0.5"/>
+    <line x1="960" y1="0" x2="960" y2="720" stroke="#06b6d4" stroke-width="0.5"/>
+  </g>
+
+  <!-- Title section -->
+  <text x="600" y="48" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f1f5f9" letter-spacing="2">ORBIT FORESIGHT</text>
+
+  <rect x="540" y="58" width="120" height="2" rx="1" fill="url(#header-line)"/>
+
+  <text x="600" y="84" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="30" font-weight="700" fill="#f8fafc" letter-spacing="0.5">Projected Engineering Impact</text>
+
+  <text x="600" y="112" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="14" fill="#94a3b8" letter-spacing="0.3">Executive-level impact metrics powered by predictive engineering intelligence.</text>
+
+  <!-- Metric Cards Row 1 -->
+  <!-- Card 1: Incident Detection 94% -->
+  <g filter="url(#ambient-glow-cyan)">
+    <rect x="37" y="148" width="362" height="240" rx="16" fill="#0f172a" fill-opacity="0.6" stroke="url(#card-border-cyan)" stroke-width="1.2"/>
+    <rect x="37" y="148" width="362" height="240" rx="16" fill="url(#card-border-cyan)" fill-opacity="0.04"/>
+  </g>
+  <text x="60" y="176" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" font-weight="600" fill="#06b6d4" letter-spacing="1.5">METRIC 01</text>
+  <text x="60" y="202" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="17" font-weight="600" fill="#e2e8f0">Incident Detection</text>
+  <text x="60" y="222" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" fill="#64748b">AI-powered anomaly detection</text>
+  <!-- Ring -->
+  <circle cx="320" cy="275" r="48" fill="none" stroke="#1e293b" stroke-width="6"/>
+  <circle cx="320" cy="275" r="48" fill="none" stroke="url(#cyan-grad)" stroke-width="6" stroke-dasharray="301.59" stroke-dashoffset="18.1" stroke-linecap="round" transform="rotate(-90 320 275)" filter="url(#ring-glow)"/>
+  <text x="320" y="272" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">94%</text>
+  <text x="320" y="290" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="10" fill="#64748b">ACCURACY</text>
+  <!-- Live dot -->
+  <circle cx="60" cy="372" r="4" fill="#06b6d4"/>
+  <circle cx="60" cy="372" r="4" fill="#06b6d4" opacity="0.4">
+    <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="72" y="376" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="11" fill="#64748b">Projected accuracy</text>
+
+  <!-- Card 2: Blast Radius Mapping 92% -->
+  <g filter="url(#ambient-glow-purple)">
+    <rect x="419" y="148" width="362" height="240" rx="16" fill="#0f172a" fill-opacity="0.6" stroke="url(#card-border-purple)" stroke-width="1.2"/>
+    <rect x="419" y="148" width="362" height="240" rx="16" fill="url(#card-border-purple)" fill-opacity="0.04"/>
+  </g>
+  <text x="442" y="176" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" font-weight="600" fill="#8b5cf6" letter-spacing="1.5">METRIC 02</text>
+  <text x="442" y="202" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="17" font-weight="600" fill="#e2e8f0">Blast Radius Mapping</text>
+  <text x="442" y="222" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" fill="#64748b">Real-time propagation simulation</text>
+  <circle cx="702" cy="275" r="48" fill="none" stroke="#1e293b" stroke-width="6"/>
+  <circle cx="702" cy="275" r="48" fill="none" stroke="url(#purple-grad)" stroke-width="6" stroke-dasharray="301.59" stroke-dashoffset="24.13" stroke-linecap="round" transform="rotate(-90 702 275)" filter="url(#ring-glow)"/>
+  <text x="702" y="272" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">92%</text>
+  <text x="702" y="290" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="10" fill="#64748b">COVERAGE</text>
+  <circle cx="442" cy="372" r="4" fill="#8b5cf6"/>
+  <circle cx="442" cy="372" r="4" fill="#8b5cf6" opacity="0.4">
+    <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="454" y="376" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="11" fill="#64748b">Service topology mapped</text>
+
+  <!-- Card 3: Root Cause Discovery 88% -->
+  <g filter="url(#ambient-glow-blue)">
+    <rect x="801" y="148" width="362" height="240" rx="16" fill="#0f172a" fill-opacity="0.6" stroke="url(#card-border-blue)" stroke-width="1.2"/>
+    <rect x="801" y="148" width="362" height="240" rx="16" fill="url(#card-border-blue)" fill-opacity="0.04"/>
+  </g>
+  <text x="824" y="176" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" font-weight="600" fill="#3b82f6" letter-spacing="1.5">METRIC 03</text>
+  <text x="824" y="202" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="17" font-weight="600" fill="#e2e8f0">Root Cause Discovery</text>
+  <text x="824" y="222" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" fill="#64748b">15-dimension forensic analysis</text>
+  <circle cx="1084" cy="275" r="48" fill="none" stroke="#1e293b" stroke-width="6"/>
+  <circle cx="1084" cy="275" r="48" fill="none" stroke="url(#blue-grad)" stroke-width="6" stroke-dasharray="301.59" stroke-dashoffset="36.19" stroke-linecap="round" transform="rotate(-90 1084 275)" filter="url(#ring-glow)"/>
+  <text x="1084" y="272" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">88%</text>
+  <text x="1084" y="290" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="10" fill="#64748b">CONFIDENCE</text>
+  <circle cx="824" cy="372" r="4" fill="#3b82f6"/>
+  <circle cx="824" cy="372" r="4" fill="#3b82f6" opacity="0.4">
+    <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="836" y="376" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="11" fill="#64748b">Historical pattern match</text>
+
+  <!-- Metric Cards Row 2 -->
+  <!-- Card 4: Deployment Confidence 96% -->
+  <g filter="url(#ambient-glow-emerald)">
+    <rect x="37" y="420" width="362" height="240" rx="16" fill="#0f172a" fill-opacity="0.6" stroke="url(#card-border-emerald)" stroke-width="1.2"/>
+    <rect x="37" y="420" width="362" height="240" rx="16" fill="url(#card-border-emerald)" fill-opacity="0.04"/>
+  </g>
+  <text x="60" y="448" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" font-weight="600" fill="#10b981" letter-spacing="1.5">METRIC 04</text>
+  <text x="60" y="474" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="17" font-weight="600" fill="#e2e8f0">Deployment Confidence</text>
+  <text x="60" y="494" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" fill="#64748b">Pre-deployment risk modeling</text>
+  <circle cx="320" cy="547" r="48" fill="none" stroke="#1e293b" stroke-width="6"/>
+  <circle cx="320" cy="547" r="48" fill="none" stroke="url(#emerald-grad)" stroke-width="6" stroke-dasharray="301.59" stroke-dashoffset="12.06" stroke-linecap="round" transform="rotate(-90 320 547)" filter="url(#ring-glow)"/>
+  <text x="320" y="544" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">96%</text>
+  <text x="320" y="562" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="10" fill="#64748b">SCORE</text>
+  <circle cx="60" cy="644" r="4" fill="#10b981"/>
+  <circle cx="60" cy="644" r="4" fill="#10b981" opacity="0.4">
+    <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="72" y="648" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="11" fill="#64748b">Proactive confidence scoring</text>
+
+  <!-- Card 5: MTTR Reduction 63% -->
+  <g filter="url(#ambient-glow-amber)">
+    <rect x="419" y="420" width="362" height="240" rx="16" fill="#0f172a" fill-opacity="0.6" stroke="url(#card-border-amber)" stroke-width="1.2"/>
+    <rect x="419" y="420" width="362" height="240" rx="16" fill="url(#card-border-amber)" fill-opacity="0.04"/>
+  </g>
+  <text x="442" y="448" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" font-weight="600" fill="#f59e0b" letter-spacing="1.5">METRIC 05</text>
+  <text x="442" y="474" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="17" font-weight="600" fill="#e2e8f0">MTTR Reduction</text>
+  <text x="442" y="494" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" fill="#64748b">Automated root cause analysis</text>
+  <circle cx="702" cy="547" r="48" fill="none" stroke="#1e293b" stroke-width="6"/>
+  <circle cx="702" cy="547" r="48" fill="none" stroke="url(#amber-grad)" stroke-width="6" stroke-dasharray="301.59" stroke-dashoffset="111.59" stroke-linecap="round" transform="rotate(-90 702 547)" filter="url(#ring-glow)"/>
+  <text x="702" y="544" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">63%</text>
+  <text x="702" y="562" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="10" fill="#64748b">REDUCTION</text>
+  <circle cx="442" cy="644" r="4" fill="#f59e0b"/>
+  <circle cx="442" cy="644" r="4" fill="#f59e0b" opacity="0.4">
+    <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="454" y="648" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="11" fill="#64748b">45 min → 12 min avg</text>
+
+  <!-- Card 6: Executive Reporting Speed 15s -->
+  <g filter="url(#ambient-glow-pink)">
+    <rect x="801" y="420" width="362" height="240" rx="16" fill="#0f172a" fill-opacity="0.6" stroke="url(#card-border-pink)" stroke-width="1.2"/>
+    <rect x="801" y="420" width="362" height="240" rx="16" fill="url(#card-border-pink)" fill-opacity="0.04"/>
+  </g>
+  <text x="824" y="448" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" font-weight="600" fill="#ec4899" letter-spacing="1.5">METRIC 06</text>
+  <text x="824" y="474" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="17" font-weight="600" fill="#e2e8f0">Executive Reporting Speed</text>
+  <text x="824" y="494" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="12" fill="#64748b">AI-generated boardroom reports</text>
+  <!-- For the reporting speed, show a big number instead of ring -->
+  <rect x="1056" y="515" width="84" height="64" rx="12" fill="#ec4899" fill-opacity="0.1" stroke="#ec4899" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="1098" y="548" text-anchor="middle" font-family="'SF Pro Display', 'Inter', -apple-system, sans-serif" font-size="28" font-weight="700" fill="#f8fafc">15s</text>
+  <text x="1098" y="572" text-anchor="middle" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="9" fill="#ec4899" letter-spacing="1">AVERAGE</text>
+  <circle cx="824" cy="644" r="4" fill="#ec4899"/>
+  <circle cx="824" cy="644" r="4" fill="#ec4899" opacity="0.4">
+    <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="836" y="648" font-family="'SF Pro Text', 'Inter', -apple-system, sans-serif" font-size="11" fill="#64748b">From hours to seconds</text>
+</svg>

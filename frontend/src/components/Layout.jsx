@@ -181,7 +181,7 @@ export default function Layout({ children }) {
           background-size: 64px 64px;
         }
         @keyframes orbit-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes radar-sweep { 0% { transform: rotate(0deg); opacity: 0.4; } 50% { opacity: 0.15; } 100% { transform: rotate(360deg); opacity: 0.4; } }
+        @keyframes radar-sweep { 0% { transform: rotate(0deg); opacity: 0.3; } 50% { opacity: 0.1; } 100% { transform: rotate(360deg); opacity: 0.3; } }
         @keyframes scan-line { 0% { top: -2px; } 100% { top: 100%; } }
         .animate-orbit { animation: orbit-rotate 8s linear infinite; }
         .animate-radar { animation: radar-sweep 6s ease-in-out infinite; }
@@ -192,6 +192,17 @@ export default function Layout({ children }) {
         .animate-glitch { animation: glitch-pulse 2s ease-in-out infinite; }
         @keyframes border-rotate { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         .animate-border-rotate { background-size: 200% 200%; animation: border-rotate 3s linear infinite; }
+        /* Aurora gradient animation */
+        @keyframes aurora-shift { 0% { transform: translate(-30%, -30%) rotate(0deg); } 50% { transform: translate(10%, -10%) rotate(180deg); } 100% { transform: translate(-30%, -30%) rotate(360deg); } }
+        .animate-aurora { animation: aurora-shift 20s ease-in-out infinite; }
+        @keyframes aurora-shift-2 { 0% { transform: translate(30%, 20%) rotate(0deg); } 50% { transform: translate(-10%, 10%) rotate(-180deg); } 100% { transform: translate(30%, 20%) rotate(-360deg); } }
+        .animate-aurora-2 { animation: aurora-shift-2 25s ease-in-out infinite; }
+        /* Glass card style */
+        .glass-card { background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 8px 32px -12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04); }
+        .glass-card:hover { border-color: rgba(255,255,255,0.1); box-shadow: 0 12px 40px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06); }
+        /* Remove section gaps */
+        section, .space-y-2 > * + * { margin-top: 0 !important; }
+        .section-gap { height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); margin: 0.5rem 0; }
         .animate-particle-flow { animation: particle-flow 1.8s ease-in-out infinite; }
         .animate-particle-flow-2 { animation: particle-flow 2.4s ease-in-out infinite; }
         .animate-particle-flow-3 { animation: particle-flow 3s ease-in-out infinite; }
@@ -324,6 +335,13 @@ export default function Layout({ children }) {
           ))}
         </nav>
       </aside>
+
+      {/* Aurora background — spans entire page */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 rounded-full bg-cyan-500/[0.02] blur-[120px] animate-aurora" />
+        <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 rounded-full bg-purple-600/[0.02] blur-[120px] animate-aurora-2" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-1/3 h-1/3 rounded-full bg-blue-500/[0.015] blur-[100px] animate-aurora" style={{ animationDelay: '-5s' }} />
+      </div>
 
       {/* Main area */}
       <div className="flex flex-1 flex-col min-w-0">

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import ReactFlow, { Background, Controls, MiniMap, useNodesState, useEdgesState, MarkerType, useReactFlow, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
 import Layout from '../components/Layout'
+import NarrativeCTA from '../components/NarrativeCTA'
 
 const initialNodes = [
   { id: 'gateway', position: { x: 475, y: 50 }, data: { label: 'API Gateway', type: 'API', risk: 'medium', team: 'Platform', deps: ['Payments', 'Auth', 'Billing'] } },
@@ -653,6 +654,9 @@ export default function KnowledgeGraph() {
             <GraphInside />
           </ReactFlowProvider>
         </div>
+      </div>
+      <div className="px-2 sm:px-4 pb-2">
+        <NarrativeCTA currentPage="/knowledge-graph" confidence={92} impact="$340K blast radius exposure" />
       </div>
     </Layout>
   )

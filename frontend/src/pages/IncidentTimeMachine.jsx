@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
+import NarrativeCTA from '../components/NarrativeCTA'
 
 const presets = [
   'Deploy new payment gateway with retry logic',
@@ -1745,6 +1746,7 @@ export default function IncidentTimeMachine() {
 
         
       </motion.div>
+      <NarrativeCTA currentPage="/time-machine" confidence={87} impact="$120K avg incident cost" />
     </Layout>
   )
 }

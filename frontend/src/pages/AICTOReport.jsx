@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatCard from '../components/StatCard'
 import StatusBadge from '../components/StatusBadge'
+import NarrativeCTA from '../components/NarrativeCTA'
 
 const reportData = {
   feature: 'Add payment retry support',
@@ -1193,7 +1194,7 @@ export default function AICTOReport() {
           </div>
         </motion.div>
 
-        <div className="h-2" />
+        <NarrativeCTA currentPage="/cto-report" confidence={87} impact="$288K monthly savings" />
       </motion.div>
     </Layout>
   )

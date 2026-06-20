@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
+import NarrativeCTA from '../components/NarrativeCTA'
 
 const presets = [
   'Add payment retry support',
@@ -1943,6 +1944,8 @@ export default function IntelligenceCenter() {
 
           </motion.div>
         )}
+
+        <NarrativeCTA currentPage="/intelligence" confidence={94} impact="$340K risk reduction" />
 
       </motion.div>
     </Layout>

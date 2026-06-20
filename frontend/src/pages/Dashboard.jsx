@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
+import NarrativeCTA from '../components/NarrativeCTA'
 
 const mockData = {
   kpis: [
@@ -2005,6 +2006,7 @@ export default function Dashboard() {
         <BusinessImpactCalculator />
         <QuickActionPanel />
         <FooterBar />
+        <NarrativeCTA currentPage="/dashboard" confidence={96} impact="$288K potential exposure" />
       </motion.div>
     </div>
   )

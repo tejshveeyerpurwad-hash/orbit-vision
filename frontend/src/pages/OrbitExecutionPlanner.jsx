@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
+import NarrativeCTA from '../components/NarrativeCTA'
 
 const presets = [
   'Add payment retry support',
@@ -1140,6 +1141,7 @@ export default function OrbitExecutionPlanner() {
 
           </motion.div>
         )}
+        <NarrativeCTA currentPage="/execution-planner" confidence={82} impact="42% execution completion" />
       </motion.div>
     </Layout>
   )

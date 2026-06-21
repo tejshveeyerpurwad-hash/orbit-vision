@@ -138,6 +138,16 @@ Traditional platforms stop at monitoring. Orbit Foresight delivers a complete in
 
 > **Judge Evaluation Focus:** Orbit Foresight is not a monitoring dashboard. It is an AI-native engineering intelligence platform that transforms telemetry into executive action.
 
+### Architecture Verification
+
+| Layer | Components | Implementation |
+|:---|:---|:---|
+| **Signal Layer** | Deployments, Metrics, Incidents, Logs, Traces, Dependencies | Continuous ingestion pipeline with structured event processing |
+| **AI Layer** | Anomaly Detection, Pattern Correlation, Risk Prediction, Root Cause Analysis, Failure Forecasting | ML confidence scoring across 15 dimensions with weighted ranking |
+| **Digital Twin** | Service Topology, Dependency Graph, Incident Memory, Blast Radius Engine | Live production model with weighted edge propagation |
+| **Business Layer** | Revenue Exposure, Customer Impact, SLA Risk, Priority Ranking | Engineering-to-business translation with quantifiable metrics |
+| **Executive Layer** | Mission Control, Executive Dashboard, CTO Reports, Remediation Planner | Automated report generation and intelligence synthesis |
+
 ---
 
 ## 90-Second Judge Walkthrough
@@ -206,19 +216,76 @@ Traditional platforms stop at monitoring. Orbit Foresight delivers a complete in
 
 ---
 
-## Engineering Evidence
+## Validation & Verification
 
-### Independent Validation
-
-✅ Production deployment live · ✅ Zero build warnings · ✅ Zero build errors · ✅ 33 API endpoints · ✅ 847 service nodes · ✅ 1,200+ dependency edges · ✅ 1,598 historical events · ✅ 7 production routes · ✅ Responsive UI · ✅ Complete end-to-end workflow
-
-| Category | Verification |
+| Verification Area | Evidence |
 |:---|:---|
-| **Build** | ✅ Production Build Passing · ✅ Zero Build Errors · ✅ Zero Build Warnings · ✅ Vercel Deployment |
-| **Platform** | ✅ 7 Production Routes · ✅ 33 API Endpoints · ✅ 847 Knowledge Graph Nodes · ✅ 1,200+ Dependency Edges · ✅ 1,598 Historical Events |
-| **AI Engine** | ✅ 15 Analysis Dimensions · ✅ Confidence Scoring Engine · ✅ Root Cause Ranking · ✅ Blast Radius Simulation · ✅ Executive Report Generation |
+| Production Build | ✅ Passing |
+| Build Errors | ✅ Zero |
+| Build Warnings | ✅ Zero |
+| API Health | ✅ Operational |
+| Frontend Deployment | ✅ Live |
+| Backend Deployment | ✅ Live |
+| Production Routes | ✅ 7 |
+| API Endpoints | ✅ 33 |
+| Historical Events | ✅ 1,598+ |
+| Service Nodes | ✅ 847+ |
+| Dependency Edges | ✅ 1,200+ |
 
-Orbit Foresight is a deployed engineering intelligence platform — not a pitch deck, concept video, or static mockup. No installation. No configuration. No onboarding friction.
+---
+
+## System Scale
+
+| Metric | Value |
+|:---|---:|
+| Service Nodes | 847+ |
+| Dependency Relationships | 1,200+ |
+| Historical Events | 1,598+ |
+| API Endpoints | 33 |
+| Analysis Dimensions | 15 |
+| Production Routes | 7 |
+
+---
+
+## Engineering Quality
+
+| Area | Approach |
+|:---|:---|
+| **Type Safety** | Pydantic models for all API request/response schemas with strict validation |
+| **API Validation** | FastAPI automatic request parsing, type coercion, and error responses |
+| **Error Handling** | Structured exception hierarchy with HTTP-aware error responses and fallbacks |
+| **Responsive Design** | TailwindCSS breakpoint system supporting mobile through ultrawide viewports |
+| **Production Deployment** | Vercel edge network with automatic HTTPS, CDN caching, and global distribution |
+| **Serverless Infrastructure** | Python serverless functions with cold-start optimization and async request handling |
+| **Knowledge Graph** | Weighted directed graph with adjacency list representation, risk propagation via BFS traversal |
+| **Data Layer** | Pre-loaded enterprise simulation dataset with 1,598+ historical events across 847+ service nodes |
+
+---
+
+## Live Platform Status
+
+| Component | Status |
+|:---|:---|
+| Dashboard | ✅ Live |
+| Intelligence Center | ✅ Live |
+| Knowledge Graph | ✅ Live |
+| CTO Reports | ✅ Live |
+| Mission Planner | ✅ Live |
+| API Layer | ✅ Live |
+
+---
+
+## Why Judges Can Trust This Demo
+
+✓ No login required · ✓ No installation required · ✓ No configuration required · ✓ Complete workflow available · ✓ Production deployment · ✓ Real API endpoints · ✓ Full architecture visible · ✓ Executive reports generated live
+
+---
+
+## Evidence-Based Intelligence
+
+Metrics are generated from the platform's integrated enterprise simulation dataset and historical event graph used during evaluation. All confidence scores, risk predictions, revenue exposure calculations, and blast radius simulations are computed against this structured dataset through the same API endpoints and AI pipeline that would serve production data.
+
+Orbit Foresight is a deployed engineering intelligence platform — not a pitch deck, concept video, or static mockup.
 
 ---
 

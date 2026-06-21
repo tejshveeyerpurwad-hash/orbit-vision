@@ -27,8 +27,8 @@
   <img src="https://img.shields.io/badge/AI_Powered-8b5cf6?style=flat-square&logo=openai&labelColor=0f172a" alt="AI Powered"/>
   <img src="https://img.shields.io/badge/Open_Source-22c55e?style=flat-square&logo=opensourceinitiative&labelColor=0f172a" alt="Open Source"/>
   <img src="https://img.shields.io/badge/Production_Ready-06b6d4?style=flat-square&logo=vercel&labelColor=0f172a" alt="Production Ready"/>
-  <img src="https://img.shields.io/badge/Zero_Config-ec4899?style=flat-square&logo=react&labelColor=0f172a" alt="Zero Config"/>
-  <img src="https://img.shields.io/badge/First_Place_Energy-f59e0b?style=flat-square&logo=target&labelColor=0f172a" alt="First Place Energy"/>
+  <img src="https://img.shields.io/badge/Enterprise_Grade-8b5cf6?style=flat-square&logo=vercel&labelColor=0f172a&color=8b5cf6" alt="Enterprise Grade"/>
+  <img src="https://img.shields.io/badge/AI_Native-22c55e?style=flat-square&logo=openai&labelColor=0f172a&color=22c55e" alt="AI Native"/>
 </p>
 
 <br/>
@@ -110,20 +110,34 @@ The gap between *monitoring* and *intelligence* is the single largest source of 
 
 ---
 
+## Why Judges Can Evaluate Instantly
+
+| Capability | Details |
+|:---|---:|
+| **No login required** | Open the live demo URL — no account creation or authentication needed |
+| **No setup required** | Pre-configured demo with zero configuration steps |
+| **Pre-loaded enterprise dataset** | 847+ service nodes, 1,598+ historical events, 1,200+ dependency edges |
+| **All pages accessible immediately** | 7 SPA routes with complete functionality on first load |
+| **Production deployment** | Live on Vercel edge network — no local setup needed |
+| **End-to-end workflow** | Full detection → investigation → reporting → remediation flow |
+| **Executive and technical views** | Both CTO-level reports and engineering-level analysis available |
+
+---
+
 ## 90-Second Judge Walkthrough
 
-### A timed tour designed for hackathon judges who have seen 100+ projects.
+### A structured walkthrough demonstrating key platform capabilities.
 
 <br/>
 
 | Phase | What Judges See | Why It Matters | Business Impact |
 |:---|:---|:---|:---|
-| **0-15s** · Executive Command Center | Bloomberg-style strategic insights panel with live revenue at risk ($202K), AI confidence (96.8%), and MTTR (18.7m). Floating particle background, typewriter effect on intelligence narratives. | First impression is "funded startup" not "student project". No login, no config — value in 5 seconds. | **$2.8M** revenue visibility |
-| **15-30s** · Enterprise Risk Galaxy | 3D orbiting node visualization with severity-coded risk indicators. Click any node to see blast radius propagation. Palantir-grade intelligence visualization. | Judges see enterprise UX thinking — not just another chart library. | **847+** service nodes mapped |
-| **30-45s** · AI Investigation Engine | Neural network visualization with pulsing AI brain, 5 orbiting service nodes, evidence constellation with floating forensic artifacts. Cinematic reasoning timeline. | AI is the product architecture, not a feature. Every page has a visual centerpiece. | **30s** to root cause |
-| **45-60s** · Knowledge Graph | 847+ service nodes, 1,200+ dependency edges, weighted risk propagation paths. Interactive blast radius — click any service to see cascading failure. | First engineering knowledge graph that auto-discovers architecture dynamically. | **70%** fewer cascading P0s |
-| **60-75s** · CTO Boardroom Report | Boardroom Intelligence Dashboard: $2.8M annual savings, Executive Impact Radar (6-dimension), Revenue Exposure Heatmap, ROI Planetarium with floating spheres. | Boardroom-ready reports in under 60 seconds — no manual slides. | **$2.4M** revenue protected |
-| **75-90s** · Mission Control Planner | NASA Mission Control aesthetic: Squad Coordination Map, Launch Readiness Score, Mission Timeline. AI-generated sprint plans with risk mitigation. | Every product surface is custom-designed with a visual centerpiece. No generic cards. | **3.8×** faster resolution |
+| **0-15s** · Executive Command Center | Bloomberg-style strategic insights panel with live revenue at risk ($202K), AI confidence (96.8%), and MTTR (18.7m). Floating particle background, typewriter effect on intelligence narratives. | No login, no configuration — operational intelligence visible within 5 seconds. | **$2.8M** revenue visibility |
+| **15-30s** · Enterprise Risk Galaxy | 3D orbiting node visualization with severity-coded risk indicators. Click any node to see blast radius propagation. Interactive intelligence visualization. | Enterprise UX thinking — each interaction reveals deeper operational context. | **847+** service nodes mapped |
+| **30-45s** · AI Investigation Engine | Neural network visualization with 5 orbiting service nodes, evidence constellation with floating forensic artifacts. Animated reasoning timeline. | AI-native architecture — intelligence is embedded in every layer of the platform. | **30s** to root cause |
+| **45-60s** · Knowledge Graph | 847+ service nodes, 1,200+ dependency edges, weighted risk propagation paths. Interactive blast radius — click any service to see cascading failure. | Knowledge graph auto-discovers service architecture dynamically — no manual mapping required. | **70%** fewer cascading P0s |
+| **60-75s** · CTO Boardroom Report | Boardroom Intelligence Dashboard: $2.8M annual savings, Executive Impact Radar (6-dimension), Revenue Exposure Heatmap. | Boardroom-ready reports generated in under 60 seconds — eliminating manual slide preparation. | **$2.4M** revenue protected |
+| **75-90s** · Mission Control Planner | Mission-control inspired interface: Squad Coordination Map, Launch Readiness Score, Mission Timeline. AI-generated sprint plans with risk mitigation. | Every product surface includes a custom visual centerpiece — no generic cards or repeated layouts. | **3.8×** faster resolution |
 
 > **Walkthrough URL:** Open [orbit-foresight.vercel.app](https://orbit-foresight.vercel.app) and follow the flow: Dashboard → Risk Galaxy → Intelligence Center → Knowledge Graph → CTO Report → Execution Planner.
 
@@ -141,7 +155,7 @@ Real-time risk posture across the entire engineering organization. Anomaly count
 
 **Business value:** Engineering leadership gains complete situational awareness before the first Slack notification fires.
 
-**Why judges care:** This is the first page judges see. It must communicate "enterprise product" instantly — and it does.
+**Why judges care:** This is the first page judges see — it immediately communicates enterprise-grade operational intelligence.
 
 <br/>
 
@@ -157,7 +171,7 @@ Fifteen forensic analysis dimensions execute in parallel: deployment correlation
 
 **Business value:** Eliminates 6+ hours of manual investigation per incident — engineers focus on fixing, not hunting.
 
-**Why judges care:** The neural network visualization with pulsing brain is the most memorable visual in the entire product.
+**Why judges care:** The neural network visualization provides an intuitive view of AI-driven forensic analysis in action.
 
 <br/>
 
@@ -173,7 +187,7 @@ Live dependency topology with **847+ service nodes** and **1,200+ dependency edg
 
 **Business value:** Every engineer sees exactly what will break before making a change — no more discovery failures in production.
 
-**Why judges care:** No competing product has a live, interactive knowledge graph. This is Orbit Foresight's technical moat.
+**Why judges care:** The live, interactive knowledge graph is a differentiated capability that auto-discovers service topology.
 
 <br/>
 
@@ -189,7 +203,7 @@ Real-time failure propagation simulation across the entire service topology. Bef
 
 **Business value:** Teams deploy with full knowledge of blast radius — eliminating the #1 cause of production incidents.
 
-**Why judges care:** This is the "holy grail" feature that every engineering team wants and no tool provides.
+**Why judges care:** Blast radius simulation addresses a critical gap in existing observability and incident management tools.
 
 <br/>
 
@@ -205,7 +219,7 @@ Boardroom-ready intelligence reports generated in under 60 seconds. Revenue expo
 
 **Business value:** Engineering leadership delivers data-driven briefings to the board without manual slide preparation.
 
-**Why judges care:** Every investor and judge has sat through manual board presentations. This is the first product that solves that pain.
+**Why judges care:** Automated boardroom-ready reporting eliminates hours of manual slide preparation for engineering leadership.
 
 <br/>
 
@@ -221,7 +235,7 @@ AI-generated engineering plans from a single feature description. The engine ana
 
 **Business value:** Engineering managers move from estimation meetings to execution in minutes, not hours.
 
-**Why judges care:** NASA Mission Control aesthetic with Squad Coordination Map — design excellence on every screen.
+**Why judges care:** Mission-control inspired interface paired with AI-generated planning demonstrates production-grade engineering execution.
 
 <br/>
 
@@ -237,7 +251,7 @@ Full forensic timeline reconstruction for every incident. Engineers replay any p
 
 **Business value:** Every incident becomes a training signal — the platform gets smarter with each event.
 
-**Why judges care:** Incident replay is an enterprise feature that even Datadog and PagerDuty don't offer.
+**Why judges care:** Incident replay provides full forensic reconstruction — a capability not available in standard monitoring platforms.
 
 ---
 
@@ -248,13 +262,13 @@ Full forensic timeline reconstruction for every incident. Engineers replay any p
   <a href="https://devpost.com/tejshveeyerpurwad" target="_blank"><img src="https://img.shields.io/badge/WATCH_ON_DEVPOST-003E54?style=for-the-badge&logo=devpost&labelColor=0f172a&color=003E54" alt="Watch on Devpost"/></a>
 </p>
 
-The fastest way to see Orbit Foresight is to open the live demo — zero configuration, zero login, instant enterprise intelligence. The platform loads with pre-loaded data across 847+ simulated service nodes and 1,598+ historical events.
+Open the live demo to explore Orbit Foresight — no configuration or login required. The platform loads with pre-loaded data across 847+ simulated service nodes and 1,598+ historical events for immediate evaluation.
 
 ---
 
 ## Why Orbit Foresight Wins
 
-### Six capabilities that no existing platform combines in a single product.
+### Six integrated capabilities spanning the full incident lifecycle.
 
 <br/>
 
@@ -283,7 +297,7 @@ The fastest way to see Orbit Foresight is to open the live demo — zero configu
 
 ### Why Orbit Foresight is different.
 
-Orbit Foresight is the **first platform to close the intelligence loop**: from code change → prediction → investigation → business impact → executive decision → remediation plan. It replaces the reactive multi-tool stack with a single, intelligent, AI-native platform that:
+Orbit Foresight is an **AI-native platform that closes the intelligence loop**: from code change → prediction → investigation → business impact → executive decision → remediation plan. It replaces the reactive multi-tool stack with a single platform that:
 
 1. **Predicts** incidents before they happen using ML pattern matching across 1,598+ historical events
 2. **Investigates** root cause in under 30 seconds across 15 forensic dimensions simultaneously
@@ -291,9 +305,9 @@ Orbit Foresight is the **first platform to close the intelligence loop**: from c
 4. **Translates** engineering telemetry into business metrics — revenue, SLA, customer impact
 5. **Generates** boardroom-ready executive reports and engineering remediation plans automatically
 
-### Why this represents the future of engineering operations.
+### Why this matters for engineering operations.
 
-The platform engineering movement is driving toward **developer self-service**, **internal developer platforms**, and **AI-augmented operations**. Orbit Foresight is the intelligence layer that makes these movements possible. As engineering organizations grow from 10 to 1,000+ engineers, the cost of reactive operations becomes unsustainable. The future belongs to platforms that **predict, automate, and decide** — not just monitor and alert.
+The platform engineering movement is driving toward **developer self-service**, **internal developer platforms**, and **AI-augmented operations**. Orbit Foresight provides the intelligence layer that supports these movements. As engineering organizations scale, the cost of reactive operations increases — platforms that **predict, automate, and decide** offer a more sustainable operational model than tools that only monitor and alert.
 
 ---
 
@@ -318,7 +332,7 @@ The platform engineering movement is driving toward **developer self-service**, 
 
 ## Competitive Moat
 
-### Why Orbit Foresight wins against every incumbent — including the new entrants.
+### Comparison with incumbent monitoring and observability platforms.
 
 | Capability | Datadog | PagerDuty | Splunk | ServiceNow | Grafana | **Orbit Foresight** |
 |:---|---:|---:|---:|---:|---:|---:|
@@ -337,15 +351,36 @@ The platform engineering movement is driving toward **developer self-service**, 
 
 ## Technical Excellence
 
-### Built to production standards — not hackathon standards.
+### Built to production standards.
 
 | Layer | Technology | Impact |
 |:---|:---|:---|
-| **Frontend** | React 18 + Vite 5 + TailwindCSS 3 + Framer Motion 12 | Code-split SPA, 1,158 modules, 0 errors, 0 warnings. Glassmorphism design system with premium animations. Every page has a visual centerpiece. |
-| **Backend** | FastAPI (Python 3) with 33 API endpoints, 4 risk profiles, 1,598+ historical events | Async request handling, Pydantic validation, Vercel serverless deployment. Zero configuration demo. |
+| **Frontend** | React 18 + Vite 5 + TailwindCSS 3 + Framer Motion 12 | Code-split SPA, 1,158 modules, 0 errors, 0 warnings. Glassmorphism design system with custom page-level visualizations. |
+| **Backend** | FastAPI (Python 3) with 33 API endpoints, 4 risk profiles, 1,598+ historical events | Async request handling, Pydantic validation, Vercel serverless deployment. Pre-loaded demo data. |
 | **AI Layer** | ML-powered risk scoring across 15 dimensions, pattern correlation engine, confidence-weighted root cause ranking | 94% prediction accuracy. Every recommendation includes confidence score and supporting evidence. |
-| **Knowledge Graph** | 847+ service nodes, 1,200+ dependency edges, weighted risk propagation paths, live topology with metadata | First engineering knowledge graph that auto-discovers architecture dynamically. |
+| **Knowledge Graph** | 847+ service nodes, 1,200+ dependency edges, weighted risk propagation paths, live topology with metadata | Knowledge graph that auto-discovers service architecture dynamically. |
 | **Scalability** | Vercel edge network, Python serverless functions, sub-100ms initial load | Handles enterprise-scale data with zero infrastructure management. |
+
+---
+
+## Build & Verification Status
+
+### Production-ready deployment verification.
+
+| Verification | Status |
+|:---|---:|
+| Production Build | **✅ Passing** |
+| Build Warnings | **✅ Zero** |
+| Build Errors | **✅ Zero** |
+| Production Deployment | **✅ Vercel** |
+| SPA Routes | **✅ 7 Routes** |
+| API Endpoints | **✅ 33 Endpoints** |
+| Historical Events | **✅ 1,598+** |
+| Knowledge Graph Nodes | **✅ 847+** |
+| Dependency Edges | **✅ 1,200+** |
+| Demo Ready | **✅ Yes** |
+
+Orbit Foresight is fully deployed, production-ready, and available for immediate evaluation. Judges can explore the complete platform without setup, configuration, or account creation.
 
 ---
 
@@ -402,7 +437,7 @@ Orbit Foresight becomes the central nervous system of engineering organizations 
 </p>
 
 <p align="center">
-  Built Orbit Foresight from concept to production as a solo founder — spanning React frontend, FastAPI backend, AI reasoning engine, knowledge graph, executive reporting, and NASA-grade mission control UX. Product of nights, weekends, and an unshakable belief that engineering intelligence should be proactive, not reactive.
+  Built Orbit Foresight from concept to production as a solo founder — spanning React frontend, FastAPI backend, AI reasoning engine, knowledge graph, executive reporting, and mission-control inspired operational interface. Product of nights, weekends, and a conviction that engineering intelligence should be proactive, not reactive.
 </p>
 
 <br/>
@@ -413,12 +448,12 @@ Orbit Foresight becomes the central nervous system of engineering organizations 
 
 <p align="center">
   <strong>Orbit Foresight is not an incident management tool.</strong><br/>
-  <strong>It's the first engineering intelligence infrastructure.</strong>
+  <strong>It's an engineering intelligence infrastructure.</strong>
 </p>
 
 <p align="center">
   <em>Built for the GitLab Transcend Hackathon</em><br/>
-  <em>Designed to win — engineered to scale</em>
+  <em>Production-ready — engineered to scale</em>
 </p>
 
 <p align="center">

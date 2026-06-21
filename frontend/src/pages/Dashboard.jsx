@@ -362,8 +362,8 @@ function MiniGaugeSparkline({ data, color = '#22d3ee' }) {
 }
 
 function AnimatedKPI({ kpi, idx }) {
-  if (!kpi) return null
   const count = useCounter(kpi.value ?? 0, idx * 80, 1500, (kpi.format || '') === '$$$')
+  if (!kpi) return null
   const circumference = 2 * Math.PI * 22
   const pct = Math.min((kpi.value / ((kpi.label || '') === 'Uptime' ? 10000 : 100)) * 100, 100)
   const offset = circumference - (pct / 100) * circumference
@@ -995,6 +995,32 @@ function PredictionCards() {
   )
 }
 
+function BusinessImpactCard({ biz, idx }) {
+  const val = useCounter(biz.value, idx * 100, 1800, biz.format)
+  const displayVal = typeof val === 'string' ? val : val.toLocaleString()
+  const barPct = Math.min((biz.value / biz.barMax) * 100, 100)
+  const colorMap = { 'text-red-400': '#f87171', 'text-amber-400': '#fbbf24', 'text-cyan-400': '#22d3ee', 'text-emerald-400': '#34d399' }
+  const colorHex = colorMap[biz.color] || '#64748b'
+  return (
+    <motion.div variants={item} className="rounded-lg border border-white/[0.04] bg-white/[0.01] p-3 sm:p-4 hover:bg-white/[0.03] transition-all group">
+      <div className="flex items-center gap-2 mb-2">
+        <svg className={`h-3.5 w-3.5 ${biz.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d={biz.icon} /></svg>
+        <span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider truncate">{biz.label}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className={`text-lg sm:text-xl font-bold font-mono ${biz.color} truncate`}>{biz.prefix}{displayVal}{biz.suffix}</div>
+        <svg width="32" height="32" viewBox="0 0 32 32" className="-rotate-90 shrink-0 ml-auto">
+          <circle cx="16" cy="16" r="12" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
+          <motion.circle cx="16" cy="16" r="12" fill="none" stroke={colorHex} strokeWidth="3" strokeLinecap="round"
+            strokeDasharray={2 * Math.PI * 12} initial={{ strokeDashoffset: 2 * Math.PI * 12 }}
+            animate={{ strokeDashoffset: 2 * Math.PI * 12 * (1 - barPct / 100) }} transition={{ duration: 1.2, delay: idx * 0.1 + 0.3, ease: 'easeOut' }} />
+          <text x="16" y="19" textAnchor="middle" fill={colorHex} fontSize="7" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{Math.round(barPct)}%</text>
+        </svg>
+      </div>
+    </motion.div>
+  )
+}
+
 function BusinessImpactCalculator() {
   const [globalFlash, setGlobalFlash] = useState(false)
   useEffect(() => { const i = setInterval(() => { setGlobalFlash(true); setTimeout(() => setGlobalFlash(false), 200) }, 6000); return () => clearInterval(i) }, [])
@@ -1010,29 +1036,7 @@ function BusinessImpactCalculator() {
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {mockData.businessImpact.map((biz, idx) => {
-            const val = useCounter(biz.value, idx * 100, 1800, biz.format)
-            const displayVal = typeof val === 'string' ? val : val.toLocaleString()
-            const barPct = Math.min((biz.value / biz.barMax) * 100, 100)
-            return (
-              <motion.div key={biz.label} variants={item} className="rounded-lg border border-white/[0.04] bg-white/[0.01] p-3 sm:p-4 hover:bg-white/[0.03] transition-all group">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg className={`h-3.5 w-3.5 ${biz.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d={biz.icon} /></svg>
-                  <span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider truncate">{biz.label}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className={`text-lg sm:text-xl font-bold font-mono ${biz.color} truncate`}>{biz.prefix}{displayVal}{biz.suffix}</div>
-                  <svg width="32" height="32" viewBox="0 0 32 32" className="-rotate-90 shrink-0 ml-auto">
-                    <circle cx="16" cy="16" r="12" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
-                    <motion.circle cx="16" cy="16" r="12" fill="none" stroke={(() => { const m = { 'text-red-400': '#f87171', 'text-amber-400': '#fbbf24', 'text-cyan-400': '#22d3ee', 'text-emerald-400': '#34d399' }; return m[biz.color] || '#64748b' })()} strokeWidth="3" strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 12} initial={{ strokeDashoffset: 2 * Math.PI * 12 }}
-                      animate={{ strokeDashoffset: 2 * Math.PI * 12 * (1 - barPct / 100) }} transition={{ duration: 1.2, delay: idx * 0.1 + 0.3, ease: 'easeOut' }} />
-                    <text x="16" y="19" textAnchor="middle" fill={(() => { const m = { 'text-red-400': '#f87171', 'text-amber-400': '#fbbf24', 'text-cyan-400': '#22d3ee', 'text-emerald-400': '#34d399' }; return m[biz.color] || '#64748b' })()} fontSize="7" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{Math.round(barPct)}%</text>
-                  </svg>
-                </div>
-              </motion.div>
-            )
-          })}
+          {mockData.businessImpact.map((biz, idx) => <BusinessImpactCard key={biz.label} biz={biz} idx={idx} />)}
         </div>
         <div className="mt-3 pt-2 border-t border-white/[0.04] flex items-center justify-between flex-wrap gap-1 text-[9px] font-mono text-slate-600">
           <span>NEXT SLA WINDOW: <span className="text-amber-400/80">23:47:12</span></span>
@@ -1261,21 +1265,23 @@ function BusinessImpactCenter() {
         <div className="flex items-center gap-2"><StatusBadge status="warning" label="RISK ASSESSMENT" /><span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" /></div>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        {items.map((biz, idx) => {
-          const val = useCounter(biz.value, idx * 80, 1500, biz.value >= 1000)
-          const displayVal = typeof val === 'string' ? val : val.toLocaleString()
-          const trendIcon = biz.trend === 'up' ? '\u2191' : '\u2193'
-          const trendColor = biz.trend === 'up' ? 'text-red-400' : 'text-emerald-400'
-          return (
-            <motion.div key={biz.label} variants={item} className="rounded-lg border border-white/[0.04] bg-white/[0.01] p-3 hover:bg-white/[0.03] transition-all group">
-              <div className="flex items-center gap-1.5 mb-1.5"><span className={`h-2 w-2 rounded-full ${biz.dotColor}`} /><span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider truncate">{biz.label}</span></div>
-              <div className={`text-lg sm:text-xl font-bold font-mono ${biz.color} truncate`}>{biz.prefix}{displayVal}{biz.suffix}</div>
-              <div className="flex items-center gap-1.5 mt-0.5"><span className={`text-[9px] font-mono ${trendColor}`}>{trendIcon} {biz.pct}%</span></div>
-              <p className="text-[8px] text-slate-600 mt-1">{biz.description}</p>
-            </motion.div>
-          )
-        })}
+        {items.map((biz, idx) => <BusinessImpactCenterCard key={biz.label} biz={biz} idx={idx} />)}
       </div>
+    </motion.div>
+  )
+}
+
+function BusinessImpactCenterCard({ biz, idx }) {
+  const val = useCounter(biz.value, idx * 80, 1500, biz.value >= 1000)
+  const displayVal = typeof val === 'string' ? val : val.toLocaleString()
+  const trendIcon = biz.trend === 'up' ? '\u2191' : '\u2193'
+  const trendColor = biz.trend === 'up' ? 'text-red-400' : 'text-emerald-400'
+  return (
+    <motion.div variants={item} className="rounded-lg border border-white/[0.04] bg-white/[0.01] p-3 hover:bg-white/[0.03] transition-all group">
+      <div className="flex items-center gap-1.5 mb-1.5"><span className={`h-2 w-2 rounded-full ${biz.dotColor}`} /><span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider truncate">{biz.label}</span></div>
+      <div className={`text-lg sm:text-xl font-bold font-mono ${biz.color} truncate`}>{biz.prefix}{displayVal}{biz.suffix}</div>
+      <div className="flex items-center gap-1.5 mt-0.5"><span className={`text-[9px] font-mono ${trendColor}`}>{trendIcon} {biz.pct}%</span></div>
+      <p className="text-[8px] text-slate-600 mt-1">{biz.description}</p>
     </motion.div>
   )
 }
@@ -1290,26 +1296,7 @@ function PredictionWall() {
         <div className="flex items-center gap-2"><StatusBadge status="info" label="FORECAST ACTIVE" /><span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" /></span></div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        {predictions.map((p, idx) => {
-          const count = useCounter(parseInt(p.value), idx * 100, 1500)
-          return (
-            <motion.div key={p.title} variants={item} className="rounded-lg border border-white/[0.04] bg-white/[0.01] p-3 hover:bg-white/[0.03] transition-all group">
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} /><span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">{p.title}</span></div>
-                <MiniSparkline data={p.sparkData} color={p.color} width={48} height={14} />
-              </div>
-              <div className="flex items-baseline gap-1"><span className={`text-xl sm:text-2xl font-bold font-mono ${p.textColor}`}>{count}{p.unit}</span></div>
-              <p className="text-[8px] text-slate-600 mt-0.5">{p.description}</p>
-              <div className="flex items-center gap-1.5 mt-1.5">
-                <span className="h-1 w-1 rounded-full" style={{ backgroundColor: trendColors[p.trend] || '#64748b' }} />
-                <span className="text-[8px] font-mono text-slate-700">{String(p.trend ?? '').charAt(0).toUpperCase() + String(p.trend ?? '').slice(1)}</span>
-              </div>
-              <div className="flex flex-wrap gap-1 mt-1.5 pt-1.5 border-t border-white/[0.03]">
-                {p.factors.map((f, fi) => (<span key={fi} className="rounded-md bg-white/[0.02] border border-white/[0.03] px-1.5 py-0.5 text-[7px] font-mono text-slate-700">{f}</span>))}
-              </div>
-            </motion.div>
-          )
-        })}
+        {predictions.map((p, idx) => <PredictionCard key={p.title} p={p} idx={idx} trendColors={trendColors} />)}
       </div>
       <div className="mt-2.5 pt-2 border-t border-white/[0.04] flex items-center justify-between text-[9px] font-mono">
         <span className="text-slate-500">Risk Direction: <span className="text-red-400">Increasing</span></span>
@@ -1319,6 +1306,27 @@ function PredictionWall() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
         <EnterpriseRiskGalaxy selectedRisk={null} onSelectRisk={() => {}} />
         <AISpotlightPanel selectedRisk={null} />
+      </div>
+    </motion.div>
+  )
+}
+
+function PredictionCard({ p, idx, trendColors }) {
+  const count = useCounter(parseInt(p.value), idx * 100, 1500)
+  return (
+    <motion.div variants={item} className="rounded-lg border border-white/[0.04] bg-white/[0.01] p-3 hover:bg-white/[0.03] transition-all group">
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} /><span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">{p.title}</span></div>
+        <MiniSparkline data={p.sparkData} color={p.color} width={48} height={14} />
+      </div>
+      <div className="flex items-baseline gap-1"><span className={`text-xl sm:text-2xl font-bold font-mono ${p.textColor}`}>{count}{p.unit}</span></div>
+      <p className="text-[8px] text-slate-600 mt-0.5">{p.description}</p>
+      <div className="flex items-center gap-1.5 mt-1.5">
+        <span className="h-1 w-1 rounded-full" style={{ backgroundColor: trendColors[p.trend] || '#64748b' }} />
+        <span className="text-[8px] font-mono text-slate-700">{String(p.trend ?? '').charAt(0).toUpperCase() + String(p.trend ?? '').slice(1)}</span>
+      </div>
+      <div className="flex flex-wrap gap-1 mt-1.5 pt-1.5 border-t border-white/[0.03]">
+        {p.factors.map((f, fi) => (<span key={fi} className="rounded-md bg-white/[0.02] border border-white/[0.03] px-1.5 py-0.5 text-[7px] font-mono text-slate-700">{f}</span>))}
       </div>
     </motion.div>
   )
@@ -1737,19 +1745,21 @@ function BusinessImpactCenterExpanded() {
         </div>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-        {items.map((biz, idx) => {
-          const val = useCounter(biz.value, idx * 60, 1500, biz.value >= 1000)
-          const displayVal = typeof val === 'string' ? val : val.toLocaleString()
-          return (
-            <motion.div key={biz.label} variants={item} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-3 hover:bg-white/[0.04] transition-all group">
-              <div className="flex items-center gap-1.5 mb-1.5"><span className={`h-2 w-2 rounded-full ${biz.dotColor}`} /><span className="text-[9px] font-mono text-slate-600 uppercase tracking-wider">{biz.label}</span></div>
-              <div className={`text-lg sm:text-xl font-bold font-mono ${biz.color} truncate`}>{biz.prefix}{displayVal}{biz.suffix}</div>
-              <div className="flex items-center gap-1.5 mt-0.5"><span className={`text-[10px] font-mono ${biz.trend === 'up' ? 'text-red-400' : 'text-emerald-400'}`}>{biz.trend === 'up' ? '\u2191' : '\u2193'} {biz.pct}%</span></div>
-              <p className="text-[8px] text-slate-600 mt-1">{biz.description}</p>
-            </motion.div>
-          )
-        })}
+        {items.map((biz, idx) => <BusinessImpactExpandedCard key={biz.label} biz={biz} idx={idx} />)}
       </div>
+    </motion.div>
+  )
+}
+
+function BusinessImpactExpandedCard({ biz, idx }) {
+  const val = useCounter(biz.value, idx * 60, 1500, biz.value >= 1000)
+  const displayVal = typeof val === 'string' ? val : val.toLocaleString()
+  return (
+    <motion.div variants={item} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-3 hover:bg-white/[0.04] transition-all group">
+      <div className="flex items-center gap-1.5 mb-1.5"><span className={`h-2 w-2 rounded-full ${biz.dotColor}`} /><span className="text-[9px] font-mono text-slate-600 uppercase tracking-wider">{biz.label}</span></div>
+      <div className={`text-lg sm:text-xl font-bold font-mono ${biz.color} truncate`}>{biz.prefix}{displayVal}{biz.suffix}</div>
+      <div className="flex items-center gap-1.5 mt-0.5"><span className={`text-[10px] font-mono ${biz.trend === 'up' ? 'text-red-400' : 'text-emerald-400'}`}>{biz.trend === 'up' ? '\u2191' : '\u2193'} {biz.pct}%</span></div>
+      <p className="text-[8px] text-slate-600 mt-1">{biz.description}</p>
     </motion.div>
   )
 }
@@ -1766,25 +1776,27 @@ function PredictionWallExpanded() {
         </div>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {predictions.map((p, idx) => {
-          const count = useCounter(parseInt(p.value), idx * 80, 1500)
-          return (
-            <motion.div key={p.title} variants={item} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-all group">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} /><span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">{p.title}</span></div>
-                <MiniSparkline data={p.sparkData} color={p.color} width={56} height={14} />
-              </div>
-              <div className="flex items-baseline gap-1"><span className={`text-2xl font-bold font-mono ${p.textColor}`}>{count}{p.unit}</span></div>
-              <p className="text-[9px] text-slate-600 mt-1">{p.description}</p>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="h-1 w-1 rounded-full" style={{ backgroundColor: p.trend === 'declining' ? '#ef4444' : p.trend === 'stable' ? '#22d3ee' : '#34d399' }} />
-<span className="text-[8px] font-mono text-slate-700">{String(p.trend ?? '').charAt(0).toUpperCase() + String(p.trend ?? '').slice(1)}</span>
-              </div>
-              <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-white/[0.03]">{p.factors.map((f, fi) => (<span key={fi} className="rounded-md bg-white/[0.02] border border-white/[0.03] px-1.5 py-0.5 text-[7px] font-mono text-slate-700">{f}</span>))}</div>
-            </motion.div>
-          )
-        })}
+        {predictions.map((p, idx) => <PredictionWallExpandedCard key={p.title} p={p} idx={idx} />)}
       </div>
+    </motion.div>
+  )
+}
+
+function PredictionWallExpandedCard({ p, idx }) {
+  const count = useCounter(parseInt(p.value), idx * 80, 1500)
+  return (
+    <motion.div variants={item} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-all group">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} /><span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">{p.title}</span></div>
+        <MiniSparkline data={p.sparkData} color={p.color} width={56} height={14} />
+      </div>
+      <div className="flex items-baseline gap-1"><span className={`text-2xl font-bold font-mono ${p.textColor}`}>{count}{p.unit}</span></div>
+      <p className="text-[9px] text-slate-600 mt-1">{p.description}</p>
+      <div className="flex items-center gap-2 mt-2">
+        <span className="h-1 w-1 rounded-full" style={{ backgroundColor: p.trend === 'declining' ? '#ef4444' : p.trend === 'stable' ? '#22d3ee' : '#34d399' }} />
+<span className="text-[8px] font-mono text-slate-700">{String(p.trend ?? '').charAt(0).toUpperCase() + String(p.trend ?? '').slice(1)}</span>
+      </div>
+      <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-white/[0.03]">{p.factors.map((f, fi) => (<span key={fi} className="rounded-md bg-white/[0.02] border border-white/[0.03] px-1.5 py-0.5 text-[7px] font-mono text-slate-700">{f}</span>))}</div>
     </motion.div>
   )
 }
@@ -1975,24 +1987,25 @@ function RiskAnalyticsDashboard() {
         </div>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {riskMetrics.map((rm, idx) => {
-          if (!rm) return null
-          const val = useCounter(parseInt(String(rm.value ?? '0')), idx * 80, 1500, Number(rm.value) >= 1000)
-          const displayVal = typeof val === 'string' ? val : val.toLocaleString()
-          return (
-            <motion.div key={rm.label || idx} variants={item} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-3 hover:bg-white/[0.04] transition-all">
-              <div className="flex items-center gap-1.5 mb-1.5"><span className={`h-2 w-2 rounded-full ${rm.dot || 'bg-slate-500'}`} /><span className="text-[9px] font-mono text-slate-600 uppercase tracking-wider">{rm.label || '-'}</span></div>
-              <div className={`text-lg sm:text-xl font-bold font-mono ${rm.color || 'text-white'}`}>{rm.prefix || ''}{displayVal}{rm.suffix || ''}</div>
-              <div className="flex items-center gap-1.5 mt-0.5"><span className={`text-[10px] font-mono ${rm.trend === 'up' ? 'text-red-400' : 'text-emerald-400'}`}>{rm.trend === 'up' ? '\u2191' : '\u2193'} {rm.pct ?? 0}%</span></div>
-            </motion.div>
-          )
-        })}
+        {riskMetrics.filter(Boolean).map((rm, idx) => <RiskAnalyticsCard key={rm.label || idx} rm={rm} idx={idx} />)}
       </div>
       <div className="mt-3 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[10px] font-mono">
         <span className="text-slate-500">Aggregate Risk Score</span>
         <span className="text-red-400 font-bold">{riskMetrics.reduce((a, b) => a + (typeof b.value === 'number' ? b.value : parseInt(String(b.value ?? '0').replace(/,/g, '')) || 0), 0)}</span>
         <span className="text-amber-400/80">Threshold: 75</span>
       </div>
+    </motion.div>
+  )
+}
+
+function RiskAnalyticsCard({ rm, idx }) {
+  const val = useCounter(parseInt(String(rm.value ?? '0')), idx * 80, 1500, Number(rm.value) >= 1000)
+  const displayVal = typeof val === 'string' ? val : val.toLocaleString()
+  return (
+    <motion.div variants={item} className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-3 hover:bg-white/[0.04] transition-all">
+      <div className="flex items-center gap-1.5 mb-1.5"><span className={`h-2 w-2 rounded-full ${rm.dot || 'bg-slate-500'}`} /><span className="text-[9px] font-mono text-slate-600 uppercase tracking-wider">{rm.label || '-'}</span></div>
+      <div className={`text-lg sm:text-xl font-bold font-mono ${rm.color || 'text-white'}`}>{rm.prefix || ''}{displayVal}{rm.suffix || ''}</div>
+      <div className="flex items-center gap-1.5 mt-0.5"><span className={`text-[10px] font-mono ${rm.trend === 'up' ? 'text-red-400' : 'text-emerald-400'}`}>{rm.trend === 'up' ? '\u2191' : '\u2193'} {rm.pct ?? 0}%</span></div>
     </motion.div>
   )
 }
@@ -2360,6 +2373,37 @@ function AIStrategicInsightsPanel() {
   )
 }
 
+const dashboardKpiData = [
+  { label: 'Revenue Protected', value: 2.8, prefix: '$', suffix: 'M', color: 'text-emerald-400', trend: 'up', pct: 12, sparkData: [1.8, 2.0, 2.2, 2.4, 2.5, 2.7, 2.8] },
+  { label: 'Services At Risk', value: 3, suffix: ' Critical', color: 'text-red-400', trend: 'up', pct: 20, sparkData: [1, 2, 2, 3, 2, 3, 3] },
+  { label: 'AI Confidence', value: 96, suffix: '%', color: 'text-cyan-400', trend: 'stable', pct: 0.5, sparkData: [94, 95, 95, 96, 96, 96, 96] },
+  { label: 'Predicted Incident Cost', value: 4.5, prefix: '$', suffix: 'K/m', color: 'text-orange-400', trend: 'down', pct: 8.4, sparkData: [5.2, 5.0, 4.8, 4.7, 4.5, 4.5, 4.5] },
+  { label: 'MTTR Reduction', value: 31, prefix: '-', suffix: '%', color: 'text-violet-400', trend: 'up', pct: 14.3, sparkData: [24, 26, 27, 28, 30, 29, 31] },
+  { label: 'Risk Forecast', value: 72, prefix: 'Score: ', color: 'text-amber-400', trend: 'down', pct: 5.2, sparkData: [78, 76, 75, 74, 72, 72, 72] },
+]
+
+function DashboardKpiCard({ kpi, idx }) {
+  const val = useCounter(kpi.value, idx * 60, 1500, kpi.value >= 1000)
+  const displayVal = typeof val === 'number' ? val : kpi.value
+  const sparkColor = kpi.color.includes('red') ? '#ef4444' : kpi.color.includes('emerald') ? '#34d399' : kpi.color.includes('cyan') ? '#22d3ee' : kpi.color.includes('orange') ? '#f97316' : kpi.color.includes('violet') ? '#a78bfa' : '#f59e0b'
+  return (
+    <div className="rounded-xl border border-white/[0.05] bg-slate-900/30 p-3 hover:border-white/[0.1] transition-all group relative overflow-hidden">
+      <span className="text-[8px] font-mono text-slate-500 uppercase tracking-wider block mb-0.5">{kpi.label}</span>
+      <div className="flex items-baseline justify-between gap-1 mt-1">
+        <span className={`text-2xl sm:text-3xl font-extrabold font-mono tracking-tight ${kpi.color}`}>
+          {kpi.prefix || ''}{displayVal}{kpi.suffix || ''}
+        </span>
+      </div>
+      <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-white/[0.02]">
+        <span className={`text-[9px] font-mono ${kpi.trend === 'up' && kpi.color.includes('red') ? 'text-red-400' : 'text-emerald-400'}`}>
+          {kpi.trend === 'up' ? '\u2191' : kpi.trend === 'down' ? '\u2193' : '\u2192'} {kpi.pct}%
+        </span>
+        <MiniSparkline data={kpi.sparkData} color={sparkColor} width={44} height={12} />
+      </div>
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
@@ -2390,33 +2434,7 @@ export default function Dashboard() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
-            {[
-              { label: 'Revenue Protected', value: 2.8, prefix: '$', suffix: 'M', color: 'text-emerald-400', trend: 'up', pct: 12, sparkData: [1.8, 2.0, 2.2, 2.4, 2.5, 2.7, 2.8] },
-              { label: 'Services At Risk', value: 3, prefix: '', suffix: ' Critical', color: 'text-red-400', trend: 'up', pct: 20, sparkData: [1, 2, 2, 3, 2, 3, 3] },
-              { label: 'AI Confidence', value: 96, prefix: '', suffix: '%', color: 'text-cyan-400', trend: 'stable', pct: 0.5, sparkData: [94, 95, 95, 96, 96, 96, 96] },
-              { label: 'Predicted Incident Cost', value: 4.5, prefix: '$', suffix: 'K/m', color: 'text-orange-400', trend: 'down', pct: 8.4, sparkData: [5.2, 5.0, 4.8, 4.7, 4.5, 4.5, 4.5] },
-              { label: 'MTTR Reduction', value: 31, prefix: '-', suffix: '%', color: 'text-violet-400', trend: 'up', pct: 14.3, sparkData: [24, 26, 27, 28, 30, 29, 31] },
-              { label: 'Risk Forecast', value: 72, prefix: 'Score: ', suffix: '', color: 'text-amber-400', trend: 'down', pct: 5.2, sparkData: [78, 76, 75, 74, 72, 72, 72] }
-            ].map((kpi, idx) => {
-              const val = useCounter(kpi.value, idx * 60, 1500, kpi.value >= 1000)
-              const displayVal = typeof val === 'number' ? val : kpi.value
-              return (
-                <div key={kpi.label} className="rounded-xl border border-white/[0.05] bg-slate-900/30 p-3 hover:border-white/[0.1] transition-all group relative overflow-hidden">
-                  <span className="text-[8px] font-mono text-slate-500 uppercase tracking-wider block mb-0.5">{kpi.label}</span>
-                  <div className="flex items-baseline justify-between gap-1 mt-1">
-                    <span className={`text-2xl sm:text-3xl font-extrabold font-mono tracking-tight ${kpi.color}`}>
-                      {kpi.prefix}{displayVal}{kpi.suffix}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-white/[0.02]">
-                    <span className={`text-[9px] font-mono ${kpi.trend === 'up' && kpi.color.includes('red') ? 'text-red-400' : 'text-emerald-400'}`}>
-                      {kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→'} {kpi.pct}%
-                    </span>
-                    <MiniSparkline data={kpi.sparkData} color={kpi.color.includes('red') ? '#ef4444' : kpi.color.includes('emerald') ? '#34d399' : kpi.color.includes('cyan') ? '#22d3ee' : kpi.color.includes('orange') ? '#f97316' : kpi.color.includes('violet') ? '#a78bfa' : '#f59e0b'} width={44} height={12} />
-                  </div>
-                </div>
-              )
-            })}
+            {dashboardKpiData.map((kpi, idx) => <DashboardKpiCard key={kpi.label} kpi={kpi} idx={idx} />)}
           </div>
         </div>
 

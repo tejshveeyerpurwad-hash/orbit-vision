@@ -7,8 +7,6 @@ import ExecutiveBanner from '../components/ExecutiveBanner'
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
-const LOG_PREFIX = '[DBG IntelligenceCenter]'
-
 const presets = [
   'Add payment retry support',
   'Implement OAuth 2.0 SSO',
@@ -662,8 +660,6 @@ export default function IntelligenceCenter() {
   const feedRef = useRef(null)
   const [copied, setCopied] = useState(false)
 
-  console.log(LOG_PREFIX, '1. Component MOUNTED. loading=', loading, 'data keys:', Object.keys(data).length)
-
   useEffect(() => {
     const interval = setInterval(() => {
       const mins = Math.floor(Math.random() * 3) + 1
@@ -683,25 +679,14 @@ export default function IntelligenceCenter() {
   const filtered = input.trim() ? presets.filter(p => p.toLowerCase().includes(input.toLowerCase())) : presets
 
   const investigate = (text) => {
-    console.log(LOG_PREFIX, '2. investigate() CALLED with text=', `"${text}"`)
-    if (!text.trim()) {
-      console.log(LOG_PREFIX, '2a. text is empty, returning early')
-      return
-    }
-    console.log(LOG_PREFIX, '3. Setting loading=true, error=null')
+    if (!text.trim()) return
     setLoading(true)
     setError(null)
     setShowPresets(false)
-    console.log(LOG_PREFIX, '4. Calling generateMockData(text)')
     const result = generateMockData(text)
-    console.log(LOG_PREFIX, '5. generateMockData returned. result keys:', Object.keys(result).length, 'result.caseId:', result.caseId)
-    console.log(LOG_PREFIX, '6. Scheduling setData/setLoading(false) in 800ms')
     setTimeout(() => {
-      console.log(LOG_PREFIX, '7. setTimeout FIRED. Calling setData(result)')
       setData(result)
-      console.log(LOG_PREFIX, '8. Called setData. Now calling setLoading(false)')
       setLoading(false)
-      console.log(LOG_PREFIX, '9. Both setData and setLoading(false) called')
     }, 800)
   }
 
@@ -766,9 +751,6 @@ export default function IntelligenceCenter() {
     Review: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
     Closed: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
   }
-
-  console.log(LOG_PREFIX, '10. RENDER — loading:', loading, 'error:', error ? error.substring(0, 50) : null, 'data.caseId:', data?.caseId, 'data keys:', Object.keys(data).length, 'input:', `"${input}"`)
-  console.log(LOG_PREFIX, '10b. Rendering condition:', loading ? 'LOADING SKELETON' : 'RESULTS PANEL (or nothing if data empty)')
 
   return (
     <Layout>
@@ -911,6 +893,7 @@ export default function IntelligenceCenter() {
                   const angleRad = (node.angle * Math.PI) / 180
                   const nx = 300 + 140 * Math.cos(angleRad)
                   const ny = 175 + 140 * Math.sin(angleRad)
+                  if (!Number.isFinite(nx) || !Number.isFinite(ny)) return null
                   return (
                     <g key={'node-' + i}>
                       <motion.path d={'M 300 175 L ' + nx + ' ' + ny} stroke={node.color} strokeWidth="1.5" strokeOpacity={0.3} strokeDasharray="6 4"
@@ -939,6 +922,7 @@ export default function IntelligenceCenter() {
                   const px = 30 + Math.random() * 540
                   const py = 20 + Math.random() * 310
                   const size = 1.5 + Math.random() * 2
+                  if (!Number.isFinite(px) || !Number.isFinite(py)) return null
                   return (
                     <motion.circle key={'p-' + i} cx={px} cy={py} r={size} fill={i % 2 === 0 ? 'rgba(6,182,212,0.4)' : 'rgba(168,85,247,0.3)'}
                       animate={{ y: [0, -10 - Math.random() * 15, 0], opacity: [0.2, 0.6, 0.2] }}
@@ -977,13 +961,18 @@ export default function IntelligenceCenter() {
                   const lines = []
                   const nodes = []
                   data.evidenceItems.forEach((ev, i) => {
-                    const from = positions[i]
+                    const from = positions[i] || { x: 50 + i * 10, y: 40 + i * 8 }
+                    if (!positions[i]) console.warn('[IC Evidence] positions out of range at i=' + i + ' length=' + data.evidenceItems.length)
+                    const fx = Number.isFinite(from?.x) ? from.x : 50
+                    const fy = Number.isFinite(from?.y) ? from.y : 50
                     for (let j = i + 1; j < data.evidenceItems.length; j++) {
                       if (j - i <= 2) {
                         const to = positions[j]
                         if (to) {
+                          const tox = Number.isFinite(to?.x) ? to.x : 50
+                          const toy = Number.isFinite(to?.y) ? to.y : 50
                           lines.push(
-                            <motion.line key={'el-' + i + '-' + j} x1={from.x} y1={from.y} x2={to.x} y2={to.y}
+                            <motion.line key={'el-' + i + '-' + j} x1={fx} y1={fy} x2={tox} y2={toy}
                               stroke="rgba(255,255,255,0.06)" strokeWidth="0.3" strokeDasharray="1 2"
                               initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, delay: i * 0.15 }} />
                           )
@@ -994,19 +983,19 @@ export default function IntelligenceCenter() {
                     const r = ev.critical ? 5 : 3.5
                     nodes.push(
                       <g key={'ev-' + i}>
-                        <motion.circle cx={from.x} cy={from.y} r={r + 3} fill={colorKey + '0.1)'} stroke="none"
+                        <motion.circle cx={fx} cy={fy} r={r + 3} fill={colorKey + '0.1)'} stroke="none"
                           animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 3, repeat: Infinity, delay: i * 0.4, ease: 'easeInOut' }} />
-                        <motion.circle cx={from.x} cy={from.y} r={r} fill={colorKey + '0.5)'} stroke={colorKey + '0.7)'} strokeWidth="0.5"
+                        <motion.circle cx={fx} cy={fy} r={r} fill={colorKey + '0.5)'} stroke={colorKey + '0.7)'} strokeWidth="0.5"
                           initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 150, delay: 0.3 + i * 0.15 }} />
                         {ev.critical && (
-                          <motion.circle cx={from.x} cy={from.y} r={r + 4} fill="none" stroke="rgba(239,68,68,0.3)" strokeWidth="0.5"
+                          <motion.circle cx={fx} cy={fy} r={r + 4} fill="none" stroke="rgba(239,68,68,0.3)" strokeWidth="0.5"
                             animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0, 0.4] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }} />
                         )}
-                        <motion.text x={from.x} y={from.y + r + 6} textAnchor="middle" fill={colorKey + '0.8)'} fontSize="2.5" fontFamily="monospace" fontWeight="600"
+                        <motion.text x={fx} y={fy + r + 6} textAnchor="middle" fill={colorKey + '0.8)'} fontSize="2.5" fontFamily="monospace" fontWeight="600"
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 + i * 0.15 }}>
                           {ev.title}
                         </motion.text>
-                        <text x={from.x} y={from.y - r - 2} textAnchor="middle" fill={colorKey + '0.6)'} fontSize="2" fontFamily="monospace">
+                        <text x={fx} y={fy - r - 2} textAnchor="middle" fill={colorKey + '0.6)'} fontSize="2" fontFamily="monospace">
                           {ev.type}
                         </text>
                       </g>

@@ -117,24 +117,22 @@ The gap between *monitoring* and *intelligence* is the single largest source of 
 Orbit Foresight continuously ingests engineering signals, builds a living digital twin of production systems, predicts failure propagation, quantifies business impact, and generates executive-grade remediation intelligence in real time.
 
 <p align="center">
-  <img src="docs/assets/orbit-foresight-architecture.svg" alt="Orbit Foresight Intelligence Architecture" width="100%">
+  <img src="docs/assets/orbit-foresight-architecture-v2.svg" alt="Orbit Foresight Intelligence Architecture" width="100%">
 </p>
 
-### Why This Architecture Wins
+### Why Orbit Foresight Is Different
 
-Traditional platforms stop at monitoring. Orbit Foresight delivers a complete intelligence loop:
+Traditional platforms stop at visibility. Orbit Foresight delivers intelligence.
 
-✓ **Detect** anomalies across 15 telemetry dimensions simultaneously
+Instead of showing engineers what happened, it predicts what is likely to happen, explains why, quantifies business impact, and generates executive-grade actions.
 
-✓ **Understand** dependencies through an auto-discovered knowledge graph of 847+ nodes
-
-✓ **Simulate** cascading failure impact across the full service topology in real time
-
-✓ **Quantify** business risk as revenue exposure, customer impact, and SLA liability
-
-✓ **Generate** executive decisions — boardroom-ready CTO reports in under 60 seconds
-
-✓ **Produce** remediation plans with sprint breakdowns, team assignment, and risk mitigation
+| Approach | Traditional Monitoring | Orbit Foresight |
+|:---|:---|:---|
+| **Detection** | Alerts fire after customers report issues | ML predicts incidents before they occur |
+| **Investigation** | Engineers manually query dashboards | AI identifies root cause in under 30 seconds |
+| **Impact Analysis** | Static dependency maps | Real-time blast radius simulation |
+| **Reporting** | Manual slide deck preparation | Automated boardroom-ready reports |
+| **Decision Support** | Raw metrics without context | Business impact quantification |
 
 > **Judge Evaluation Focus:** Orbit Foresight is not a monitoring dashboard. It is an AI-native engineering intelligence platform that transforms telemetry into executive action.
 

@@ -1,0 +1,345 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1150" width="1800" height="1150">
+  <defs>
+    <radialGradient id="bgV2" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#0c1e34"/>
+      <stop offset="30%" stop-color="#080f1c"/>
+      <stop offset="100%" stop-color="#020408"/>
+    </radialGradient>
+
+    <radialGradient id="coreAuraV2" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="rgba(6,182,212,0.25)"/>
+      <stop offset="25%" stop-color="rgba(139,92,246,0.12)"/>
+      <stop offset="50%" stop-color="rgba(6,182,212,0.04)"/>
+      <stop offset="100%" stop-color="rgba(6,182,212,0)"/>
+    </radialGradient>
+
+    <radialGradient id="coreGlowV2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(6,182,212,0.5)"/>
+      <stop offset="30%" stop-color="rgba(139,92,246,0.2)"/>
+      <stop offset="100%" stop-color="rgba(6,182,212,0)"/>
+    </radialGradient>
+
+    <linearGradient id="glassV2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(15,23,42,0.75)"/>
+      <stop offset="100%" stop-color="rgba(15,23,42,0.2)"/>
+    </linearGradient>
+
+    <linearGradient id="glassDarker" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(15,23,42,0.85)"/>
+      <stop offset="100%" stop-color="rgba(15,23,42,0.35)"/>
+    </linearGradient>
+
+    <linearGradient id="cyanEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(6,182,212,0.6)"/>
+      <stop offset="50%" stop-color="rgba(6,182,212,0.08)"/>
+      <stop offset="100%" stop-color="rgba(6,182,212,0)"/>
+    </linearGradient>
+
+    <linearGradient id="purpleEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(139,92,246,0.6)"/>
+      <stop offset="50%" stop-color="rgba(139,92,246,0.08)"/>
+      <stop offset="100%" stop-color="rgba(139,92,246,0)"/>
+    </linearGradient>
+
+    <linearGradient id="tealEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(34,211,238,0.6)"/>
+      <stop offset="50%" stop-color="rgba(34,211,238,0.08)"/>
+      <stop offset="100%" stop-color="rgba(34,211,238,0)"/>
+    </linearGradient>
+
+    <linearGradient id="amberEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(245,158,11,0.6)"/>
+      <stop offset="50%" stop-color="rgba(245,158,11,0.08)"/>
+      <stop offset="100%" stop-color="rgba(245,158,11,0)"/>
+    </linearGradient>
+
+    <linearGradient id="emeraldEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(16,185,129,0.6)"/>
+      <stop offset="50%" stop-color="rgba(16,185,129,0.08)"/>
+      <stop offset="100%" stop-color="rgba(16,185,129,0)"/>
+    </linearGradient>
+
+    <linearGradient id="vsLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(239,68,68,0.08)"/>
+      <stop offset="100%" stop-color="rgba(239,68,68,0.02)"/>
+    </linearGradient>
+
+    <linearGradient id="vsRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(6,182,212,0.02)"/>
+      <stop offset="100%" stop-color="rgba(6,182,212,0.08)"/>
+    </linearGradient>
+
+    <filter id="glowCyanV2"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glowPurpleV2"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glowTealV2"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glowAmberV2"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glowEmeraldV2"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadowPanelV2"><feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="rgba(0,0,0,0.8)"/></filter>
+    <filter id="ambientSoft"><feGaussianBlur stdDeviation="50"/></filter>
+
+    <pattern id="dotGridV2" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="18" cy="18" r="0.5" fill="rgba(6,182,212,0.035)"/>
+    </pattern>
+
+    <style>
+      @keyframes corePulseV2 { 0%,100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+      @keyframes ringExpandV2 { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.35); opacity: 0; } }
+      @keyframes nodeGlow { 0%,100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+      @keyframes moveParticle { 0% { transform: translate(0,0) scale(1); opacity: 0; } 10% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translate(140px,-50px) scale(0.3); opacity: 0; } }
+      @keyframes flowBeam { 0%,100% { opacity: 0.1; } 50% { opacity: 0.5; } }
+      @keyframes flickerNode { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+      @keyframes slideIn { 0% { transform: translateY(10px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+      .p-core-v2 { animation: corePulseV2 3s ease-in-out infinite; transform-origin: center; }
+      .p-ring-v2 { animation: ringExpandV2 3s ease-out infinite; transform-origin: center; }
+      .p-node-cyan { animation: nodeGlow 2.5s ease-in-out infinite; }
+      .p-node-purple { animation: nodeGlow 3s ease-in-out infinite; }
+      .p-node-teal { animation: nodeGlow 2.7s ease-in-out infinite; }
+      .p-node-amber { animation: nodeGlow 3.3s ease-in-out infinite; }
+      .p-node-emerald { animation: nodeGlow 2.9s ease-in-out infinite; }
+      .p-flow { animation: flowBeam 2.2s ease-in-out infinite; }
+      .p-particle { animation: moveParticle 4s ease-in-out infinite; }
+      .p-flicker { animation: flickerNode 1.5s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1150" fill="url(#bgV2)"/>
+  <rect width="1800" height="1150" fill="url(#dotGridV2)"/>
+
+  <circle cx="900" cy="440" r="480" fill="url(#coreAuraV2)"/>
+
+  <circle cx="120" cy="280" r="200" fill="rgba(6,182,212,0.035)" filter="url(#ambientSoft)"/>
+  <circle cx="1680" cy="300" r="200" fill="rgba(139,92,246,0.035)" filter="url(#ambientSoft)"/>
+  <circle cx="1400" cy="700" r="160" fill="rgba(245,158,11,0.025)" filter="url(#ambientSoft)"/>
+  <circle cx="600" cy="700" r="160" fill="rgba(34,211,238,0.025)" filter="url(#ambientSoft)"/>
+
+  <text x="900" y="42" text-anchor="middle" fill="#06b6d4" font-family="'SF Pro','Inter',system-ui,sans-serif" font-size="20" font-weight="800" letter-spacing="14">ORBIT FORESIGHT</text>
+  <text x="900" y="68" text-anchor="middle" fill="rgba(148,163,184,0.25)" font-family="'SF Mono','JetBrains Mono',monospace" font-size="10" letter-spacing="6">ARCHITECTURE OVERVIEW</text>
+  <line x1="300" y1="82" x2="1500" y2="82" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+
+  <g transform="translate(900, 440)">
+    <circle cx="0" cy="0" r="100" fill="rgba(6,182,212,0.04)" stroke="rgba(6,182,212,0.1)" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="85" fill="rgba(6,182,212,0.025)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+    <circle cx="0" cy="0" r="70" fill="url(#coreGlowV2)" class="p-core-v2"/>
+    <circle cx="0" cy="0" r="26" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="2.5" filter="url(#glowCyanV2)"/>
+    <circle cx="0" cy="0" r="8" fill="#06b6d4"/>
+    <text x="0" y="115" text-anchor="middle" fill="#06b6d4" font-family="'SF Pro',system-ui,sans-serif" font-size="16" font-weight="800" letter-spacing="3">AI ENGINEERING INTELLIGENCE</text>
+    <text x="0" y="137" text-anchor="middle" fill="rgba(148,163,184,0.3)" font-family="'SF Mono',monospace" font-size="11" letter-spacing="4">PREDICT → INVESTIGATE → SIMULATE → DECIDE</text>
+    <g class="p-ring-v2"><circle cx="0" cy="0" r="100" fill="none" stroke="rgba(6,182,212,0.12)" stroke-width="2"/></g>
+    <g class="p-ring-v2" style="animation-delay: 1s"><circle cx="0" cy="0" r="100" fill="none" stroke="rgba(139,92,246,0.08)" stroke-width="1.5"/></g>
+  </g>
+
+  <g transform="translate(60, 140)">
+    <rect width="370" height="400" rx="16" fill="url(#glassV2)" stroke="url(#cyanEdge)" stroke-width="1.5" filter="url(#shadowPanelV2)"/>
+    <rect width="370" height="50" rx="16" fill="rgba(6,182,212,0.06)"/>
+    <rect width="370" height="50" rx="16" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <circle cx="26" cy="25" r="8" fill="#06b6d4" filter="url(#glowCyanV2)" class="p-node-cyan"/>
+    <circle cx="26" cy="25" r="8" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.3"><animate attributeName="r" values="8;16;8" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/></circle>
+    <text x="185" y="32" text-anchor="middle" fill="#06b6d4" font-family="'SF Pro',system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="4">SIGNAL LAYER</text>
+
+    <g transform="translate(14, 64)">
+      <rect width="342" height="36" rx="8" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3.5" fill="#06b6d4" class="p-flicker"/>
+      <text x="32" y="24" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="13" font-weight="500">Deployments</text>
+    </g>
+    <g transform="translate(14, 108)">
+      <rect width="342" height="36" rx="8" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3.5" fill="#06b6d4" class="p-flicker" style="animation-delay: 0.3s"/>
+      <text x="32" y="24" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="13" font-weight="500">Incidents</text>
+    </g>
+    <g transform="translate(14, 152)">
+      <rect width="342" height="36" rx="8" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3.5" fill="#06b6d4" class="p-flicker" style="animation-delay: 0.6s"/>
+      <text x="32" y="24" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="13" font-weight="500">Metrics</text>
+    </g>
+    <g transform="translate(14, 196)">
+      <rect width="342" height="36" rx="8" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3.5" fill="#06b6d4" class="p-flicker" style="animation-delay: 0.9s"/>
+      <text x="32" y="24" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="13" font-weight="500">Logs</text>
+    </g>
+    <g transform="translate(14, 240)">
+      <rect width="342" height="36" rx="8" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3.5" fill="#06b6d4" class="p-flicker" style="animation-delay: 1.2s"/>
+      <text x="32" y="24" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="13" font-weight="500">Traces</text>
+    </g>
+    <g transform="translate(14, 284)">
+      <rect width="342" height="36" rx="8" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3.5" fill="#06b6d4" class="p-flicker" style="animation-delay: 1.5s"/>
+      <text x="32" y="24" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="13" font-weight="500">Dependencies</text>
+    </g>
+
+    <text x="185" y="358" text-anchor="middle" fill="rgba(148,163,184,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="2">RAW ENGINEERING TELEMETRY</text>
+  </g>
+
+  <g transform="translate(1370, 140)">
+    <rect width="370" height="400" rx="16" fill="url(#glassV2)" stroke="url(#purpleEdge)" stroke-width="1.5" filter="url(#shadowPanelV2)"/>
+    <rect width="370" height="50" rx="16" fill="rgba(139,92,246,0.06)"/>
+    <rect width="370" height="50" rx="16" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <circle cx="26" cy="25" r="8" fill="#8b5cf6" filter="url(#glowPurpleV2)" class="p-node-purple"/>
+    <circle cx="26" cy="25" r="8" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.3"><animate attributeName="r" values="8;16;8" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.5s" repeatCount="indefinite"/></circle>
+    <text x="185" y="32" text-anchor="middle" fill="#8b5cf6" font-family="'SF Pro',system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="4">AI INTELLIGENCE</text>
+
+    <g transform="translate(14, 64)">
+      <rect width="342" height="44" rx="8" fill="rgba(139,92,246,0.03)" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+      <text x="171" y="18" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Anomaly Detection</text>
+      <text x="171" y="34" text-anchor="middle" fill="rgba(148,163,184,0.25)" font-family="'SF Mono',monospace" font-size="8">Statistical deviation · ML classification</text>
+    </g>
+    <g transform="translate(14, 118)">
+      <rect width="342" height="44" rx="8" fill="rgba(139,92,246,0.03)" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+      <text x="171" y="18" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Risk Prediction</text>
+      <text x="171" y="34" text-anchor="middle" fill="rgba(148,163,184,0.25)" font-family="'SF Mono',monospace" font-size="8">15-dimension · 94% confidence</text>
+    </g>
+    <g transform="translate(14, 172)">
+      <rect width="342" height="44" rx="8" fill="rgba(139,92,246,0.03)" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+      <text x="171" y="18" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Pattern Correlation</text>
+      <text x="171" y="34" text-anchor="middle" fill="rgba(148,163,184,0.25)" font-family="'SF Mono',monospace" font-size="8">1,598+ historical event matching</text>
+    </g>
+    <g transform="translate(14, 226)">
+      <rect width="342" height="44" rx="8" fill="rgba(139,92,246,0.03)" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+      <text x="171" y="18" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Root Cause Analysis</text>
+      <text x="171" y="34" text-anchor="middle" fill="rgba(148,163,184,0.25)" font-family="'SF Mono',monospace" font-size="8">Forensic chain · &lt; 30 seconds</text>
+    </g>
+    <g transform="translate(14, 280)">
+      <rect width="342" height="44" rx="8" fill="rgba(139,92,246,0.03)" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+      <text x="171" y="18" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Failure Forecasting</text>
+      <text x="171" y="34" text-anchor="middle" fill="rgba(148,163,184,0.25)" font-family="'SF Mono',monospace" font-size="8">Predictive · 87%+ accuracy at 24h</text>
+    </g>
+
+    <text x="185" y="358" text-anchor="middle" fill="rgba(148,163,184,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="2">MULTI-DIMENSIONAL AI REASONING</text>
+  </g>
+
+  <g transform="translate(540, 640)">
+    <rect width="340" height="280" rx="16" fill="url(#glassV2)" stroke="url(#tealEdge)" stroke-width="1.5" filter="url(#shadowPanelV2)"/>
+    <rect width="340" height="50" rx="16" fill="rgba(34,211,238,0.06)"/>
+    <rect width="340" height="50" rx="16" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <circle cx="26" cy="25" r="8" fill="#22d3ee" filter="url(#glowTealV2)" class="p-node-teal"/>
+    <circle cx="26" cy="25" r="8" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.3"><animate attributeName="r" values="8;16;8" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.8s" repeatCount="indefinite"/></circle>
+    <text x="170" y="32" text-anchor="middle" fill="#22d3ee" font-family="'SF Pro',system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="4">DIGITAL TWIN</text>
+
+    <g transform="translate(12, 60)">
+      <rect width="316" height="36" rx="8" fill="rgba(34,211,238,0.03)" stroke="rgba(34,211,238,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Service Topology</text>
+    </g>
+    <g transform="translate(12, 104)">
+      <rect width="316" height="36" rx="8" fill="rgba(34,211,238,0.03)" stroke="rgba(34,211,238,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Dependency Graph</text>
+    </g>
+    <g transform="translate(12, 148)">
+      <rect width="316" height="36" rx="8" fill="rgba(34,211,238,0.03)" stroke="rgba(34,211,238,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Incident Memory</text>
+    </g>
+    <g transform="translate(12, 192)">
+      <rect width="316" height="36" rx="8" fill="rgba(34,211,238,0.03)" stroke="rgba(34,211,238,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Blast Radius Engine</text>
+    </g>
+
+    <text x="170" y="260" text-anchor="middle" fill="rgba(148,163,184,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="2">LIVING PRODUCTION MODEL</text>
+  </g>
+
+  <g transform="translate(1020, 640)">
+    <rect width="340" height="280" rx="16" fill="url(#glassV2)" stroke="url(#amberEdge)" stroke-width="1.5" filter="url(#shadowPanelV2)"/>
+    <rect width="340" height="50" rx="16" fill="rgba(245,158,11,0.06)"/>
+    <rect width="340" height="50" rx="16" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <circle cx="26" cy="25" r="8" fill="#f59e0b" filter="url(#glowAmberV2)" class="p-node-amber"/>
+    <circle cx="26" cy="25" r="8" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.3"><animate attributeName="r" values="8;16;8" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="3.2s" repeatCount="indefinite"/></circle>
+    <text x="170" y="32" text-anchor="middle" fill="#f59e0b" font-family="'SF Pro',system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="4">BUSINESS IMPACT</text>
+
+    <g transform="translate(12, 60)">
+      <rect width="316" height="36" rx="8" fill="rgba(245,158,11,0.03)" stroke="rgba(245,158,11,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Revenue Exposure</text>
+    </g>
+    <g transform="translate(12, 104)">
+      <rect width="316" height="36" rx="8" fill="rgba(245,158,11,0.03)" stroke="rgba(245,158,11,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Customer Impact</text>
+    </g>
+    <g transform="translate(12, 148)">
+      <rect width="316" height="36" rx="8" fill="rgba(245,158,11,0.03)" stroke="rgba(245,158,11,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">SLA Risk</text>
+    </g>
+    <g transform="translate(12, 192)">
+      <rect width="316" height="36" rx="8" fill="rgba(245,158,11,0.03)" stroke="rgba(245,158,11,0.06)" stroke-width="1"/>
+      <text x="158" y="24" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="12" font-weight="600">Compliance Impact</text>
+    </g>
+
+    <text x="170" y="260" text-anchor="middle" fill="rgba(148,163,184,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="2">ENGINEERING → BUSINESS TRANSLATION</text>
+  </g>
+
+  <g transform="translate(730, 855)">
+    <rect width="340" height="210" rx="16" fill="url(#glassDarker)" stroke="url(#emeraldEdge)" stroke-width="1.5" filter="url(#shadowPanelV2)"/>
+    <rect width="340" height="50" rx="16" fill="rgba(16,185,129,0.06)"/>
+    <rect width="340" height="50" rx="16" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <circle cx="26" cy="25" r="8" fill="#10b981" filter="url(#glowEmeraldV2)" class="p-node-emerald"/>
+    <circle cx="26" cy="25" r="8" fill="none" stroke="#10b981" stroke-width="1" opacity="0.3"><animate attributeName="r" values="8;16;8" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.6s" repeatCount="indefinite"/></circle>
+    <text x="170" y="32" text-anchor="middle" fill="#10b981" font-family="'SF Pro',system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="4">EXECUTIVE DECISION</text>
+
+    <g transform="translate(10, 58)">
+      <rect width="155" height="34" rx="7" fill="rgba(16,185,129,0.03)" stroke="rgba(16,185,129,0.06)" stroke-width="1"/>
+      <text x="77" y="23" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="11" font-weight="600">CTO Reports</text>
+    </g>
+    <g transform="translate(175, 58)">
+      <rect width="155" height="34" rx="7" fill="rgba(16,185,129,0.03)" stroke="rgba(16,185,129,0.06)" stroke-width="1"/>
+      <text x="77" y="23" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="11" font-weight="600">Mission Control</text>
+    </g>
+    <g transform="translate(10, 100)">
+      <rect width="155" height="34" rx="7" fill="rgba(16,185,129,0.03)" stroke="rgba(16,185,129,0.06)" stroke-width="1"/>
+      <text x="77" y="23" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="11" font-weight="600">Exec Dashboard</text>
+    </g>
+    <g transform="translate(175, 100)">
+      <rect width="155" height="34" rx="7" fill="rgba(16,185,129,0.03)" stroke="rgba(16,185,129,0.06)" stroke-width="1"/>
+      <text x="77" y="23" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="'SF Mono',monospace" font-size="11" font-weight="600">Remediation Planner</text>
+    </g>
+
+    <text x="170" y="172" text-anchor="middle" fill="rgba(148,163,184,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="2">ACTIONABLE INTELLIGENCE</text>
+  </g>
+
+  <g class="p-flow">
+    <path d="M 430 340 L 730 400" fill="none" stroke="rgba(6,182,212,0.3)" stroke-width="3"/>
+    <path d="M 1370 340 L 1070 400" fill="none" stroke="rgba(139,92,246,0.3)" stroke-width="3"/>
+    <path d="M 750 550 L 750 640" fill="none" stroke="rgba(34,211,238,0.25)" stroke-width="2.5"/>
+    <path d="M 1050 550 L 1050 640" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="2.5"/>
+    <path d="M 880 560 L 880 855" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="2"/>
+    <path d="M 920 560 L 920 855" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="2"/>
+  </g>
+
+  <g>
+    <circle cx="500" cy="360" r="3" fill="#06b6d4" filter="url(#glowCyanV2)" class="p-particle" style="animation-delay: 0s"/>
+    <circle cx="520" cy="370" r="2" fill="#06b6d4" class="p-particle" style="animation-delay: 0.8s"/>
+    <circle cx="1300" cy="360" r="3" fill="#8b5cf6" filter="url(#glowPurpleV2)" class="p-particle" style="animation-delay: 0.4s"/>
+    <circle cx="1280" cy="370" r="2" fill="#8b5cf6" class="p-particle" style="animation-delay: 1.2s"/>
+    <circle cx="790" cy="590" r="2.5" fill="#22d3ee" class="p-particle" style="animation-delay: 0.6s"/>
+    <circle cx="1010" cy="590" r="2.5" fill="#f59e0b" class="p-particle" style="animation-delay: 1s"/>
+  </g>
+
+  <g transform="translate(0, 0)">
+    <circle cx="620" cy="380" r="1.5" fill="#06b6d4" opacity="0.8"><animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/></circle>
+    <circle cx="640" cy="400" r="1.5" fill="#06b6d4" opacity="0.8"><animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite"/></circle>
+    <circle cx="1200" cy="380" r="1.5" fill="#8b5cf6" opacity="0.8"><animate attributeName="opacity" values="0;1;0" dur="1.6s" repeatCount="indefinite"/></circle>
+    <circle cx="1180" cy="400" r="1.5" fill="#8b5cf6" opacity="0.8"><animate attributeName="opacity" values="0;1;0" dur="1.9s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <g transform="translate(900, 1100)">
+    <rect x="-520" y="0" width="1040" height="44" rx="22" fill="rgba(6,182,212,0.03)" stroke="rgba(6,182,212,0.05)" stroke-width="1"/>
+    <text x="-420" y="28" text-anchor="middle" fill="#06b6d4" font-family="'SF Mono','JetBrains Mono',monospace" font-size="12" font-weight="700" letter-spacing="1">847+ SERVICE NODES</text>
+    <line x1="-310" y1="8" x2="-310" y2="36" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>
+    <text x="-210" y="28" text-anchor="middle" fill="#8b5cf6" font-family="'SF Mono',monospace" font-size="12" font-weight="700" letter-spacing="1">1,200+ DEPENDENCIES</text>
+    <line x1="-100" y1="8" x2="-100" y2="36" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>
+    <text x="0" y="28" text-anchor="middle" fill="#22d3ee" font-family="'SF Mono',monospace" font-size="12" font-weight="700" letter-spacing="1">1,598+ HISTORICAL EVENTS</text>
+    <line x1="100" y1="8" x2="100" y2="36" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>
+    <text x="200" y="28" text-anchor="middle" fill="#f59e0b" font-family="'SF Mono',monospace" font-size="12" font-weight="700" letter-spacing="1">94% AI CONFIDENCE</text>
+    <line x1="310" y1="8" x2="310" y2="36" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>
+    <text x="420" y="28" text-anchor="middle" fill="#10b981" font-family="'SF Mono',monospace" font-size="12" font-weight="700" letter-spacing="1">30s INVESTIGATION TIME</text>
+  </g>
+
+  <g transform="translate(900, 1015)">
+    <rect x="-520" y="0" width="1040" height="70" rx="14" fill="url(#glassDarker)" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    <text x="-380" y="28" text-anchor="middle" fill="rgba(239,68,68,0.4)" font-family="'SF Mono',monospace" font-size="8" letter-spacing="2">TRADITIONAL MONITORING</text>
+    <text x="-380" y="52" text-anchor="middle" fill="rgba(239,68,68,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="1">Alerts → Dashboards → Investigation → Guesswork</text>
+    <line x1="-140" y1="8" x2="-140" y2="62" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    <text x="0" y="28" text-anchor="middle" fill="rgba(239,68,68,0.5)" font-family="'SF Pro',system-ui,sans-serif" font-size="16" font-weight="800">VS</text>
+    <line x1="140" y1="8" x2="140" y2="62" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    <text x="380" y="28" text-anchor="middle" fill="rgba(6,182,212,0.4)" font-family="'SF Mono',monospace" font-size="8" letter-spacing="2">ORBIT FORESIGHT</text>
+    <text x="380" y="52" text-anchor="middle" fill="rgba(6,182,212,0.2)" font-family="'SF Mono',monospace" font-size="9" letter-spacing="1">Signals → Intelligence → Digital Twin → Impact → Action</text>
+  </g>
+
+  <path d="M 30 25 L 65 25 L 65 23 L 32 23 L 32 65 L 30 65 Z" fill="rgba(6,182,212,0.04)"/>
+  <path d="M 1770 25 L 1735 25 L 1735 23 L 1768 23 L 1768 65 L 1770 65 Z" fill="rgba(6,182,212,0.04)"/>
+</svg>

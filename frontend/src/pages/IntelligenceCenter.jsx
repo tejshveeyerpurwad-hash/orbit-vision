@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
@@ -6,6 +6,8 @@ import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
+
+const LOG_PREFIX = '[DBG IntelligenceCenter]'
 
 const presets = [
   'Add payment retry support',
@@ -660,6 +662,8 @@ export default function IntelligenceCenter() {
   const feedRef = useRef(null)
   const [copied, setCopied] = useState(false)
 
+  console.log(LOG_PREFIX, '1. Component MOUNTED. loading=', loading, 'data keys:', Object.keys(data).length)
+
   useEffect(() => {
     const interval = setInterval(() => {
       const mins = Math.floor(Math.random() * 3) + 1
@@ -678,27 +682,28 @@ export default function IntelligenceCenter() {
 
   const filtered = input.trim() ? presets.filter(p => p.toLowerCase().includes(input.toLowerCase())) : presets
 
-  const investigate = useCallback(async (text) => {
-    if (!text.trim()) return
+  const investigate = (text) => {
+    console.log(LOG_PREFIX, '2. investigate() CALLED with text=', `"${text}"`)
+    if (!text.trim()) {
+      console.log(LOG_PREFIX, '2a. text is empty, returning early')
+      return
+    }
+    console.log(LOG_PREFIX, '3. Setting loading=true, error=null')
     setLoading(true)
     setError(null)
-    try {
-      const res = await fetch(`${API_BASE}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description: text }),
-      })
-      if (res.ok) {
-        const result = await res.json()
-        setData(prev => ({ ...prev, ...result }))
-      } else {
-        setData(generateMockData(text))
-      }
-    } catch {
-      setData(generateMockData(text))
-    }
-    setLoading(false)
-  }, [])
+    setShowPresets(false)
+    console.log(LOG_PREFIX, '4. Calling generateMockData(text)')
+    const result = generateMockData(text)
+    console.log(LOG_PREFIX, '5. generateMockData returned. result keys:', Object.keys(result).length, 'result.caseId:', result.caseId)
+    console.log(LOG_PREFIX, '6. Scheduling setData/setLoading(false) in 800ms')
+    setTimeout(() => {
+      console.log(LOG_PREFIX, '7. setTimeout FIRED. Calling setData(result)')
+      setData(result)
+      console.log(LOG_PREFIX, '8. Called setData. Now calling setLoading(false)')
+      setLoading(false)
+      console.log(LOG_PREFIX, '9. Both setData and setLoading(false) called')
+    }, 800)
+  }
 
   const handleKey = (e) => {
     if (!showPresets || !filtered.length) return
@@ -761,6 +766,9 @@ export default function IntelligenceCenter() {
     Review: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
     Closed: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
   }
+
+  console.log(LOG_PREFIX, '10. RENDER — loading:', loading, 'error:', error ? error.substring(0, 50) : null, 'data.caseId:', data?.caseId, 'data keys:', Object.keys(data).length, 'input:', `"${input}"`)
+  console.log(LOG_PREFIX, '10b. Rendering condition:', loading ? 'LOADING SKELETON' : 'RESULTS PANEL (or nothing if data empty)')
 
   return (
     <Layout>

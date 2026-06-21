@@ -309,60 +309,9 @@ Start at the **[Dashboard](https://orbit-foresight.vercel.app)** and flow throug
 
 ## Architecture
 
-```mermaid
-flowchart LR
-
-    subgraph Signals["Multi-Source Engineering Signals"]
-        A1["Deployments"]
-        A2["Incidents"]
-        A3["Observability"]
-        A4["Dependencies"]
-        A5["CI/CD Pipelines"]
-        A6["Metrics & Logs"]
-    end
-
-    subgraph AIEngine["Orbit AI Reasoning Engine"]
-        B1["Anomaly Detection"]
-        B2["Pattern Correlation"]
-        B3["Risk Prediction"]
-        B4["Root Cause Analysis"]
-        B5["Failure Forecasting"]
-    end
-
-    subgraph Twin["Digital Twin & Knowledge Layer"]
-        C1["Service Topology"]
-        C2["Dependency Intelligence"]
-        C3["Blast Radius Simulation"]
-        C4["Historical Incident Memory"]
-    end
-
-    subgraph Impact["Business Impact Intelligence"]
-        D1["Revenue Exposure"]
-        D2["Customer Impact"]
-        D3["SLA Risk"]
-        D4["Compliance Risk"]
-    end
-
-    subgraph Decisions["Executive Decision Layer"]
-        E1["Mission Control Dashboard"]
-        E2["CTO Briefings"]
-        E3["Remediation Planner"]
-        E4["AI Action Recommendations"]
-    end
-
-    subgraph Outcomes["Business Outcomes"]
-        F1["Faster Incident Response"]
-        F2["Reduced Downtime"]
-        F3["Lower Engineering Cost"]
-        F4["Predict Before Production"]
-    end
-
-    Signals --> AIEngine
-    AIEngine --> Twin
-    Twin --> Impact
-    Impact --> Decisions
-    Decisions --> Outcomes
-```
+<p align="center">
+  <img src="docs/assets/orbit-foresight-architecture.svg" alt="Orbit Foresight Architecture" width="100%" style="max-width: 1920px; border-radius: 12px;"/>
+</p>
 
 ---
 

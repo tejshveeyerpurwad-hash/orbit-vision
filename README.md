@@ -310,43 +310,58 @@ Start at the **[Dashboard](https://orbit-foresight.vercel.app)** and flow throug
 ## Architecture
 
 ```mermaid
-flowchart TB
-    subgraph InputLayer["Signal Ingestion"]
+flowchart LR
+
+    subgraph Signals["Multi-Source Engineering Signals"]
         A1["Deployments"]
         A2["Incidents"]
-        A3["Dependencies"]
-        A4["Metrics"]
+        A3["Observability"]
+        A4["Dependencies"]
+        A5["CI/CD Pipelines"]
+        A6["Metrics & Logs"]
     end
 
-    subgraph IntelligenceLayer["AI Intelligence Engine"]
-        B1["Risk Scoring"]
+    subgraph AIEngine["Orbit AI Reasoning Engine"]
+        B1["Anomaly Detection"]
         B2["Pattern Correlation"]
-        B3["Anomaly Detection"]
+        B3["Risk Prediction"]
         B4["Root Cause Analysis"]
+        B5["Failure Forecasting"]
     end
 
-    subgraph KnowledgeLayer["Knowledge Graph"]
+    subgraph Twin["Digital Twin & Knowledge Layer"]
         C1["Service Topology"]
-        C2["Dependency Mapping"]
-        C3["Risk Propagation"]
+        C2["Dependency Intelligence"]
+        C3["Blast Radius Simulation"]
+        C4["Historical Incident Memory"]
     end
 
-    subgraph ImpactLayer["Business Impact Layer"]
+    subgraph Impact["Business Impact Intelligence"]
         D1["Revenue Exposure"]
         D2["Customer Impact"]
         D3["SLA Risk"]
+        D4["Compliance Risk"]
     end
 
-    subgraph ExecutiveLayer["Executive Interface"]
-        E1["Command Center"]
-        E2["CTO Reports"]
+    subgraph Decisions["Executive Decision Layer"]
+        E1["Mission Control Dashboard"]
+        E2["CTO Briefings"]
         E3["Remediation Planner"]
+        E4["AI Action Recommendations"]
     end
 
-    InputLayer --> IntelligenceLayer
-    IntelligenceLayer --> KnowledgeLayer
-    KnowledgeLayer --> ImpactLayer
-    ImpactLayer --> ExecutiveLayer
+    subgraph Outcomes["Business Outcomes"]
+        F1["Faster Incident Response"]
+        F2["Reduced Downtime"]
+        F3["Lower Engineering Cost"]
+        F4["Predict Before Production"]
+    end
+
+    Signals --> AIEngine
+    AIEngine --> Twin
+    Twin --> Impact
+    Impact --> Decisions
+    Decisions --> Outcomes
 ```
 
 ---

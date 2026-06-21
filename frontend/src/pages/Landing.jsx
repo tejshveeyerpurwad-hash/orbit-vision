@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import Navbar from '../components/Navbar'
+import SolutionSection from '../components/SolutionSection'
 
 function AnimatedCounter({ value, suffix = '', duration = 2 }) {
   const [count, setCount] = useState(0)
@@ -904,61 +905,7 @@ export default function Landing() {
           </div>
         </motion.section>
 
-        <motion.section
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={stagger}
-          className="border-t border-white/[0.04] py-10 sm:py-12"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <motion.div variants={fadeUp} className="mx-auto max-w-2xl text-center mb-6">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/[0.06] px-4 py-1.5 text-xs font-medium text-brand-light">
-                How It Works
-              </div>
-              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">
-                Orbital Intelligence{' '}
-                <span className="bg-gradient-to-r from-brand via-violet-400 to-cyan-400 bg-clip-text text-transparent">Pipeline</span>
-              </h2>
-              <p className="mt-2 text-sm text-slate-500">Four simple steps from integration to executive intelligence</p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-              {howItWorks.map((h, i) => (
-                <motion.div
-                  key={h.step}
-                  variants={fadeUpSmall}
-                  className={`group relative rounded-xl border ${h.border} bg-gradient-to-br ${h.bg} p-5 overflow-hidden`}
-                >
-                  <div className="absolute top-0 left-0 right-0 h-0.5 opacity-60" style={{ backgroundColor: h.color.replace('text-', 'bg-').replace('cyan-400', '#22d3ee').replace('violet-400', '#a78bfa').replace('rose-400', '#fb7185').replace('emerald-400', '#34d399') }} />
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${h.bg} ${h.color}`}>
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d={h.icon} />
-                        </svg>
-                      </div>
-                      <span className={`text-[9px] font-mono font-bold ${h.color} opacity-60`}>STEP 0{h.step}</span>
-                    </div>
-                    <h3 className="text-sm font-semibold text-white mb-1">{h.title}</h3>
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{h.desc}</p>
-                    {i < 3 && (
-                      <motion.div
-                        animate={{ x: [0, 4, 0], opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                        className="hidden lg:block absolute -right-3 top-1/2 transform -translate-y-1/2"
-                      >
-                        <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                      </motion.div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
+        <SolutionSection />
 
         <section ref={featuresRef} className="border-t border-white/[0.04] py-10 sm:py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

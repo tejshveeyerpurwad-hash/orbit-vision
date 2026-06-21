@@ -354,12 +354,8 @@ flowchart TB
 ## Founder
 
 <p align="center">
-  <img src="https://img.shields.io/badge/PHOTO_PLACEHOLDER-0f172a?style=for-the-badge&labelColor=06b6d4&color=0f172a" alt="Founder Photo"/>
-</p>
-
-<p align="center">
   <strong>Tejshvini Yerpurwad</strong><br/>
-  <em>Founder & Lead Engineer, Orbit Foresight</em>
+  <em>Founder, Product Architect & AI Systems Engineer</em>
 </p>
 
 <p align="center">

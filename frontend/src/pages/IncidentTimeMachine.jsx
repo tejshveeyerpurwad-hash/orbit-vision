@@ -916,6 +916,202 @@ function HistoricalComparisonCard({ metric }) {
   )
 }
 
+function AnimatedRecoveryTimeline() {
+  const [activeStep, setActiveStep] = useState(-1)
+  const [running, setRunning] = useState(false)
+  const [completed, setCompleted] = useState(new Set())
+  const intervalRef = useRef(null)
+
+  const steps = [
+    { id: 0, label: 'Detection', time: '00:02', detail: 'Monitoring alert triggered — error rate 4.2%', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', color: '#ef4444', glow: 'rgba(239,68,68,0.4)', confidence: 97 },
+    { id: 1, label: 'Triage', time: '00:07', detail: 'On-call engineer pinpoints retry queue saturation', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', color: '#f97316', glow: 'rgba(249,115,22,0.4)', confidence: 93 },
+    { id: 2, label: 'Diagnosis', time: '00:17', detail: 'Root cause: missing circuit breaker in payment worker', icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z', color: '#eab308', glow: 'rgba(234,179,8,0.4)', confidence: 94 },
+    { id: 3, label: 'Fix', time: '00:37', detail: 'Circuit breaker deployed with exponential backoff config', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', color: '#3b82f6', glow: 'rgba(59,130,246,0.4)', confidence: 96 },
+    { id: 4, label: 'Verification', time: '00:45', detail: 'Pipeline at 100% success — incident closed', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: '#22c55e', glow: 'rgba(34,197,94,0.5)', confidence: 99 },
+  ]
+
+  const startReplay = () => {
+    if (running) {
+      clearInterval(intervalRef.current)
+      setRunning(false)
+      setActiveStep(-1)
+      setCompleted(new Set())
+      return
+    }
+    setRunning(true)
+    setActiveStep(0)
+    setCompleted(new Set())
+    let s = 0
+    intervalRef.current = setInterval(() => {
+      s++
+      if (s >= steps.length) {
+        clearInterval(intervalRef.current)
+        setRunning(false)
+        setActiveStep(-1)
+        setCompleted(new Set(steps.map(st => st.id)))
+      } else {
+        setCompleted(prev => new Set([...prev, s - 1]))
+        setActiveStep(s)
+      }
+    }, 900)
+  }
+
+  useEffect(() => () => clearInterval(intervalRef.current), [])
+
+  return (
+    <motion.div variants={item} className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-950 p-4 sm:p-5">
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/[0.03] via-transparent to-cyan-500/[0.03] pointer-events-none" />
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-[11px] font-mono font-semibold text-slate-400 uppercase tracking-[0.2em]">Incident Recovery Timeline</h2>
+          <p className="text-[9px] text-slate-600 font-mono mt-0.5">Animated forensic replay — Payment Pipeline Outage · Jun 1, 2024</p>
+        </div>
+        <button
+          onClick={startReplay}
+          className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-[10px] font-semibold transition-all ${running ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20' : 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/20 hover:from-purple-500/30'}`}
+        >
+          {running ? (
+            <><svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Stop</>
+          ) : (
+            <><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5.14v14.72a1 1 0 001.5.86l11-7.36a1 1 0 000-1.72l-11-7.36A1 1 0 008 5.14z" /></svg>Replay Incident</>
+          )}
+        </button>
+      </div>
+
+      {/* Main Timeline Row */}
+      <div className="relative flex items-center gap-0 overflow-x-auto pb-2">
+        {steps.map((step, i) => {
+          const isActive = activeStep === step.id
+          const isDone = completed.has(step.id)
+          const isPending = !isActive && !isDone
+          return (
+            <div key={step.id} className="flex items-center shrink-0">
+              {/* Step node */}
+              <motion.div
+                className="flex flex-col items-center cursor-pointer group"
+                animate={isActive ? { scale: [1, 1.08, 1] } : {}}
+                transition={{ duration: 0.6, repeat: isActive ? Infinity : 0 }}
+                onClick={() => setActiveStep(isActive ? -1 : step.id)}
+              >
+                <div className="relative">
+                  {/* Glow ring on active */}
+                  {isActive && (
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{ boxShadow: `0 0 20px 6px ${step.glow}` }}
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 1.2, repeat: Infinity }}
+                    />
+                  )}
+                  <div
+                    className={`relative flex h-11 w-11 items-center justify-center rounded-full border-2 transition-all duration-500 ${
+                      isDone ? 'border-emerald-400 bg-emerald-500/20' :
+                      isActive ? 'bg-slate-800' :
+                      'border-slate-700/60 bg-slate-900/80'
+                    }`}
+                    style={isActive ? { borderColor: step.color, boxShadow: `0 0 16px ${step.glow}` } : isDone ? {} : {}}
+                  >
+                    {isDone ? (
+                      <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}
+                        style={{ color: isActive ? step.color : '#475569' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d={step.icon} />
+                      </svg>
+                    )}
+                  </div>
+                  {/* Step number badge */}
+                  <span className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold font-mono ${isDone ? 'bg-emerald-500 text-white' : isActive ? 'text-white' : 'bg-slate-800 text-slate-600'}`}
+                    style={isActive ? { backgroundColor: step.color } : {}}>
+                    {isDone ? '✓' : i + 1}
+                  </span>
+                </div>
+                <span className={`mt-1.5 text-[9px] font-semibold tracking-wide transition-colors ${isActive ? 'text-white' : isDone ? 'text-emerald-400' : 'text-slate-600'}`}>
+                  {step.label}
+                </span>
+                <span className={`text-[8px] font-mono ${isActive ? '' : isDone ? 'text-emerald-600' : 'text-slate-700'}`}
+                  style={isActive ? { color: step.color } : {}}>
+                  T+{step.time}
+                </span>
+              </motion.div>
+
+              {/* Connector line between steps */}
+              {i < steps.length - 1 && (
+                <div className="relative mx-1 sm:mx-2 w-12 sm:w-20 h-[3px] rounded-full bg-slate-800/80 overflow-hidden shrink-0">
+                  <motion.div
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{ backgroundColor: steps[i].color }}
+                    animate={{ width: isDone ? '100%' : isActive ? '60%' : '0%' }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                  />
+                  {/* Animated packet */}
+                  {(isActive || isDone) && (
+                    <motion.div
+                      className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: steps[i].color, boxShadow: `0 0 6px ${steps[i].glow}` }}
+                      animate={{ left: ['0%', '100%'] }}
+                      transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Active step detail */}
+      <AnimatePresence>
+        {activeStep >= 0 && steps[activeStep] && (
+          <motion.div
+            key={activeStep}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.25 }}
+            className="mt-3 rounded-xl border p-3 flex items-center gap-3"
+            style={{ borderColor: `${steps[activeStep].color}30`, backgroundColor: `${steps[activeStep].color}08` }}
+          >
+            <div className="h-2 w-2 rounded-full animate-pulse shrink-0" style={{ backgroundColor: steps[activeStep].color }} />
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] font-semibold font-mono" style={{ color: steps[activeStep].color }}>{steps[activeStep].label}</span>
+              <p className="text-[10px] text-slate-300 mt-0.5">{steps[activeStep].detail}</p>
+            </div>
+            <div className="shrink-0 flex items-center gap-2">
+              <div className="text-right">
+                <div className="text-[8px] text-slate-600 font-mono">AI Confidence</div>
+                <div className="text-[11px] font-bold font-mono" style={{ color: steps[activeStep].color }}>{steps[activeStep].confidence}%</div>
+              </div>
+              <svg width="28" height="28" viewBox="0 0 28 28" className="-rotate-90">
+                <circle cx="14" cy="14" r="11" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="2.5" />
+                <motion.circle cx="14" cy="14" r="11" fill="none" stroke={steps[activeStep].color} strokeWidth="2.5" strokeLinecap="round"
+                  strokeDasharray={2 * Math.PI * 11}
+                  animate={{ strokeDashoffset: 2 * Math.PI * 11 * (1 - steps[activeStep].confidence / 100) }}
+                  transition={{ duration: 0.5 }} />
+              </svg>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bottom row — quick stats */}
+      <div className="mt-3 pt-3 border-t border-white/[0.04] grid grid-cols-5 gap-2">
+        {steps.map(step => (
+          <div key={step.id} className="text-center">
+            <div className="text-[8px] font-mono text-slate-600 truncate">{step.label}</div>
+            <div className="text-[9px] font-bold font-mono mt-0.5" style={{ color: completed.has(step.id) ? '#22c55e' : activeStep === step.id ? step.color : '#334155' }}>
+              T+{step.time}
+            </div>
+            <div className="text-[7px] font-mono text-slate-700">{step.confidence}% conf</div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
 export default function IncidentTimeMachine() {
   const [input, setInput] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
@@ -1047,6 +1243,42 @@ export default function IncidentTimeMachine() {
               )}
             </AnimatePresence>
           </div>
+        </motion.div>
+
+        {/* Always-visible: Animated Recovery Timeline */}
+        <AnimatedRecoveryTimeline />
+
+        {/* Always-visible: AI Insight Panel */}
+        <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { label: 'Root Cause Confidence', value: '94%', sub: 'Circuit breaker gap', color: 'text-red-400', borderColor: 'border-red-500/20', glow: 'from-red-500/[0.05]', dot: 'bg-red-500', icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z' },
+            { label: 'Similar Historical Incidents', value: '3 found', sub: 'MR #142, #198, #305', color: 'text-amber-400', borderColor: 'border-amber-500/20', glow: 'from-amber-500/[0.05]', dot: 'bg-amber-500', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
+            { label: 'Estimated Recovery Savings', value: '$340K', sub: 'With recommended fix', color: 'text-emerald-400', borderColor: 'border-emerald-500/20', glow: 'from-emerald-500/[0.05]', dot: 'bg-emerald-500', icon: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+            { label: 'Prevention Probability', value: '89%', sub: 'If P0 actions applied', color: 'text-cyan-400', borderColor: 'border-cyan-500/20', glow: 'from-cyan-500/[0.05]', dot: 'bg-cyan-500', icon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
+          ].map((ins, idx) => (
+            <motion.div
+              key={ins.label}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.08 }}
+              className={`relative overflow-hidden rounded-xl border ${ins.borderColor} bg-gradient-to-br ${ins.glow} to-transparent p-3 group hover:border-white/[0.15] transition-all`}
+            >
+              <div className="flex items-start gap-2 mb-2">
+                <div className="shrink-0 mt-0.5">
+                  <span className={`relative flex h-2 w-2`}>
+                    <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${ins.dot} opacity-60`} />
+                    <span className={`relative inline-flex h-2 w-2 rounded-full ${ins.dot}`} />
+                  </span>
+                </div>
+                <svg className={`h-3.5 w-3.5 shrink-0 ${ins.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d={ins.icon} />
+                </svg>
+              </div>
+              <div className={`text-lg font-extrabold font-mono tracking-tight ${ins.color}`}>{ins.value}</div>
+              <div className="text-[9px] font-mono text-slate-500 mt-0.5 uppercase tracking-wider">{ins.label}</div>
+              <div className="text-[8px] text-slate-700 mt-1">{ins.sub}</div>
+            </motion.div>
+          ))}
         </motion.div>
 
         {analyzing && (

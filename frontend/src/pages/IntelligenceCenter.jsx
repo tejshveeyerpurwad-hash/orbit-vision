@@ -20,320 +20,45 @@ function rng(min, max) { return Math.floor(Math.random() * (max - min + 1)) + mi
 function hashNum(s, max) { let h = 0; for (let i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i); return Math.abs(h % max) }
 const ucFirst = s => s.charAt(0).toUpperCase() + s.slice(1)
 
-const PROFILES = {
-  payment: {
-    title: 'Payment Pipeline Failure — Forensic Analysis of Retry Queue Cascade & Circuit Breaker Gap',
-    services: ['Payment Service', 'Billing Service', 'API Gateway', 'Notification Service', 'Webhook Gateway', 'Redis Cache', 'Database'],
-    riskScore: 87, confidence: 94, totalFailures: 8, criticalFailures: 2, highFailures: 3, mediumFailures: 2, lowFailures: 1,
-    deps: [
-      { service: 'Payment Service', deps: ['Auth Service', 'Database', 'Redis Cache'], risk: 87, critical: true },
-      { service: 'Billing Service', deps: ['Auth Service', 'Redis Cache', 'Payment Service'], risk: 65, critical: false },
-      { service: 'Notification Service', deps: ['Auth Service'], risk: 45, critical: false },
-      { service: 'API Gateway', deps: ['Payment Service', 'Auth Service', 'Billing Service'], risk: 72, critical: true },
-    ],
-    failureModes: [
-      { mode: 'Retry queue overflow causes cascading failure', severity: 'critical', probability: 'High', impact: 'All payment flows blocked — 45min P0 outage', detection: 'Monitoring alert after 5 min of degraded throughput', mitigation: 'Add bounded retry queues with backpressure mechanism' },
-      { mode: 'Circuit breaker misconfiguration causes silent failures', severity: 'critical', probability: 'Medium', impact: 'Failed transactions without error logs for 30+ min', detection: 'Customer complaints escalated through support tickets', mitigation: 'Add comprehensive integration tests with fault injection scenarios' },
-      { mode: 'Billing reconciliation delay during rollout', severity: 'high', probability: 'Low', impact: '15K invoices delayed up to 3 hours', detection: 'Billing dashboard alert triggered by batch processing lag', mitigation: 'Feature flag with gradual rollout (10% -> 50% -> 100%) over 48h' },
-      { mode: 'API gateway timeout regression', severity: 'high', probability: 'Medium', impact: 'Payment requests timeout under load > 500 RPS', detection: 'APM latency spike alert crossing 5s P99 threshold', mitigation: 'Update timeout configs with load testing validation at 2x expected traffic' },
-      { mode: 'Database connection pool exhaustion', severity: 'high', probability: 'Low', impact: 'All services unable to connect to DB simultaneously', detection: 'Connection pool monitoring alert at 95% utilization', mitigation: 'Add connection pooling with max limit per service instance' },
-    ],
-    rootCauseChains: [
-      { title: 'Circuit Breaker Cascade', chain: ['Missing circuit breaker in payment worker', 'Retry queue overflow under load spike', 'Complete payment pipeline outage (45min)'], descriptions: ['No backpressure mechanism configured in the payment worker retry loop — all failures retried immediately', 'Traffic spike caused unbounded retry queue to grow beyond memory limits, consuming all available heap', 'All payment flows blocked for 45 minutes — critical P0 incident declared with executive escalation'], confidences: [92, 87, 95], evidence: [12, 8, 15] },
-      { title: 'Memory Exhaustion Chain', chain: ['Unbounded retry queue in billing worker', 'Worker OOM crash after 4hr continuous retry', '15K invoices delayed by 3+ hours'], descriptions: ['Billing worker had no upper bound on retry queue depth — could grow indefinitely under load', 'Heap exhaustion caused worker pod to be killed by OOM killer after 4 hours of sustained retries', 'Billing processing stalled completely leading to massive invoice backlog across 15K customers'], confidences: [91, 86, 93], evidence: [7, 5, 10] },
-      { title: 'Idempotency Gap Chain', chain: ['Missing idempotency keys in webhook handler', 'Duplicate webhook events sent to merchants', '2% merchants received duplicate notifications'], descriptions: ['Webhook endpoints lacked idempotency key validation — same event could be delivered multiple times', 'Retry mechanism caused same event to be delivered 2–3 times to merchant endpoints', 'Merchants reported duplicate payment notifications and spam complaints to support team'], confidences: [88, 82, 90], evidence: [6, 4, 8] },
-    ],
-  },
-  auth: {
-    title: 'Authentication Pipeline Analysis — OAuth Token Rotation Failure & Session Management Gap',
-    services: ['Auth Service', 'Identity Provider', 'Session Manager', 'API Gateway', 'User Service', 'Token Cache', 'Audit Log'],
-    riskScore: 76, confidence: 91, totalFailures: 6, criticalFailures: 1, highFailures: 3, mediumFailures: 1, lowFailures: 1,
-    deps: [
-      { service: 'Auth Service', deps: ['Identity Provider', 'Token Cache', 'Database'], risk: 76, critical: true },
-      { service: 'Identity Provider', deps: ['Token Cache', 'Audit Log'], risk: 62, critical: false },
-      { service: 'API Gateway', deps: ['Auth Service', 'User Service', 'Session Manager'], risk: 71, critical: true },
-      { service: 'Session Manager', deps: ['Token Cache', 'Database'], risk: 58, critical: false },
-    ],
-    failureModes: [
-      { mode: 'OAuth token rotation race condition', severity: 'critical', probability: 'Medium', impact: 'All authenticated sessions invalidated — mass logout event', detection: 'Auth error rate spike from 0.1% to 45% in 2 minutes', mitigation: 'Add token rotation locking with distributed mutex' },
-      { mode: 'Session cache eviction causing re-auth storms', severity: 'high', probability: 'High', impact: '60% of users forced to re-authenticate within 5min window', detection: 'Cache miss rate alert at 85% on session store', mitigation: 'Increase session TTL and add warm cache preloading' },
-      { mode: 'IdP timeout under concurrent load', severity: 'high', probability: 'Medium', impact: 'Auth flow timeout after 5 concurrent requests per second', detection: 'IdP latency P99 spiking to 12s', mitigation: 'Add connection pooling and rate limiting to IdP client' },
-      { mode: 'Token validation cache stampede', severity: 'high', probability: 'Low', impact: 'All token validation requests hit database simultaneously', detection: 'Database connection pool exhausted during auth burst', mitigation: 'Add cache-aside pattern with background refresh' },
-      { mode: 'Audit log write bottleneck during peak auth', severity: 'medium', probability: 'High', impact: 'Auth requests queued behind audit log writes — 3s added latency', detection: 'Auth latency percentile alert at P95 > 2s', mitigation: 'Async audit logging with batch writes and backpressure' },
-    ],
-    rootCauseChains: [
-      { title: 'Token Rotation Cascade', chain: ['Missing distributed lock in token rotation', 'Race condition causes simultaneous token invalidations', '5M users logged out in 8 minutes'], descriptions: ['Token rotation handler lacked distributed mutex — multiple nodes could rotate same token simultaneously', 'Race window caused all active sessions to be invalidated at once, triggering global re-authentication storm', 'Identity provider overwhelmed by 800 req/s re-auth spike — cascading to full auth system degradation'], confidences: [94, 91, 89], evidence: [15, 11, 18] },
-      { title: 'Cache Stampede Chain', chain: ['Token cache TTL misconfigured at 5 min', 'All tokens expire simultaneously causing cache stampede', 'Database connection pool exhausted under 20K req/s validation load'], descriptions: ['Cache expiration policy set all tokens to same TTL without jitter — mass expiration event created stampede', 'Validation requests bypassed empty cache directly to database, creating 40x load amplification', 'Connection pool at 100% utilization blocked all other database-dependent services'], confidences: [87, 92, 86], evidence: [9, 13, 7] },
-    ],
-  },
-  database: {
-    title: 'Database Infrastructure Analysis — Connection Pool Exhaustion & Query Performance Degradation',
-    services: ['Database', 'Connection Pool Manager', 'Query Router', 'Replica Set', 'Backup Service', 'Migration Runner', 'Monitoring Agent'],
-    riskScore: 82, confidence: 93, totalFailures: 7, criticalFailures: 2, highFailures: 3, mediumFailures: 1, lowFailures: 1,
-    deps: [
-      { service: 'Database', deps: ['Replica Set', 'Backup Service', 'Connection Pool Manager'], risk: 82, critical: true },
-      { service: 'Query Router', deps: ['Database', 'Replica Set'], risk: 68, critical: false },
-      { service: 'Connection Pool Manager', deps: ['Database', 'Monitoring Agent'], risk: 74, critical: true },
-      { service: 'Migration Runner', deps: ['Database', 'Backup Service'], risk: 55, critical: false },
-    ],
-    failureModes: [
-      { mode: 'Connection pool exhaustion under load spike', severity: 'critical', probability: 'Medium', impact: 'All services unable to acquire database connections', detection: 'Pool utilization alert at 95% with 200 queued requests', mitigation: 'Add per-service connection limits with priority queuing' },
-      { mode: 'Slow query causing row-level lock cascade', severity: 'critical', probability: 'Medium', impact: '12K transactions stuck behind 3s unindexed query', detection: 'Lock wait timeout alert on orders table', mitigation: 'Add missing composite index and query timeout guard' },
-      { mode: 'Replica lag during migration causing stale reads', severity: 'high', probability: 'Low', impact: 'Read replicas returning data 5+ minutes stale', detection: 'Replication lag alert at 320 seconds', mitigation: 'Online schema migration with controlled throttle rate' },
-      { mode: 'Connection leak in query router', severity: 'high', probability: 'Medium', impact: 'Gradual connection exhaustion over 4 hour window', detection: 'Connection count trending up 15/hour for 4 hours', mitigation: 'Add connection leak detection and automatic pool recovery' },
-      { mode: 'Backup window contention with production traffic', severity: 'medium', probability: 'High', impact: 'Backup process blocks read queries for 12 seconds', detection: 'P99 query latency spike from 50ms to 12s during backup window', mitigation: 'Schedule backups during off-peak with reduced concurrency' },
-    ],
-    rootCauseChains: [
-      { title: 'Connection Exhaustion Chain', chain: ['N+1 query introduced in billing report', 'Database connection pool saturated by slow queries', 'All downstream services fail to acquire connections'], descriptions: ['New billing report feature introduced N+1 query pattern — each API call triggered 50+ individual queries', 'Connection pool of 100 connections exhausted within 2 minutes under normal traffic load', 'Payment, auth, and notification services all failed simultaneously with connection timeout errors'], confidences: [93, 88, 91], evidence: [14, 10, 12] },
-      { title: 'Migration Lock Chain', chain: ['Schema migration acquires exclusive table lock', 'Production queries blocked for 8+ minutes', 'Connection pool exhaustion cascades to dependent services'], descriptions: ['Online migration tool failed to use lock-free algorithm — exclusive write lock acquired on orders table', 'All write queries blocked, queue growing at 200 req/s, read queries degraded due to MVCC overhead', 'Accumulated blocked queries exhausted pool, causing cascading failure to payment and billing services'], confidences: [89, 94, 87], evidence: [8, 13, 9] },
-    ],
-  },
-  billing: {
-    title: 'Billing Pipeline Analysis — Invoice Generation Failure & Reconciliation Gap',
-    services: ['Billing Service', 'Invoice Generator', 'Payment Processor', 'PDF Renderer', 'Email Service', 'Audit Trail', 'Reporting Service'],
-    riskScore: 72, confidence: 89, totalFailures: 5, criticalFailures: 1, highFailures: 2, mediumFailures: 1, lowFailures: 1,
-    deps: [
-      { service: 'Billing Service', deps: ['Invoice Generator', 'Payment Processor', 'Audit Trail'], risk: 72, critical: true },
-      { service: 'Invoice Generator', deps: ['PDF Renderer', 'Database'], risk: 61, critical: false },
-      { service: 'Email Service', deps: ['Invoice Generator', 'Audit Trail'], risk: 48, critical: false },
-      { service: 'Reporting Service', deps: ['Billing Service', 'Database'], risk: 52, critical: false },
-    ],
-    failureModes: [
-      { mode: 'Invoice generation OOM on large batch', severity: 'critical', probability: 'Medium', impact: '25K invoices stalled — 8MB PDF generation OOM', detection: 'Worker pod OOM kill alert for invoice-generator-5', mitigation: 'Stream PDF generation with row-based pagination' },
-      { mode: 'Reconciliation mismatch due to currency rounding', severity: 'high', probability: 'Medium', impact: '$12K discrepancy in monthly reconciliation report', detection: 'Audit trail alert on 0.03% variance threshold exceeded', mitigation: 'Add decimal precision normalization at pipeline boundary' },
-      { mode: 'Email delivery delay during invoice burst', severity: 'high', probability: 'Low', impact: 'Invoice emails delayed by 6+ hours for 40% of batch', detection: 'Email queue depth alert at 50K messages', mitigation: 'Add priority queuing with per-customer rate limiting' },
-      { mode: 'PDF template rendering cache miss', severity: 'medium', probability: 'High', impact: 'PDF generation latency spikes to 45s per invoice under load', detection: 'PDF render time P95 alert at 38s', mitigation: 'Pre-warm render cache on deployment with template versioning' },
-    ],
-    rootCauseChains: [
-      { title: 'Memory Cascade Chain', chain: ['PDF generation loads entire invoice batch into memory', '25K invoice batch exceeds 4GB heap limit', 'Worker OOM kills cascades across 3 pods'], descriptions: ['Invoice generator loaded all records into memory before rendering — linear memory scaling with batch size', 'Monthly batch of 25K invoices required 4.2GB heap exceeding 3GB container limit', 'K8s OOM killer terminated 3 pods sequentially before auto-scaling could stabilize'], confidences: [91, 86, 93], evidence: [11, 7, 14] },
-    ],
-  },
+const timelineDotColors = {
+  Detection: '#38bdf8',
+  Analysis: '#a78bfa',
+  Escalation: '#f97316',
+  Resolution: '#22c55e',
+  Review: '#eab308',
+  Closed: '#64748b',
 }
-
-function generateMockData(query) {
-  const q = query.toLowerCase()
-  let profile
-  if (q.includes('payment') || q.includes('retry')) profile = PROFILES.payment
-  else if (q.includes('auth') || q.includes('oauth') || q.includes('sso') || q.includes('login')) profile = PROFILES.auth
-  else if (q.includes('database') || q.includes('db') || q.includes('pool') || q.includes('connection') || q.includes('query')) profile = PROFILES.database
-  else if (q.includes('billing') || q.includes('invoice') || q.includes('payment')) profile = PROFILES.billing
-  else profile = pick([PROFILES.payment, PROFILES.auth, PROFILES.database, PROFILES.billing])
-
-  const svc = profile.services
-  const ts = Date.now()
-  const id = `#OV-${new Date().getFullYear()}-${rng(1000, 9999)}`
-  const qTitle = query.length > 50 ? query.slice(0, 47) + '...' : query
-
-  const mrs = svc.slice(0, 4).map((s, i) => ({
-    id: `MR #${rng(100, 999)}`,
-    author: pick(['@alice', '@bob', '@carol', '@dave', '@eve']),
-    date: `${pick(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])} ${rng(1, 28)}`,
-    desc: `${pick(['Integration', 'Unit', 'E2E'])} test failed in ${s} — ${pick(['config mismatch', 'race condition', 'timeout', 'resource leak'])}`,
-    outcome: pick(['Incident', 'Near Miss']),
-    match: rng(72, 98),
-    files: rng(3, 18),
-    risk: pick(['critical', 'high', 'medium']),
-  }))
-
-  const incidents = svc.slice(0, 3).map((s, i) => ({
-    title: `${pick(['Production outage', 'Degraded performance', 'Partial outage'])} — ${s} ${pick(['down', 'degraded', 'unavailable'])} ${rng(5, 60)}min`,
-    date: `${pick(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])} ${rng(1, 28)}`,
-    cause: pick(['Missing configuration', 'Resource exhaustion', 'Race condition', 'Deployment regression']),
-    impact: `${pick(['All', 'Partial', 'Critical'])} ${pick(['users', 'transactions', 'requests'])} affected for ${rng(15, 180)}min`,
-    duration: `${rng(15, 180)}min`,
-    rootCause: pick(['Unbounded resource allocation', 'Missing error handling', 'Configuration drift', 'Capacity under-provisioning']),
-    services: [s, pick(svc.filter(x => x !== s))].filter(Boolean),
-    severity: pick(['critical', 'high', 'medium']),
-    lessons: pick(['Add circuit breaker to all external calls', 'Bound all unbounded resources', 'Add integration testing for failure modes']),
-  }))
-
-  const recommendations = svc.slice(0, 5).map((s, i) => ({
-    action: pick([
-      `Add circuit breaker pattern to all ${s} external calls`,
-      `Implement bounded retry queues with backpressure for ${s}`,
-      `Add comprehensive ${s} integration tests with fault injection`,
-      `Create deployment runbook with rollback procedures for ${s}`,
-      `Add ${s}-related metrics to operations dashboard with alert thresholds`,
-      `Implement distributed tracing across ${s} for end-to-end visibility`,
-      `Deploy canary analysis pipeline for all ${s} changes`,
-    ]),
-    priority: pick(['P0', 'P0', 'P1', 'P1', 'P2']),
-    impact: pick(['Prevents cascading failures', 'Reduces MTTR by 60%', 'Improves detection time by 80%', 'Eliminates class of incidents']),
-    effort: `${rng(2, 13)} story points`,
-    owner: pick(['@alice', '@bob', '@carol', '@dave']),
-  }))
-
-  const propagation = svc.slice(0, 5).map((_, i) => ({
-    from: svc[i % svc.length],
-    to: svc[(i + 1) % svc.length],
-    risk: rng(45, 95),
-  }))
-
-  const evidenceTimeline = [
-    { date: '2024-05-28', type: 'Code Change', description: `${pick(['Retry logic', 'Auth handler', 'Query optimization'])} added to ${svc[0]} without ${pick(['circuit breaker', 'rate limiting', 'error handling'])}`, source: `GitLab MR #${rng(100, 999)} — ${pick(['@alice', '@bob'])}`, relevance: rng(70, 95) },
-    { date: '2024-06-01', type: 'Incident', description: `${svc[0]} ${pick(['outage', 'degradation', 'failure'])} lasting ${rng(15, 60)} minutes in production`, source: `PagerDuty #INC-${rng(1000, 9999)} — ${pick(['P0', 'P1'])}`, relevance: rng(85, 98) },
-    { date: '2024-06-10', type: 'Config Change', description: `${pick(['Retry queue limits', 'Token TTL', 'Pool size'])} adjusted in ${svc[1]}`, source: `GitLab MR #${rng(100, 999)} — ${pick(['@carol', '@dave'])}`, relevance: rng(65, 85) },
-    { date: '2024-06-15', type: 'Alert', description: `${svc[2]} memory threshold breach detected at ${rng(85, 98)}% heap usage`, source: `${pick(['Datadog', 'Prometheus', 'Grafana'])} Alert`, relevance: rng(75, 92) },
-  ]
-
-  return {
-    caseId: id,
-    status: 'ACTIVE',
-    title: qTitle ? `${ucFirst(qTitle)} — ${profile.title}` : profile.title,
-    riskScore: profile.riskScore + rng(-5, 5),
-    confidence: profile.confidence + rng(-3, 3),
-    keyFindings: profile.failureModes.length,
-    recommendationsCount: recommendations.length,
-    totalFailures: profile.totalFailures,
-    criticalFailures: profile.criticalFailures,
-    highFailures: profile.highFailures,
-    mediumFailures: profile.mediumFailures,
-    lowFailures: profile.lowFailures,
-    mrsAnalyzed: 847, incidentsPrevented: rng(80, 160),
-    impactScore: profile.riskScore + rng(-5, 5),
-    riskTimeline: [
-      { phase: 'Design Phase', risk: rng(15, 35), color: 'green' },
-      { phase: 'Implementation', risk: rng(45, 70), color: 'yellow' },
-      { phase: 'Testing', risk: rng(60, 80), color: 'orange' },
-      { phase: 'Deployment', risk: rng(70, 92), color: 'red' },
-      { phase: 'Post-Release', risk: rng(40, 65), color: 'yellow' },
-    ],
-    failureModes: profile.failureModes,
-    mrs,
-    incidents,
-    deps: profile.deps,
-    recommendations,
-    rootCauses: profile.failureModes.slice(0, 3).map(fm => ({
-      title: fm.mode.slice(0, 40),
-      cause: fm.detection,
-      impact: fm.impact,
-      duration: `${rng(15, 180)}min`,
-      services: [pick(svc), pick(svc)].filter((x, i, a) => a.indexOf(x) === i),
-      lesson: fm.mitigation,
-    })),
-    rootCauseChains: profile.rootCauseChains,
-    propagation,
-    mitigations: [
-      { phase: 'Immediate (24h)', actions: [`Roll back ${svc[0]} config to previous stable version`, `Restart all ${svc[0]} pods with resource limits`, 'Add circuit breaker threshold override', 'Enable verbose logging for monitoring'], owner: '@bob', timeline: '24 hours' },
-      { phase: 'Short-Term (Next Sprint)', actions: [`Implement bounded queues with configurable max depth in ${svc[0]}`, `Add health check endpoint for ${svc[0]}`, 'Deploy circuit breaker with half-open state', 'Create runbook for recovery procedures'], owner: '@alice', timeline: '2 weeks' },
-      { phase: 'Long-Term (Architectural)', actions: ['Migrate to event-driven architecture with dead letter queues', 'Implement chaos engineering pipeline with fault injection', 'Add distributed tracing across all services', 'Build automated canary analysis pipeline'], owner: '@carol', timeline: '3 months' },
-    ],
-    verdict: { risk: profile.riskScore >= 80 ? 'High' : 'Medium', confidence: profile.confidence, findings: [`${profile.failureModes[0].mode} is primary root cause — ${rng(85, 95)}% correlation confidence across ${incidents.length} incidents`, `${incidents.length} distinct incidents affecting ${rng(50000, 150000).toLocaleString()}+ transactions`, 'Immediate remediation required before next deployment cycle'], action: pick(['Deploy circuit breaker fix and bounded queues immediately.', 'Implement token rotation lock and cache warming.', 'Add query optimization and connection pool management.']) },
-    evidenceTimeline,
-    correlations: incidents.map((inc, i) => ({
-      incident: inc.title.slice(0, 30),
-      score: rng(65, 95),
-      commonCause: pick(['Missing circuit breaker', 'Resource exhaustion', 'Configuration gap', 'Race condition']),
-      services: inc.services,
-      gap: `${rng(1, 7)} days`,
-    })),
-    heatmap: [
-      { phase: 'Design', critical: rng(10, 20), high: rng(20, 30), medium: rng(8, 15), low: rng(3, 8) },
-      { phase: 'Implementation', critical: rng(25, 35), high: rng(35, 50), medium: rng(15, 25), low: rng(8, 15) },
-      { phase: 'Testing', critical: rng(40, 60), high: rng(50, 65), medium: rng(25, 40), low: rng(10, 20) },
-      { phase: 'Deployment', critical: rng(65, 85), high: rng(60, 75), medium: rng(35, 50), low: rng(20, 30) },
-      { phase: 'Post-Release', critical: rng(35, 55), high: rng(40, 55), medium: rng(25, 35), low: rng(15, 25) },
-    ],
-    blastRadius: {
-      center: `${svc[0]} Change`,
-      depth: '3 levels deep',
-      totalServices: svc.length,
-      zones: svc.slice(0, 4).map((s, i) => ({
-        name: s,
-        radius: i + 1,
-        risk: rng(40, 90),
-        critical: i < 2,
-        files: rng(3, 15),
-        status: pick(['Degraded', 'At Risk', 'Stable']),
-      })),
-    },
-    investigationTimeline: [
-      { date: '2024-05-28', type: 'Detection', title: 'Monitoring alert triggered', description: `${pick(['Error rate', 'Latency', 'Memory'])} spike detected on ${svc[0]} — PagerDuty alert fired`, team: 'Platform', duration: '2min' },
-      { date: '2024-05-30', type: 'Analysis', title: 'Root cause identification', description: `Engineering team traced to ${profile.failureModes[0].mode}`, team: '@alice, @bob', duration: '45min' },
-      { date: '2024-06-01', type: 'Escalation', title: 'Incident escalated', description: 'VP Engineering notified, cross-team incident bridge established', team: 'SRE, Platform, Security', duration: '15min' },
-      { date: '2024-06-10', type: 'Resolution', title: 'Hotfix deployed to production', description: `Fix pushed to all ${svc[0]} instances with canary deployment`, team: '@alice, Platform', duration: '30min' },
-      { date: '2024-06-15', type: 'Review', title: 'Post-mortem analysis complete', description: `Full RCA with ${profile.failureModes.length} failure modes identified`, team: 'Engineering, SRE', duration: '2hr' },
-      { date: '2024-06-22', type: 'Closed', title: 'Case closed', description: `${recommendations.length} recommendations pushed to backlog with P0/P1 prioritization`, team: 'Platform', duration: '1hr' },
-    ],
-    liveFeed: [
-      { time: '14:23:15', type: 'alert', message: `${pick(['Error rate', 'Memory', 'Latency'])} spike >${rng(3, 8)}% on ${svc[0]} — automated rollback triggered`, severity: 'critical' },
-      { time: '14:22:48', type: 'event', message: `${pick(['Circuit breaker', 'Rate limiter', 'Connection pool'])} opened on ${svc[0]} after ${rng(5, 20)} consecutive failures`, severity: 'high' },
-      { time: '14:22:12', type: 'investigation', message: `AI analysis completed — ${profile.failureModes.length} failure modes identified across ${svc.length} services with ${profile.confidence}% confidence`, severity: 'info' },
-      { time: '14:21:30', type: 'risk', message: `Risk propagation probability updated: ${svc[0]} -> ${svc[1]} now at ${rng(70, 95)}% likelihood`, severity: 'warning' },
-      { time: '14:20:55', type: 'alert', message: `${svc[1]} memory threshold at ${rng(85, 98)}% — potential OOM risk detected`, severity: 'high' },
-      { time: '14:20:10', type: 'event', message: `New correlation found: MR #${rng(100, 999)} matches ${rng(85, 98)}% with current incident signature`, severity: 'info' },
-      { time: '14:19:25', type: 'investigation', message: `Blast radius analysis expanded — ${svc[3]} added to impact zone`, severity: 'warning' },
-      { time: '14:18:40', type: 'risk', message: `${svc[4]} identified as downstream risk — propagation likelihood ${rng(60, 85)}%`, severity: 'medium' },
-      { time: '14:18:00', type: 'event', message: 'Incident timeline updated — forensic artifacts collected for evidence chain correlation', severity: 'info' },
-      { time: '14:17:20', type: 'alert', message: `${svc[2]} utilization at ${rng(75, 92)}% — approaching critical threshold`, severity: 'medium' },
-    ],
-    decisions: [
-      { action: 'Deploy Now', confidence: rng(85, 95), reasoning: `Fix ready for production with automated rollback protection — ${rng(85, 95)}% confidence`, team: '@alice', urgency: 'immediate' },
-      { action: 'Monitor Closely', confidence: rng(75, 90), reasoning: 'System within safe limits — observe before escalation', team: '@bob', urgency: 'short' },
-      { action: 'Rollback Changes', confidence: rng(70, 85), reasoning: 'Revert recent MRs to restore stable state', team: '@carol', urgency: 'medium' },
-      { action: 'Investigate Further', confidence: rng(85, 96), reasoning: 'Additional correlation data needed for deep-dive', team: '@dave', urgency: 'long' },
-    ],
-    riskReduction: [
-      { phase: 'Immediate', reduction: rng(55, 70) },
-      { phase: 'Short-Term', reduction: rng(75, 90) },
-      { phase: 'Long-Term', reduction: rng(88, 98) },
-    ],
-    recommendationConfidence: recommendations.map(() => rng(78, 96)),
-    keyFindingsData: profile.failureModes.slice(0, 3).map((fm, i) => ({
-      id: `F-00${i + 1}`,
-      title: fm.severity === 'critical' ? 'Critical' : 'High',
-      description: `${fm.mode} — ${fm.impact}`,
-      severity: fm.severity,
-    })),
-    affectedSystems: svc.slice(0, 4).map((s, i) => ({
-      name: s, impact: i < 2 ? 'Critical' : 'High', status: i < 2 ? 'Degraded' : 'At Risk', rps: String(rng(100, 1500)),
-    })),
-    whatIfSimulation: {
-      currentPath: { riskReduction: rng(18, 30), costSavings: 0, successProbability: rng(40, 55), recoveryTime: `${rng(30, 60)}min` },
-      recommendedPath: { riskReduction: rng(75, 88), costSavings: rng(200000, 500000), successProbability: rng(88, 96), recoveryTime: `${rng(8, 18)}min` },
-      scenarios: [
-        { name: `Without fix`, risk: rng(75, 92), impact: `$${rng(200, 500)}K loss`, timeToRecover: `${rng(30, 60)}min`, confidence: rng(85, 95) },
-        { name: 'With circuit breaker', risk: rng(20, 35), impact: `$${rng(20, 50)}K loss`, timeToRecover: `${rng(8, 18)}min`, confidence: rng(90, 97) },
-        { name: 'With bounded queues', risk: rng(28, 42), impact: `$${rng(40, 70)}K loss`, timeToRecover: `${rng(14, 25)}min`, confidence: rng(85, 94) },
-        { name: 'Full architecture fix', risk: rng(8, 18), impact: `$${rng(5, 15)}K loss`, timeToRecover: `${rng(3, 8)}min`, confidence: rng(82, 92) },
-      ],
-      metrics: { riskReduction: rng(65, 80), costSavings: rng(250000, 450000), successBoost: rng(42, 55), timeReduction: rng(65, 78) },
-    },
-    forecast: {
-      predictions: [
-        { period: '24 hours', risk: rng(18, 30), confidence: rng(88, 96), trend: 'down', description: `Immediate fix stabilizes ${svc[0]}. Predicted error rate drops from ${(rng(3, 6) / 10).toFixed(1)}% to ${(rng(1, 3) / 10).toFixed(1)}%.` },
-        { period: '7 days', risk: rng(28, 42), confidence: rng(82, 92), trend: 'stable', description: `Bounded resources prevent cascading failures. Predicted MTTR reduces from ${rng(30, 60)}min to ${rng(8, 18)}min.` },
-        { period: '30 days', risk: rng(14, 25), confidence: rng(78, 88), trend: 'down', description: `Complete architectural remediation reduces incident probability by ${rng(72, 88)}%. Predicted cost avoidance: $${rng(250, 500)}K.` },
-      ],
-      trendData: [
-        { month: 'Jan', incidents: rng(2, 5), mttr: rng(30, 45) },
-        { month: 'Feb', incidents: rng(2, 5), mttr: rng(35, 50) },
-        { month: 'Mar', incidents: rng(3, 6), mttr: rng(40, 60) },
-        { month: 'Apr', incidents: rng(4, 8), mttr: rng(45, 65) },
-        { month: 'May', incidents: rng(4, 7), mttr: rng(35, 55) },
-        { month: 'Jun', incidents: rng(1, 4), mttr: rng(20, 35) },
-      ],
-      riskByService: svc.slice(0, 4).map(s => ({
-        service: s,
-        currentRisk: rng(55, 92),
-        mitigatedRisk: rng(10, 28),
-        improvement: rng(60, 85),
-      })),
-    },
-    similarIncidents: [
-      { id: `INC-${rng(2023, 2024)}-${rng(100, 999)}`, date: `${pick(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])} ${rng(2023, 2024)}`, title: `${pick(['Retry storm', 'Auth failure', 'DB outage', 'Billing delay'])} caused ${pick(['payment outage', 'session loss', 'service degradation', 'invoice delay'])}`, similarity: rng(65, 96), outcome: 'Resolved', fixApplied: pick(['Added circuit breaker with half-open state', 'Implemented distributed locking', 'Added connection pooling limits', 'Deployed async processing pipeline']), services: [pick(svc), pick(svc)].filter((x, i, a) => a.indexOf(x) === i), duration: `${rng(20, 180)}min` },
-      { id: `INC-${rng(2023, 2024)}-${rng(100, 999)}`, date: `${pick(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])} ${rng(2023, 2024)}`, title: `${pick(['Queue overflow', 'Token expiration', 'Connection pool exhaustion', 'PDF generation OOM'])} in ${pick(['billing', 'auth', 'database', 'invoice'])} pipeline`, similarity: rng(60, 90), outcome: 'Resolved', fixApplied: pick(['Bounded queue with backpressure', 'Token rotation with distributed mutex', 'Per-service connection limits', 'Streaming PDF generation']), services: [pick(svc), pick(svc)].filter((x, i, a) => a.indexOf(x) === i), duration: `${rng(30, 240)}min` },
-      { id: `INC-${rng(2023, 2024)}-${rng(100, 999)}`, date: `${pick(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])} ${rng(2023, 2024)}`, title: `${pick(['Memory leak', 'Cache stampede', 'Lock contention', 'Timeout cascade'])} causing ${pick(['worker crash', 'mass re-auth', 'query backlog', 'service timeout'])}`, similarity: rng(55, 85), outcome: 'Resolved', fixApplied: pick(['Memory limits and leak detection', 'Cache-aside with background refresh', 'Distributed lock with retry', 'Timeout configs with load testing']), services: [pick(svc)], duration: `${rng(45, 360)}min` },
-    ],
-    evidenceItems: [
-      { title: `${pick(['Error Rate', 'Latency', 'Memory'])} Spike`, type: 'Metric', value: `${(rng(2, 8) / 10).toFixed(1)}%`, timeframe: '14:15 — 14:45', source: `${pick(['Datadog APM', 'Prometheus', 'Grafana'])}`, critical: true },
-      { title: 'Resource Depth', type: 'Log', value: `${rng(8000, 15000).toLocaleString()}`, timeframe: '14:18:22', source: `${pick(['Worker Logs', 'Application Logs', 'System Logs'])}`, critical: true },
-      { title: 'CPU Utilization', type: 'Metric', value: `${rng(85, 99)}%`, timeframe: '14:20 — 14:45', source: 'K8s Metrics', critical: false },
-      { title: 'Memory Pressure', type: 'Alert', value: `${rng(85, 98)}%`, timeframe: '14:22:15', source: `${pick(['PagerDuty', 'Datadog', 'OpsGenie'])}`, critical: true },
-      { title: 'Error Correlation', type: 'Signal', value: `${(rng(80, 98) / 100).toFixed(2)}`, timeframe: 'Rolling 1hr', source: 'AI Engine', critical: false },
-      { title: 'Transaction Failure', type: 'Event', value: `${rng(800, 2000)}`, timeframe: '14:15 — 15:00', source: `${svc[0]}`, critical: true },
-    ],
-  }
+const timelineBadgeColors = {
+  Detection: 'bg-sky-500/10 text-sky-400',
+  Analysis: 'bg-purple-500/10 text-purple-400',
+  Escalation: 'bg-orange-500/10 text-orange-400',
+  Resolution: 'bg-green-500/10 text-green-400',
+  Review: 'bg-yellow-500/10 text-yellow-400',
+  Closed: 'bg-slate-500/10 text-slate-400',
+}
+const decisionGlows = {
+  'Deploy Now': 'shadow-[0_0_15px_rgba(34,197,94,0.15)] border-green-500/20',
+  'Monitor Closely': 'shadow-[0_0_15px_rgba(245,158,11,0.15)] border-amber-500/20',
+  'Rollback Changes': 'shadow-[0_0_15px_rgba(249,115,22,0.15)] border-orange-500/20',
+  'Investigate Further': 'shadow-[0_0_15px_rgba(59,130,246,0.15)] border-blue-500/20',
+}
+const decisionConfidenceColors = {
+  'Deploy Now': 'text-green-400',
+  'Monitor Closely': 'text-amber-400',
+  'Rollback Changes': 'text-orange-400',
+  'Investigate Further': 'text-blue-400',
+}
+const decisionButtons = {
+  'Deploy Now': 'bg-green-600 hover:bg-green-500',
+  'Monitor Closely': 'bg-amber-600 hover:bg-amber-500',
+  'Rollback Changes': 'bg-orange-600 hover:bg-orange-500',
+  'Investigate Further': 'bg-blue-600 hover:bg-blue-500',
+}
+const feedTypeStyles = {
+  alert: 'border-l-red-500 bg-red-500/[0.02]',
+  event: 'border-l-cyan-500 bg-cyan-500/[0.02]',
+  investigation: 'border-l-blue-500 bg-blue-500/[0.02]',
+  risk: 'border-l-yellow-500 bg-yellow-500/[0.02]',
 }
 
 const investigationData = {
@@ -643,120 +368,464 @@ function AnimatedBar({ value, height = 'h-1.5', color = 'bg-cyan-500' }) {
   )
 }
 
+const PROFILES = {
+  payment: {
+    tag: 'payment',
+    title: 'Payment Pipeline Failure — Forensic Analysis of Retry Queue Cascade & Circuit Breaker Gap',
+    services: ['Payment Service', 'API Gateway', 'Billing Service', 'Auth Service', 'Database', 'Redis Cache'],
+    riskScore: 87, confidence: 94, totalFailures: 8, criticalFailures: 2, highFailures: 3, mediumFailures: 2, lowFailures: 1,
+    mrsAnalyzed: 847, incidentsPrevented: 124,
+    deps: [
+      { service: 'Payment Service', deps: ['Auth Service', 'Database', 'Redis Cache'], risk: 87, critical: true },
+      { service: 'Billing Service', deps: ['Auth Service', 'Redis Cache', 'Payment Service'], risk: 65, critical: false },
+      { service: 'API Gateway', deps: ['Payment Service', 'Auth Service'], risk: 72, critical: false },
+    ],
+    failureModes: [
+      { mode: 'Retry queue overflow causes cascading failure', severity: 'critical', probability: 'High', impact: 'All payment flows blocked — 45min P0 outage', detection: 'Monitoring alert after 5 min of degraded throughput', mitigation: 'Add bounded retry queues with backpressure mechanism' },
+      { mode: 'Circuit breaker misconfiguration in payment worker', severity: 'critical', probability: 'Medium', impact: 'Silent failures cascade to Billing service', detection: 'Support tickets from customers reporting failed transactions', mitigation: 'Add integration tests with fault injection for circuit breaker states' },
+      { mode: 'Unbounded retry queue in billing worker', severity: 'high', probability: 'High', impact: 'Memory exhaustion under sustained load', detection: 'Container OOM kill alerts in K8s', mitigation: 'Set max retry queue depth with overflow dead-letter exchange' },
+    ],
+    rootCauseChains: [
+      { title: 'Circuit Breaker Cascade', chain: ['No backpressure in retry loop', 'Queue overflow across 3 services', 'P0 Outage — full pipeline blocked'], descriptions: ['Payment retry loop calls downstream without circuit breaker — every failure triggers infinite retries', 'Retry queue grows unbounded across Payment, Billing, and Gateway exhausting pod memory', 'Complete payment pipeline blockage — 45 minute P0 outage affecting 12K transactions'], confidences: [92, 87, 95], evidence: [12, 8, 15] }
+    ],
+    affectedSystems: [
+      { name: 'Payment Service', impact: 'Critical', status: 'Degraded', rps: '450' },
+      { name: 'Billing Service', impact: 'High', status: 'At Risk', rps: '120' },
+      { name: 'API Gateway', impact: 'High', status: 'Degraded', rps: '1200' },
+      { name: 'Notification Service', impact: 'Medium', status: 'Stable', rps: '300' },
+    ],
+    keyFindingsData: [
+      { id: 'F-001', title: 'Missing Circuit Breaker', description: 'Payment retry loop lacks any circuit breaker pattern — all failures retry infinitely causing cascading collapse across downstream services', severity: 'critical' },
+      { id: 'F-002', title: 'Unbounded Retry Queue', description: 'Billing worker retry queue has no depth limit — memory exhaustion triggered under sustained load during peak hours', severity: 'high' },
+      { id: 'F-003', title: 'No Idempotency Keys', description: 'Webhook endpoints lack idempotency validation — duplicate events delivered during retry storms causing data integrity issues', severity: 'high' },
+    ],
+    similarIncidents: [
+      { id: 'INC-2023-0412', date: 'Dec 2023', title: 'Retry storm caused payment outage', similarity: 94, outcome: 'Resolved', fixApplied: 'Added circuit breaker with half-open state', services: ['Payment', 'Gateway'], duration: '55min' },
+      { id: 'INC-2024-0215', date: 'Feb 2024', title: 'Queue overflow in billing pipeline', similarity: 88, outcome: 'Resolved', fixApplied: 'Bounded retry queue to 1000 max with backpressure', services: ['Billing'], duration: '3hr' },
+      { id: 'INC-2024-0510', date: 'May 2024', title: 'Database connection pool exhaustion', similarity: 65, outcome: 'Resolved', fixApplied: 'Connection per-service limits configured', services: ['Database', 'Payment', 'Billing'], duration: '45min' },
+    ],
+    evidenceItems: [
+      { title: 'Error Rate Spike', type: 'Metric', value: '4.2%', timeframe: '14:15 - 14:45', source: 'Datadog APM', critical: true },
+      { title: 'Retry Queue Depth', type: 'Log', value: '10,482', timeframe: '14:18:22', source: 'Worker Logs', critical: true },
+      { title: 'CPU Utilization', type: 'Metric', value: '98%', timeframe: '14:20 - 14:45', source: 'K8s Metrics', critical: false },
+      { title: 'Memory Pressure', type: 'Alert', value: '92%', timeframe: '14:22:15', source: 'PagerDuty', critical: true },
+      { title: 'Error Correlation', type: 'Signal', value: '0.94', timeframe: 'Rolling 1hr', source: 'AI Engine', critical: false },
+      { title: 'Transaction Failure', type: 'Event', value: '1,247', timeframe: '14:15 - 15:00', source: 'Payment Service', critical: true },
+    ],
+  },
+  auth: {
+    tag: 'auth',
+    title: 'OAuth 2.0 SSO Integration Failure — Token Expiry Cascade & Session Store Outage',
+    services: ['Auth Service', 'Identity Provider', 'Session Store', 'API Gateway', 'User Service', 'Token Cache'],
+    riskScore: 82, confidence: 91, totalFailures: 7, criticalFailures: 1, highFailures: 3, mediumFailures: 2, lowFailures: 1,
+    mrsAnalyzed: 623, incidentsPrevented: 89,
+    deps: [
+      { service: 'Auth Service', deps: ['Identity Provider', 'Session Store', 'Token Cache'], risk: 82, critical: true },
+      { service: 'API Gateway', deps: ['Auth Service', 'User Service'], risk: 70, critical: false },
+      { service: 'User Service', deps: ['Session Store'], risk: 55, critical: false },
+    ],
+    failureModes: [
+      { mode: 'OAuth token expiry causes cascading re-authentication', severity: 'critical', probability: 'High', impact: 'All SSO sessions invalidated — 15K users forced to re-login', detection: 'Auth error rate spike in IdP metrics', mitigation: 'Implement token refresh grace period with sliding window expiration' },
+      { mode: 'Session store replication lag under load', severity: 'high', probability: 'Medium', impact: 'Users see intermittent 401 errors during peak hours', detection: 'Redis replication delay alerts', mitigation: 'Add read-replica fallback with local session cache' },
+      { mode: 'JWT signing key rotation failure', severity: 'medium', probability: 'Low', impact: 'Some services reject valid tokens after key rotation', detection: 'Service-to-service 403 errors', mitigation: 'Implement key rotation with overlap window and JWKS endpoint caching' },
+    ],
+    rootCauseChains: [
+      { title: 'Token Cascade Failure', chain: ['Short-lived access tokens without refresh buffer', 'Mass token expiry triggers re-auth storm', 'Session store overwhelmed — SSO outage'], descriptions: ['OAuth access tokens configured with 15min expiry but no grace period for concurrent refresh', 'All 15K active sessions expired simultaneously causing tsunami of re-authentication requests to IdP', 'Session store (Redis) connection pool exhausted under 8K req/s auth load — cascading SSO failure'], confidences: [94, 89, 92], evidence: [14, 7, 11] }
+    ],
+    affectedSystems: [
+      { name: 'Auth Service', impact: 'Critical', status: 'Degraded', rps: '850' },
+      { name: 'Identity Provider', impact: 'High', status: 'At Risk', rps: '320' },
+      { name: 'Session Store', impact: 'High', status: 'Degraded', rps: '2400' },
+      { name: 'API Gateway', impact: 'Medium', status: 'Stable', rps: '1800' },
+    ],
+    keyFindingsData: [
+      { id: 'F-001', title: 'No Token Refresh Grace Period', description: 'Access tokens expire with zero overlap — all concurrent sessions force re-auth at exactly the same moment', severity: 'critical' },
+      { id: 'F-002', title: 'Session Store Single Point of Failure', description: 'Single Redis cluster handles all session state without read replicas or local caching fallback', severity: 'high' },
+      { id: 'F-003', title: 'JWKS Endpoint Uncached', description: 'Every service fetches JWKS keys on every request — 3K req/s hitting IdP for public keys', severity: 'medium' },
+    ],
+    similarIncidents: [
+      { id: 'INC-2024-0115', date: 'Jan 2024', title: 'SSO outage caused by token storm', similarity: 92, outcome: 'Resolved', fixApplied: 'Added token refresh grace period + rate limiting on IdP', services: ['Auth', 'IdP'], duration: '35min' },
+      { id: 'INC-2024-0308', date: 'Mar 2024', title: 'Session store Redis cluster meltdown', similarity: 85, outcome: 'Resolved', fixApplied: 'Redis cluster resized with read replicas deployed', services: ['Session Store'], duration: '2hr' },
+    ],
+    evidenceItems: [
+      { title: 'Auth Error Rate', type: 'Metric', value: '8.5%', timeframe: '10:30 - 11:00', source: 'Datadog APM', critical: true },
+      { title: 'Session Store CPU', type: 'Metric', value: '97%', timeframe: '10:35 - 11:00', source: 'K8s Metrics', critical: true },
+      { title: 'IdP Requests/s', type: 'Metric', value: '8,200', timeframe: '10:32:15', source: 'IdP Dashboard', critical: true },
+      { title: 'JWT Validation Errors', type: 'Log', value: '12,450', timeframe: '10:30 - 11:00', source: 'Gateway Logs', critical: false },
+      { title: 'Token Refresh Count', type: 'Signal', value: '15,000+', timeframe: '10:31 - 10:35', source: 'AI Engine', critical: false },
+      { title: 'User Login Failures', type: 'Event', value: '3,200', timeframe: '10:30 - 10:45', source: 'User Service', critical: true },
+    ],
+  },
+  database: {
+    tag: 'database',
+    title: 'Database Connection Pool Exhaustion — Connection Leak & Migration Lock Contention',
+    services: ['Database', 'Connection Pooler', 'Primary DB', 'Read Replica', 'Migration Runner', 'Cache Layer'],
+    riskScore: 85, confidence: 93, totalFailures: 9, criticalFailures: 2, highFailures: 4, mediumFailures: 2, lowFailures: 1,
+    mrsAnalyzed: 1050, incidentsPrevented: 67,
+    deps: [
+      { service: 'Database', deps: ['Connection Pooler', 'Primary DB'], risk: 85, critical: true },
+      { service: 'Connection Pooler', deps: ['Primary DB', 'Read Replica'], risk: 78, critical: true },
+      { service: 'Migration Runner', deps: ['Primary DB'], risk: 60, critical: false },
+    ],
+    failureModes: [
+      { mode: 'Connection leak from long-running queries', severity: 'critical', probability: 'High', impact: 'Connection pool exhausted — all services unable to connect to database', detection: 'Connection pool utilization alert at 98%', mitigation: 'Set statement timeout and connection max lifetime with query monitoring' },
+      { mode: 'Migration lock contention during deployment', severity: 'high', probability: 'Medium', impact: 'Schema migration blocks all write operations for 18 minutes', detection: 'Migration stuck at "acquiring exclusive lock" for 5min+', mitigation: 'Use online schema change tools (gh-ost) with lock wait timeout' },
+      { mode: 'Read replica lag exceeds tolerance', severity: 'medium', probability: 'Medium', impact: 'Stale data served to reporting dashboards', detection: 'Replication lag monitoring alert >30s', mitigation: 'Increase replica instance size and tune replication parameters' },
+    ],
+    rootCauseChains: [
+      { title: 'Connection Pool Cascade', chain: ['Long-running query holds connection for 12min', 'Pool exhaustion blocks new connections', 'All downstream services fail with connection timeout'], descriptions: ['A reporting query with missing index scanned 50M rows, holding the connection for 12+ minutes', 'Connection pool (max 100) fully occupied — every new request from all services fails to get a connection', 'Payment, Auth, Billing, and Notification services all return 503 — cascading multi-service failure'], confidences: [96, 91, 93], evidence: [13, 9, 14] }
+    ],
+    affectedSystems: [
+      { name: 'Database', impact: 'Critical', status: 'Degraded', rps: '3200' },
+      { name: 'Connection Pooler', impact: 'High', status: 'At Risk', rps: '1200' },
+      { name: 'Payment Service', impact: 'High', status: 'Downstream', rps: '450' },
+      { name: 'Auth Service', impact: 'Medium', status: 'Downstream', rps: '850' },
+    ],
+    keyFindingsData: [
+      { id: 'F-001', title: 'Missing Query Index', description: 'reporting_daily_metrics query scans full table (50M rows) — missing composite index causes 12min execution time', severity: 'critical' },
+      { id: 'F-002', title: 'Connection Pool Too Small', description: 'Max pool size of 100 connections insufficient for 15 microservices — no queueing mechanism leads to immediate rejection', severity: 'high' },
+      { id: 'F-003', title: 'No Query Timeout', description: 'No statement_timeout configured — runaway queries hold connections indefinitely with no guardrail', severity: 'high' },
+    ],
+    similarIncidents: [
+      { id: 'INC-2024-0220', date: 'Feb 2024', title: 'Connection pool exhaustion from ORM leak', similarity: 91, outcome: 'Resolved', fixApplied: 'Added connection validation and leak detection in HikariCP', services: ['Database', 'Payment'], duration: '40min' },
+      { id: 'INC-2024-0415', date: 'Apr 2024', title: 'Schema migration lock caused write outage', similarity: 87, outcome: 'Resolved', fixApplied: 'Adopted gh-ost for online schema migrations', services: ['Database', 'Migration Runner'], duration: '2.5hr' },
+    ],
+    evidenceItems: [
+      { title: 'Connection Pool Usage', type: 'Metric', value: '98%', timeframe: '13:45 - 14:30', source: 'DB Dashboard', critical: true },
+      { title: 'Query Execution Time', type: 'Log', value: '12min 18s', timeframe: '13:47:22', source: 'pg_stat_activity', critical: true },
+      { title: 'Service Error Rate', type: 'Metric', value: '12%', timeframe: '13:48 - 14:30', source: 'Datadog', critical: true },
+      { title: 'Lock Wait Time', type: 'Alert', value: '18min', timeframe: '14:00 - 14:18', source: 'PagerDuty', critical: false },
+      { title: 'Replication Lag', type: 'Metric', value: '47s', timeframe: '14:15', source: 'K8s Metrics', critical: false },
+      { title: 'Failed Connections', type: 'Event', value: '3,800', timeframe: '13:50 - 14:30', source: 'Connection Pooler', critical: true },
+    ],
+  },
+  monitoring: {
+    tag: 'monitoring',
+    title: 'Microservices Monitoring Degradation — Prometheus Scrape Timeout & High Cardinality Metrics Cluster Load',
+    services: ['Monitoring Service', 'Prometheus', 'Grafana', 'Alertmanager', 'K8s API Server', 'Metrics Collector'],
+    riskScore: 78, confidence: 92, totalFailures: 7, criticalFailures: 1, highFailures: 3, mediumFailures: 2, lowFailures: 1,
+    mrsAnalyzed: 1100, incidentsPrevented: 156,
+    deps: [
+      { service: 'Monitoring Service', deps: ['Prometheus', 'Grafana'], risk: 78, critical: true },
+      { service: 'Prometheus', deps: ['K8s API Server', 'Metrics Collector'], risk: 85, critical: true },
+      { service: 'Grafana', deps: ['Prometheus'], risk: 50, critical: false },
+    ],
+    failureModes: [
+      { mode: 'High cardinality metrics exhaust Prometheus memory', severity: 'critical', probability: 'High', impact: 'Monitoring platform crash — blind spot for all services', detection: 'Prometheus container restart loop alert', mitigation: 'Apply metric relabeling rules to drop high cardinality labels' },
+      { mode: 'Kubernetes API server rate limit during discovery', severity: 'high', probability: 'Medium', impact: 'Delay in discovering new pods for metrics collection', detection: 'K8s client 429 error rate logs spike', mitigation: 'Increase Prometheus resync interval and cache discovery results' },
+      { mode: 'Grafana dashboard query timeout', severity: 'medium', probability: 'Low', impact: 'Dashboards return no data for ops team during incident', detection: 'Grafana query timeout errors in logs', mitigation: 'Optimize dashboard queries with recording rules and dashboard caching' },
+    ],
+    rootCauseChains: [
+      { title: 'Metric Cardinality Cascade', chain: ['Unbounded label values added to custom metric', 'Prometheus TSDB memory consumption spikes', 'Prometheus OOM crash causing total monitoring blackout'], descriptions: ['Deployment of new microservice version introduced user-id as a metric label', 'Active series count increased from 1M to 15M, exhausting Prometheus pod memory', 'Prometheus crashed repeatedly, leaving operations team blind during incident'], confidences: [95, 90, 94], evidence: [10, 8, 12] }
+    ],
+    affectedSystems: [
+      { name: 'Prometheus', impact: 'Critical', status: 'CrashLoop', rps: 'N/A' },
+      { name: 'Grafana', impact: 'High', status: 'Degraded', rps: '150' },
+      { name: 'Alertmanager', impact: 'High', status: 'Degraded', rps: '80' },
+      { name: 'K8s API Server', impact: 'Medium', status: 'Stable', rps: '450' },
+    ],
+    keyFindingsData: [
+      { id: 'F-001', title: 'High Cardinality Labels', description: 'Custom metric "http_request_duration_ms" includes user_id label — 15M active series created from 1M baseline', severity: 'critical' },
+      { id: 'F-002', title: 'Prometheus Memory Unbounded', description: 'No memory limits or alerting on TSDB series count — Prometheus uses unlimited pod memory until OOM', severity: 'high' },
+      { id: 'F-003', title: 'No Recording Rules', description: 'All dashboards query raw Prometheus data — no aggregation or recording rules to reduce query load', severity: 'medium' },
+    ],
+    similarIncidents: [
+      { id: 'INC-2024-0110', date: 'Jan 2024', title: 'Prometheus OOM from label explosion', similarity: 96, outcome: 'Resolved', fixApplied: 'Applied relabeling rules and increased memory limits', services: ['Prometheus'], duration: '1hr' },
+      { id: 'INC-2024-0420', date: 'Apr 2024', title: 'Grafana dashboards timeout during incident', similarity: 72, outcome: 'Resolved', fixApplied: 'Recording rules created for top-10 dashboard queries', services: ['Grafana', 'Prometheus'], duration: '4hr' },
+    ],
+    evidenceItems: [
+      { title: 'Active Series Count', type: 'Metric', value: '15M', timeframe: 'After deploy', source: 'Prometheus Status', critical: true },
+      { title: 'Prometheus OOM Count', type: 'Event', value: '6 restarts', timeframe: '09:00 - 09:30', source: 'K8s Events', critical: true },
+      { title: 'Memory Utilization', type: 'Metric', value: '2.8GB/3GB', timeframe: 'Pre-crash', source: 'Container Metrics', critical: true },
+      { title: 'Scrape Failures', type: 'Log', value: '34%', timeframe: '09:00 - 09:30', source: 'Prometheus Logs', critical: false },
+      { title: 'Dashboard Errors', type: 'Alert', value: '12 dashboards', timeframe: '09:00 - 10:00', source: 'Grafana', critical: false },
+      { title: 'Alertmanager Silences', type: 'Signal', value: '8', timeframe: 'During outage', source: 'Alertmanager API', critical: false },
+    ],
+  },
+}
+
+const severityColor = {
+  critical: { border: 'border-red-500/30', bg: 'bg-red-500/[0.04]', dot: 'bg-red-500', badge: 'bg-red-500/10 text-red-400 border-red-500/20', text: 'text-red-400', glow: '#ef4444' },
+  high: { border: 'border-orange-500/30', bg: 'bg-orange-500/[0.04]', dot: 'bg-orange-500', badge: 'bg-orange-500/10 text-orange-400 border-orange-500/20', text: 'text-orange-400', glow: '#f97316' },
+  medium: { border: 'border-yellow-500/30', bg: 'bg-yellow-500/[0.04]', dot: 'bg-yellow-500', badge: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', text: 'text-yellow-400', glow: '#eab308' },
+}
+
+function generateMockData(query) {
+  const q = query.toLowerCase()
+  let profile
+  if (q.includes('payment') || q.includes('retry')) profile = PROFILES.payment
+  else if (q.includes('auth') || q.includes('oauth') || q.includes('sso') || q.includes('token') || q.includes('identity')) profile = PROFILES.auth
+  else if (q.includes('database') || q.includes('db') || q.includes('migrat') || q.includes('connection') || q.includes('pool') || q.includes('schema') || q.includes('sql')) profile = PROFILES.database
+  else if (q.includes('monitor') || q.includes('metric') || q.includes('observ') || q.includes('prometheus') || q.includes('grafana') || q.includes('alert')) profile = PROFILES.monitoring
+  else profile = pick([PROFILES.payment, PROFILES.auth, PROFILES.database, PROFILES.monitoring])
+
+  const svc = profile.services
+  const id = `#OV-${new Date().getFullYear()}-${rng(1000, 9999)}`
+  const qTitle = query.length > 50 ? query.slice(0, 47) + '...' : query
+  const rs = rng(-5, 5)
+  const conf = rng(-3, 3)
+
+  return {
+    caseId: id,
+    status: 'ACTIVE',
+    title: qTitle ? `${ucFirst(qTitle)} — ${profile.title}` : profile.title,
+    riskScore: Math.min(100, Math.max(1, profile.riskScore + rs)),
+    confidence: Math.min(100, Math.max(1, profile.confidence + conf)),
+    keyFindings: profile.failureModes.length,
+    recommendationsCount: rng(3, 5),
+    totalFailures: profile.totalFailures + rng(-1, 2),
+    criticalFailures: profile.criticalFailures,
+    highFailures: profile.highFailures + rng(-1, 1),
+    mediumFailures: profile.mediumFailures,
+    lowFailures: profile.lowFailures,
+    mrsAnalyzed: profile.mrsAnalyzed + rng(-50, 50),
+    incidentsPrevented: profile.incidentsPrevented + rng(-10, 10),
+    impactScore: Math.min(100, Math.max(1, profile.riskScore + rs - rng(5, 10))),
+    riskTimeline: [
+      { phase: 'Design Phase', risk: rng(15, 35), color: 'green' },
+      { phase: 'Implementation', risk: rng(45, 70), color: 'yellow' },
+      { phase: 'Testing', risk: rng(60, 80), color: 'orange' },
+      { phase: 'Deployment', risk: Math.min(100, profile.riskScore + rng(-5, 10)), color: 'red' },
+      { phase: 'Post-Release', risk: rng(30, 60), color: 'yellow' },
+    ],
+    failureModes: profile.failureModes,
+    deps: profile.deps,
+    recommendations: [
+      { id: `REC-${rng(100, 999)}`, title: `Apply ${profile.failureModes[0].mitigation}`, impact: profile.failureModes[0].impact, effort: pick(['High', 'Medium', 'Low']), priority: pick(['P0', 'P1']), confidence: rng(80, 98) },
+      { id: `REC-${rng(100, 999)}`, title: `Fix ${profile.failureModes[1].mode.slice(0, 35)}`, impact: profile.failureModes[1].impact, effort: pick(['High', 'Medium']), priority: pick(['P0', 'P1']), confidence: rng(75, 95) },
+      { id: `REC-${rng(100, 999)}`, title: `Add monitoring for ${svc[0]} metrics`, impact: 'Early detection of recurrence', effort: pick(['Low', 'Medium']), priority: 'P2', confidence: rng(85, 98) },
+    ],
+    rootCauses: [
+      { cause: profile.rootCauseChains[0].chain[0], confidence: profile.rootCauseChains[0].confidences[0], recommendation: `Implement ${profile.rootCauseChains[0].chain[0].toLowerCase()} mechanism` },
+      { cause: profile.rootCauseChains[0].chain[1], confidence: profile.rootCauseChains[0].confidences[1], recommendation: `Address ${profile.rootCauseChains[0].chain[1].toLowerCase()}` },
+      { cause: profile.rootCauseChains[0].chain[2], confidence: profile.rootCauseChains[0].confidences[2], recommendation: `Resolve ${profile.rootCauseChains[0].chain[2].toLowerCase()} scenario` },
+    ],
+    rootCauseChains: profile.rootCauseChains,
+    propagation: [
+      { from: svc[0], to: svc[1], risk: rng(75, 92) },
+      { from: svc[1], to: svc[2], risk: rng(55, 78) },
+      { from: svc[0], to: svc[2], risk: rng(60, 85) },
+    ],
+    mitigations: [
+      { phase: 'Immediate (24h)', actions: [`Roll back ${svc[0]} config to previous stable version`, `Apply ${profile.failureModes[0].mitigation}`, 'Enable verbose logging for monitoring'], owner: '@alice', timeline: '24 hours' },
+      { phase: 'Short-Term (Next Sprint)', actions: [`Implement ${profile.failureModes[1].mitigation}`, 'Add health check with saturation metrics', 'Create runbook for recovery procedures'], owner: '@bob', timeline: '2 weeks' },
+      { phase: 'Long-Term (Architectural)', actions: ['Migrate to event-driven architecture with dead letter queues', 'Implement chaos engineering pipeline', 'Build automated canary analysis for all changes'], owner: '@carol', timeline: '3 months' },
+    ],
+    verdict: { risk: profile.riskScore >= 80 ? 'Critical' : profile.riskScore >= 60 ? 'High' : 'Elevated', confidence: profile.confidence, findings: profile.failureModes.map(m => m.mode), action: profile.failureModes[0].mitigation },
+    evidenceTimeline: profile.evidenceItems.map((ev, i) => ({
+      date: `${new Date().getFullYear()}-${String(3 + Math.floor(i / 2)).padStart(2, '0')}-${String(10 + i * 3).padStart(2, '0')}`,
+      type: ev.type === 'Metric' ? 'Alert' : ev.type === 'Log' ? 'Code Change' : ev.type === 'Alert' ? 'Incident' : 'Event',
+      description: ev.title,
+      source: ev.source,
+      relevance: rng(70, 98),
+    })),
+    correlations: [
+      { incident: `${svc[0]} Error Rate`, score: rng(75, 95), commonCause: profile.rootCauseChains[0].chain[0], services: [svc[0], svc[1]], gap: `${rng(1, 5)} days` },
+      { incident: `${svc[1]} Latency Spike`, score: rng(65, 88), commonCause: profile.rootCauseChains[0].chain[1], services: [svc[1], svc[2]], gap: `${rng(2, 7)} days` },
+      { incident: 'Infrastructure Saturation', score: rng(50, 75), commonCause: 'Resource exhaustion', services: [svc[2], svc[3] || svc[0]], gap: `${rng(3, 10)} days` },
+    ],
+    heatmap: [
+      { phase: 'Design', critical: rng(10, 20), high: rng(20, 30), medium: rng(10, 20), low: rng(5, 10) },
+      { phase: 'Implementation', critical: rng(25, 40), high: rng(35, 50), medium: rng(15, 25), low: rng(8, 15) },
+      { phase: 'Testing', critical: rng(45, 60), high: rng(50, 65), medium: rng(25, 40), low: rng(10, 20) },
+      { phase: 'Deployment', critical: rng(65, 85), high: rng(60, 75), medium: rng(35, 50), low: rng(20, 30) },
+      { phase: 'Post-Release', critical: rng(35, 55), high: rng(40, 55), medium: rng(20, 35), low: rng(15, 25) },
+    ],
+    blastRadius: {
+      center: svc[0],
+      depth: `${rng(2, 4)} levels deep`,
+      totalServices: svc.length,
+      zones: svc.slice(1).map((s, i) => ({ name: s, radius: i + 1, risk: rng(40, 85), critical: i < 2, files: rng(3, 15), status: pick(['Degraded', 'At Risk', 'Stable']) })),
+    },
+    investigationTimeline: [
+      { date: `${new Date().getFullYear()}-${String(rng(3, 5)).padStart(2, '0')}-${String(rng(1, 28)).padStart(2, '0')}`, type: 'Detection', title: `Monitoring alert triggered on ${svc[0]}`, description: `Alert fired — ${profile.failureModes[0].detection}`, team: 'Platform', duration: `${rng(2, 10)}min` },
+      { date: `${new Date().getFullYear()}-${String(rng(3, 5)).padStart(2, '0')}-${String(rng(1, 28)).padStart(2, '0')}`, type: 'Analysis', title: `Root cause identified in ${svc[0]}`, description: `Engineering traced issue to ${profile.rootCauseChains[0].chain[0]}`, team: pick(['@alice, @bob', '@carol, @dave']), duration: `${rng(20, 60)}min` },
+      { date: `${new Date().getFullYear()}-${String(rng(4, 6)).padStart(2, '0')}-${String(rng(1, 28)).padStart(2, '0')}`, type: 'Escalation', title: `Incident escalated — ${profile.failureModes[0].impact.slice(0, 40)}`, description: profile.failureModes[0].impact, team: 'SRE, Platform', duration: `${rng(10, 30)}min` },
+      { date: `${new Date().getFullYear()}-${String(rng(4, 6)).padStart(2, '0')}-${String(rng(1, 28)).padStart(2, '0')}`, type: 'Resolution', title: `Hotfix deployed for ${svc[0]}`, description: profile.failureModes[0].mitigation, team: pick(['@alice, Platform', '@bob, SRE']), duration: `${rng(20, 40)}min` },
+      { date: `${new Date().getFullYear()}-${String(rng(5, 7)).padStart(2, '0')}-${String(rng(1, 28)).padStart(2, '0')}`, type: 'Review', title: 'Post-mortem analysis complete', description: `Full RCA with ${profile.failureModes.length} failure modes identified, ${profile.affectedSystems.length} services impacted`, team: 'Engineering, SRE', duration: `${rng(1, 3)}hr` },
+      { date: `${new Date().getFullYear()}-${String(rng(5, 7)).padStart(2, '0')}-${String(rng(1, 28)).padStart(2, '0')}`, type: 'Closed', title: 'Case closed with recommendations', description: `${profile.failureModes.length + 2} recommendations pushed to backlog with P0/P1 prioritization`, team: 'Platform', duration: '1hr' },
+    ],
+    liveFeed: [
+      { time: '14:23:15', type: 'alert', message: `Error rate spike on ${svc[0]} — automated rollback triggered`, severity: 'critical' },
+      { time: '14:22:48', type: 'event', message: `${profile.rootCauseChains[0].chain[0]} detected on ${svc[0]} after ${rng(3, 15)} consecutive failures`, severity: 'high' },
+      { time: '14:22:12', type: 'investigation', message: `AI analysis completed — ${profile.failureModes.length} failure modes identified across ${svc.length} services with ${profile.confidence}% confidence`, severity: 'info' },
+      { time: '14:21:30', type: 'risk', message: `Risk propagation probability: ${svc[0]} -> ${svc[1]} now at ${rng(75, 92)}% likelihood`, severity: 'warning' },
+      { time: '14:20:55', type: 'alert', message: `${svc[1]} resource threshold at ${rng(85, 95)}% — potential ${pick(['OOM', 'crash', 'throttle'])} risk`, severity: 'high' },
+      { time: '14:20:10', type: 'event', message: `New correlation found: pattern matches ${rng(85, 98)}% with current incident signature`, severity: 'info' },
+      { time: '14:19:25', type: 'investigation', message: `Blast radius analysis expanded — ${svc[2]} added to impact zone`, severity: 'warning' },
+      { time: '14:18:40', type: 'risk', message: `${svc[3] || svc[0]} identified as downstream risk — propagation likelihood ${rng(60, 85)}%`, severity: 'medium' },
+      { time: '14:18:00', type: 'event', message: `Incident timeline updated — ${profile.evidenceItems.length} forensic artifacts collected for evidence chain`, severity: 'info' },
+      { time: '14:17:20', type: 'alert', message: `${svc[1]} connection pool utilization at ${rng(80, 95)}% — approaching critical threshold`, severity: 'medium' },
+    ],
+    decisions: [
+      { action: 'Deploy Now', confidence: rng(85, 95), reasoning: `${profile.failureModes[0].mitigation} ready with automated rollback protection — high confidence`, team: pick(['@alice', '@bob']), urgency: 'immediate' },
+      { action: 'Monitor Closely', confidence: rng(75, 88), reasoning: `${svc[1]} still within safe limits — observe for ${rng(1, 4)} hours before escalation`, team: pick(['@bob', '@carol']), urgency: 'short' },
+      { action: 'Rollback Changes', confidence: rng(70, 85), reasoning: `Revert last ${rng(2, 5)} MRs to restore stable state — ${rng(70, 85)}% confidence in regression cause`, team: pick(['@carol', '@dave']), urgency: 'medium' },
+      { action: 'Investigate Further', confidence: rng(88, 96), reasoning: `Additional correlation data needed on ${svc[2]} — deep-dive into metrics and heap dumps`, team: pick(['@dave', '@eve']), urgency: 'long' },
+    ],
+    riskReduction: [
+      { phase: 'Immediate', reduction: rng(40, 65) },
+      { phase: 'Short-Term', reduction: rng(65, 85) },
+      { phase: 'Long-Term', reduction: rng(85, 98) },
+    ],
+    recommendationConfidence: [rng(85, 95), rng(80, 92), rng(75, 90), rng(70, 88), rng(85, 95)],
+    keyFindingsData: profile.keyFindingsData,
+    affectedSystems: profile.affectedSystems,
+    whatIfSimulation: {
+      currentPath: { riskReduction: rng(15, 30), costSavings: 0, successProbability: rng(35, 50), recoveryTime: `${rng(30, 60)}min` },
+      recommendedPath: { riskReduction: rng(70, 88), costSavings: rng(200, 500) * 1000, successProbability: rng(88, 96), recoveryTime: `${rng(8, 20)}min` },
+      scenarios: [
+        { name: pick(['No Action', 'Current State', 'Without Fix']), risk: rng(75, 92), impact: `$${rng(200, 400)}K loss`, timeToRecover: `${rng(30, 60)}min`, confidence: rng(85, 95) },
+        { name: pick(['Recommended Fix', 'With Circuit Breaker', 'Partial Mitigation']), risk: rng(15, 35), impact: `$${rng(15, 55)}K loss`, timeToRecover: `${rng(8, 20)}min`, confidence: rng(88, 96) },
+        { name: 'Full Architecture Remediation', risk: rng(8, 20), impact: `$${rng(5, 15)}K loss`, timeToRecover: `${rng(3, 8)}min`, confidence: rng(82, 92) },
+      ],
+      metrics: { riskReduction: rng(65, 80), costSavings: rng(200, 500) * 1000, successBoost: rng(40, 55), timeReduction: rng(65, 80) }
+    },
+    forecast: {
+      predictions: [
+        { period: '24 hours', risk: rng(15, 30), confidence: rng(88, 96), trend: 'down', description: `${profile.failureModes[0].mitigation} stabilizes ${svc[0]}. Predicted error rate drops from ${rng(3, 6)}% to under 0.5%.` },
+        { period: '7 days', risk: rng(25, 40), confidence: rng(82, 92), trend: 'stable', description: `${profile.failureModes[1]?.mitigation?.slice(0, 45) || 'Mitigations'} prevent cascading failures. MTTR reduces to ${rng(10, 20)}min.` },
+        { period: '30 days', risk: rng(12, 25), confidence: rng(78, 88), trend: 'down', description: `Complete architectural remediation reduces incident probability by ${rng(70, 88)}%. Projected cost avoidance: $${rng(250, 450)}K.` },
+      ],
+      trendData: [
+        { month: 'Jan', incidents: rng(2, 5), mttr: rng(25, 45) },
+        { month: 'Feb', incidents: rng(2, 5), mttr: rng(30, 50) },
+        { month: 'Mar', incidents: rng(3, 6), mttr: rng(35, 55) },
+        { month: 'Apr', incidents: rng(4, 8), mttr: rng(40, 65) },
+        { month: 'May', incidents: rng(3, 7), mttr: rng(35, 55) },
+        { month: 'Jun', incidents: rng(1, 4), mttr: rng(20, 35) },
+      ],
+      riskByService: svc.slice(0, 4).map(s => ({ service: s, currentRisk: rng(50, 90), mitigatedRisk: rng(10, 30), improvement: rng(60, 85) })),
+    },
+    similarIncidents: profile.similarIncidents,
+    evidenceItems: profile.evidenceItems.map((ev, i) => ({
+      ...ev,
+      timeframe: ev.timeframe || `${String(14 + Math.floor(i / 2)).padStart(2, '0')}:${String(15 + (i * 7) % 45).padStart(2, '0')} - ${String(14 + Math.floor(i / 2)).padStart(2, '0')}:${String(15 + (i * 7 + 15) % 45).padStart(2, '0')}`,
+    })),
+    incidents: profile.similarIncidents.slice(0, 3).map((inc, i) => ({
+      title: inc.title,
+      date: inc.date,
+      cause: `Root cause: ${profile.rootCauseChains[0].chain[i] || profile.rootCauseChains[0].chain[0]}`,
+      impact: `Impacted ${inc.services.length} services — ${inc.duration} duration`,
+      duration: inc.duration,
+      services: inc.services,
+      severity: i === 0 ? 'critical' : i === 1 ? 'high' : 'medium',
+      lessons: `Fix applied: ${inc.fixApplied}`,
+    })),
+    mrs: [
+      { id: `MR #${rng(100, 999)}`, author: pick(['@alice', '@bob', '@carol']), date: pick(['May 12', 'Jun 1', 'Apr 20']), desc: `${profile.failureModes[0].mode.slice(0, 50)} — ${pick(['failed integration tests', 'caused production incident', 'review needed'])}`, outcome: pick(['Incident', 'Near Miss', 'Critical']), match: rng(70, 95), files: rng(3, 18), risk: pick(['critical', 'high', 'medium']) },
+      { id: `MR #${rng(100, 999)}`, author: pick(['@bob', '@carol', '@dave']), date: pick(['Jun 15', 'Jul 2', 'May 28']), desc: `${profile.failureModes[1].mode.slice(0, 50)} — ${pick(['regression', 'performance issue', 'config change'])}`, outcome: pick(['Incident', 'Near Miss']), match: rng(65, 92), files: rng(5, 15), risk: pick(['high', 'medium']) },
+      { id: `MR #${rng(100, 999)}`, author: pick(['@alice', '@dave', '@eve']), date: pick(['Apr 20', 'Mar 15', 'Feb 28']), desc: `${profile.failureModes[2]?.mode?.slice(0, 50) || 'Infrastructure change in ' + svc[0]}`, outcome: pick(['Near Miss', 'Resolved']), match: rng(55, 80), files: rng(2, 12), risk: 'medium' },
+      { id: `MR #${rng(100, 999)}`, author: pick(['@carol', '@alice', '@frank']), date: pick(['Jul 5', 'Jun 20', 'May 5']), desc: `Rollback of ${svc[0]} deployment — ${pick(['config error', 'memory leak', 'timeout regression'])}`, outcome: pick(['Incident', 'Resolved']), match: rng(75, 90), files: rng(8, 25), risk: pick(['critical', 'high']) },
+      { id: `MR #${rng(100, 999)}`, author: pick(['@dave', '@bob', '@grace']), date: pick(['Mar 22', 'Feb 10', 'Jan 30']), desc: `${svc[0]} resilience improvement — ${pick(['circuit breaker', 'retry logic', 'timeout handling'])}`, outcome: pick(['Resolved', 'Merged']), match: rng(60, 85), files: rng(10, 30), risk: 'low' },
+    ],
+  }
+}
 
 export default function IntelligenceCenter() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
   const [data, setData] = useState(investigationData)
-  const [expandedFailure, setExpandedFailure] = useState(null)
-  const [expandedChain, setExpandedChain] = useState(null)
-  const [expandedMitigation, setExpandedMitigation] = useState(null)
-  const [selectedEvidence, setSelectedEvidence] = useState(null)
-  const [hoveredDep, setHoveredDep] = useState(null)
   const [showPresets, setShowPresets] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState(-1)
   const [timeAgo, setTimeAgo] = useState('2 min ago')
   const feedRef = useRef(null)
   const [copied, setCopied] = useState(false)
+  const [expandedChain, setExpandedChain] = useState(null)
+  const [selectedEvidence, setSelectedEvidence] = useState(null)
+  const [hoveredDep, setHoveredDep] = useState(null)
+  const [expandedMitigation, setExpandedMitigation] = useState(null)
+  const [expandedFailure, setExpandedFailure] = useState(null)
+  const copyId = () => {
+    if (!data?.caseId) return
+    navigator.clipboard.writeText(data.caseId).catch(() => {})
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+  const presets = ['Payment Service Retry Logic', 'Monitoring Service Cardinality', 'Database Connection Pool']
+  const filtered = presets.filter(p => p.toLowerCase().includes(input.toLowerCase()))
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const mins = Math.floor(Math.random() * 3) + 1
-      setTimeAgo(mins + ' min ago')
-    }, 30000)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    if (!feedRef.current) return
-    const interval = setInterval(() => {
-      feedRef.current.scrollTop = 0
-    }, 6000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const filtered = input.trim() ? presets.filter(p => p.toLowerCase().includes(input.toLowerCase())) : presets
+    if (!loading && data) console.log('[RESULTS_RENDERED]')
+  }, [loading, data])
 
   const investigate = (text) => {
     if (!text.trim()) return
+    console.log('[INVESTIGATION_STARTED]', text)
     setLoading(true)
-    setError(null)
-    setShowPresets(false)
     const result = generateMockData(text)
     setTimeout(() => {
       setData(result)
+      console.log('[STATE_UPDATED]', result)
       setLoading(false)
     }, 800)
   }
 
   const handleKey = (e) => {
-    if (!showPresets || !filtered.length) return
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      const val = (selectedPreset >= 0 && filtered[selectedPreset]) ? filtered[selectedPreset] : input
+      setInput(val)
+      investigate(val)
+      setShowPresets(false)
+    }
+    if (!showPresets) return
     if (e.key === 'ArrowDown') { e.preventDefault(); setSelectedPreset(p => Math.min(p + 1, filtered.length - 1)) }
     if (e.key === 'ArrowUp') { e.preventDefault(); setSelectedPreset(p => Math.max(p - 1, 0)) }
-    if (e.key === 'Enter' && selectedPreset >= 0) { e.preventDefault(); setInput(filtered[selectedPreset]); setShowPresets(false); investigate(filtered[selectedPreset]) }
     if (e.key === 'Escape') setShowPresets(false)
-  }
-
-  useEffect(() => { setSelectedPreset(-1) }, [input])
-
-  const copyId = () => {
-    navigator.clipboard.writeText(data.caseId)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  const feedTypeStyles = {
-    alert: 'border-l-red-500 bg-red-500/[0.03]',
-    event: 'border-l-cyan-500 bg-cyan-500/[0.02]',
-    investigation: 'border-l-blue-500 bg-blue-500/[0.02]',
-    risk: 'border-l-orange-500 bg-orange-500/[0.02]',
-  }
-
-  const decisionGlows = {
-    'Deploy Now': 'shadow-green-500/20 border-green-500/30',
-    'Monitor Closely': 'shadow-amber-500/20 border-amber-500/30',
-    'Rollback Changes': 'shadow-orange-500/20 border-orange-500/30',
-    'Investigate Further': 'shadow-red-500/20 border-red-500/30',
-  }
-
-  const decisionButtons = {
-    'Deploy Now': 'bg-green-600 hover:bg-green-500',
-    'Monitor Closely': 'bg-amber-600 hover:bg-amber-500',
-    'Rollback Changes': 'bg-orange-600 hover:bg-orange-500',
-    'Investigate Further': 'bg-red-600 hover:bg-red-500',
-  }
-
-  const decisionConfidenceColors = {
-    'Deploy Now': 'text-green-400',
-    'Monitor Closely': 'text-amber-400',
-    'Rollback Changes': 'text-orange-400',
-    'Investigate Further': 'text-red-400',
-  }
-
-  const timelineDotColors = {
-    Detection: 'bg-blue-500 border-blue-500/30 shadow-blue-500/30',
-    Analysis: 'bg-cyan-500 border-cyan-500/30 shadow-cyan-500/30',
-    Escalation: 'bg-orange-500 border-orange-500/30 shadow-orange-500/30',
-    Resolution: 'bg-green-500 border-green-500/30 shadow-green-500/30',
-    Review: 'bg-purple-500 border-purple-500/30 shadow-purple-500/30',
-    Closed: 'bg-slate-500 border-slate-500/30 shadow-slate-500/30',
-  }
-
-  const timelineBadgeColors = {
-    Detection: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-    Analysis: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-    Escalation: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-    Resolution: 'bg-green-500/10 text-green-400 border-green-500/20',
-    Review: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-    Closed: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
   }
 
   return (
     <Layout>
-      <motion.div variants={container} initial="hidden" animate="show"           className="space-y-2 pb-4">
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-2 pb-4 overflow-x-hidden px-1 sm:px-0">
 
-        
+        {/* ===== Investigation Query ===== */}
+        <motion.div variants={item} className="glass-card p-2">
+          <div className="flex items-center gap-1.5 mb-2">
+            <div className="flex h-4 w-4 items-center justify-center rounded-md bg-gradient-to-br from-cyan-500/20 to-blue-500/20">
+              <svg className="h-2.5 w-2.5 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+            <span className="text-[9px] text-slate-500 font-mono tracking-wide">Investigation Query Interface</span>
+          </div>
+          <form onSubmit={e => { e.preventDefault(); investigate(input) }}>
+            <div className="relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+              <input ref={el => { if (el) el.focus() }} type="text" value={input} onChange={e => { setInput(e.target.value); setShowPresets(true) }} onFocus={() => setShowPresets(true)} onKeyDown={handleKey}
+                placeholder="Run a new investigation - enter feature, incident, or MR ID..."
+                className="w-full rounded-xl border border-white/[0.06] bg-slate-800/60 py-2.5 pl-10 pr-40 text-xs text-white placeholder-slate-600 outline-none focus:border-cyan-500/50 focus:bg-slate-800/80 focus:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all font-mono tracking-wide"
+                disabled={loading} />
+              <div className="absolute inset-y-1 right-1.5 flex items-center gap-1">
+                <button type="submit" disabled={loading || !input.trim()}
+                  className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-cyan-500/25 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed">
+                  {loading ? (
+                    <><svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Investigating</>
+                  ) : (
+                    <><svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>Investigate</>
+                  )}
+                </button>
+              </div>
+            </div>
+          </form>
+          <AnimatePresence>
+            {showPresets && filtered.length > 0 && !loading && (
+              <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="mt-1.5 rounded-xl border border-white/[0.06] bg-slate-800/80 overflow-hidden">
+                {filtered.map((s, i) => (
+                  <button key={s} type="button"
+                    className={'flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors ' + (i === selectedPreset ? 'bg-cyan-500/10 text-cyan-300' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white')}
+                    onClick={() => { setInput(s); setShowPresets(false); investigate(s) }}>
+                    <svg className="h-3 w-3 shrink-0 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                    {s}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
         {/* ===== PREMIUM SECTION 1: ROOT CAUSE COMMAND CENTER HERO ===== */}
         <motion.div variants={item} className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-950">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/[0.04] via-transparent to-purple-500/[0.03] pointer-events-none" />
@@ -866,8 +935,8 @@ export default function IntelligenceCenter() {
               <h3 className="text-sm font-bold text-white tracking-wider">AI Neural Forensics Engine</h3>
               <span className="text-[10px] text-slate-600 font-mono">deep learning analysis</span>
             </div>
-            <div className="w-full min-h-[350px] relative">
-              <svg viewBox="0 0 600 350" className="w-full h-full">
+            <div className="w-full min-h-[350px] relative max-w-full">
+              <svg viewBox="0 0 600 350" className="w-full h-full max-w-full">
                 <defs>
                   <linearGradient id="brainBg" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="rgba(6,182,212,0.15)" />
@@ -1375,52 +1444,7 @@ export default function IntelligenceCenter() {
           </div>
         </motion.div>
 
-        {/* ===== Investigation Query ===== */}
-        <motion.div variants={item} className="glass-card p-2">
-          <div className="flex items-center gap-1.5 mb-2">
-            <div className="flex h-4 w-4 items-center justify-center rounded-md bg-gradient-to-br from-cyan-500/20 to-blue-500/20">
-              <svg className="h-2.5 w-2.5 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-            </div>
-            <span className="text-[9px] text-slate-500 font-mono tracking-wide">Investigation Query Interface</span>
-          </div>
-          <form onSubmit={e => { e.preventDefault(); investigate(input) }}>
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-              <input ref={el => { if (el) el.focus() }} type="text" value={input} onChange={e => { setInput(e.target.value); setShowPresets(true) }} onFocus={() => setShowPresets(true)} onKeyDown={handleKey}
-                placeholder="Run a new investigation - enter feature, incident, or MR ID..."
-                className="w-full rounded-xl border border-white/[0.06] bg-slate-800/60 py-2.5 pl-10 pr-40 text-xs text-white placeholder-slate-600 outline-none focus:border-cyan-500/50 focus:bg-slate-800/80 focus:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all font-mono tracking-wide"
-                disabled={loading} />
-              <div className="absolute inset-y-1 right-1.5 flex items-center gap-1">
-                <button type="submit" disabled={loading || !input.trim()}
-                  className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-cyan-500/25 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed">
-                  {loading ? (
-                    <><svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Investigating</>
-                  ) : (
-                    <><svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>Investigate</>
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
-          <AnimatePresence>
-            {showPresets && filtered.length > 0 && !loading && (
-              <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="mt-1.5 rounded-xl border border-white/[0.06] bg-slate-800/80 overflow-hidden">
-                {filtered.map((s, i) => (
-                  <button key={s} type="button"
-                    className={'flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors ' + (i === selectedPreset ? 'bg-cyan-500/10 text-cyan-300' : 'text-slate-500 hover:bg-white/[0.04] hover:text-white')}
-                    onClick={() => { setInput(s); setShowPresets(false); investigate(s) }}>
-                    <svg className="h-3 w-3 shrink-0 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
-                    {s}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+
 
         {loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">

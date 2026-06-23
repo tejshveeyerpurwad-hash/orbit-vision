@@ -403,22 +403,22 @@ export default function Layout({ children }) {
                   <div key={item.to} className="flex items-center">
                     <Link
                       to={item.to}
-                      className={`group relative flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium whitespace-nowrap transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] ${
+                      className={`group relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-300 hover:scale-[1.04] active:scale-[0.96] ${
                         active
-                          ? 'text-cyan-200'
-                          : 'text-slate-500 hover:text-slate-200'
+                          ? 'text-white drop-shadow-[0_0_10px_rgba(6,182,212,0.6)] font-bold'
+                          : 'text-slate-350 hover:text-white'
                       }`}
                     >
                       {/* Stage number — premium circle */}
-                      <span className={`relative z-10 flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold font-mono transition-all duration-300 ${
+                      <span className={`relative z-10 flex h-6.5 w-6.5 items-center justify-center rounded-full text-[11px] font-bold font-mono transition-all duration-300 ${
                         active
-                          ? 'bg-cyan-500/20 text-cyan-300 border-2 border-cyan-400/40 shadow-[0_0_12px_-2px_rgba(6,182,212,0.3)]'
+                          ? 'bg-cyan-450 text-white border-2 border-cyan-400 shadow-[0_0_16px_rgba(6,182,212,0.8)] scale-110'
                           : isDone
-                          ? 'bg-emerald-500/15 text-emerald-400 border-2 border-emerald-500/30'
-                          : 'bg-slate-800/50 text-slate-500 border border-slate-700/60'
+                          ? 'bg-emerald-500/25 text-emerald-300 border-2 border-emerald-400/50 shadow-[0_0_8px_rgba(16,185,129,0.3)]'
+                          : 'bg-slate-900/80 text-slate-400 border border-slate-700/80 hover:border-slate-500/60'
                       }`}>
                         {isDone ? (
-                          <svg className="h-3 w-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <svg className="h-3.5 w-3.5 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                           </svg>
                         ) : (
@@ -427,10 +427,10 @@ export default function Layout({ children }) {
                       </span>
 
                       {/* Label */}
-                      <span className="relative z-10 text-xs font-semibold tracking-tight">{item.label}</span>
+                      <span className={`relative z-10 text-[13px] tracking-wide transition-colors duration-300 ${active ? 'text-white font-extrabold' : 'text-slate-300 group-hover:text-white'}`}>{item.label}</span>
 
                       {/* Description — visible on hover */}
-                      <span className="hidden xl:block relative z-10 text-[8px] text-slate-600 group-hover:text-slate-500 transition-colors ml-0.5 font-mono">{item.desc}</span>
+                      <span className="hidden xl:block relative z-10 text-[9px] text-slate-500 group-hover:text-slate-300 transition-colors ml-0.5 font-mono">{item.desc}</span>
 
                       {/* Active stage: animated gradient border glow + pulsing ring + neon shadow */}
                       {active && (

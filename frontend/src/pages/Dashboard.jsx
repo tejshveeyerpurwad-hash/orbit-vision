@@ -2371,40 +2371,7 @@ function AIStrategicInsightsPanel() {
       </div>
     </motion.div>
   )
-}
-
-const dashboardKpiData = [
-  { label: 'Revenue Protected', value: 2.8, prefix: '$', suffix: 'M', color: 'text-emerald-400', trend: 'up', pct: 12, sparkData: [1.8, 2.0, 2.2, 2.4, 2.5, 2.7, 2.8] },
-  { label: 'Services At Risk', value: 3, suffix: ' Critical', color: 'text-red-400', trend: 'up', pct: 20, sparkData: [1, 2, 2, 3, 2, 3, 3] },
-  { label: 'AI Confidence', value: 96, suffix: '%', color: 'text-cyan-400', trend: 'stable', pct: 0.5, sparkData: [94, 95, 95, 96, 96, 96, 96] },
-  { label: 'Predicted Incident Cost', value: 4.5, prefix: '$', suffix: 'K/m', color: 'text-orange-400', trend: 'down', pct: 8.4, sparkData: [5.2, 5.0, 4.8, 4.7, 4.5, 4.5, 4.5] },
-  { label: 'MTTR Reduction', value: 31, prefix: '-', suffix: '%', color: 'text-violet-400', trend: 'up', pct: 14.3, sparkData: [24, 26, 27, 28, 30, 29, 31] },
-  { label: 'Risk Forecast', value: 72, prefix: 'Score: ', color: 'text-amber-400', trend: 'down', pct: 5.2, sparkData: [78, 76, 75, 74, 72, 72, 72] },
-]
-
-function DashboardKpiCard({ kpi, idx }) {
-  const val = useCounter(kpi.value, idx * 60, 1500, kpi.value >= 1000)
-  const displayVal = typeof val === 'number' ? val : kpi.value
-  const sparkColor = kpi.color.includes('red') ? '#ef4444' : kpi.color.includes('emerald') ? '#34d399' : kpi.color.includes('cyan') ? '#22d3ee' : kpi.color.includes('orange') ? '#f97316' : kpi.color.includes('violet') ? '#a78bfa' : '#f59e0b'
-  return (
-    <div className="rounded-xl border border-white/[0.05] bg-slate-900/30 p-3 hover:border-white/[0.1] transition-all group relative overflow-hidden">
-      <span className="text-[8px] font-mono text-slate-500 uppercase tracking-wider block mb-0.5">{kpi.label}</span>
-      <div className="flex items-baseline justify-between gap-1 mt-1">
-        <span className={`text-2xl sm:text-3xl font-extrabold font-mono tracking-tight ${kpi.color}`}>
-          {kpi.prefix || ''}{displayVal}{kpi.suffix || ''}
-        </span>
-      </div>
-      <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-white/[0.02]">
-        <span className={`text-[9px] font-mono ${kpi.trend === 'up' && kpi.color.includes('red') ? 'text-red-400' : 'text-emerald-400'}`}>
-          {kpi.trend === 'up' ? '\u2191' : kpi.trend === 'down' ? '\u2193' : '\u2192'} {kpi.pct}%
-        </span>
-        <MiniSparkline data={kpi.sparkData} color={sparkColor} width={44} height={12} />
-      </div>
-    </div>
-  )
-}
-
-export default function Dashboard() {
+}export default function Dashboard() {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
   if (!mounted) return <DashboardSkeleton />
@@ -2461,7 +2428,6 @@ export default function Dashboard() {
           <DeploymentTimeline />
           <ActivityTimeline />
         </div>
-
         <BoardroomViewExpanded />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -2474,3 +2440,37 @@ export default function Dashboard() {
     </Layout>
   )
 }
+
+
+const dashboardKpiData = [
+  { label: 'Revenue Protected', value: 2.8, prefix: '$', suffix: 'M', color: 'text-emerald-400', trend: 'up', pct: 12, sparkData: [1.8, 2.0, 2.2, 2.4, 2.5, 2.7, 2.8] },
+  { label: 'Services At Risk', value: 3, suffix: ' Critical', color: 'text-red-400', trend: 'up', pct: 20, sparkData: [1, 2, 2, 3, 2, 3, 3] },
+  { label: 'AI Confidence', value: 96, suffix: '%', color: 'text-cyan-400', trend: 'stable', pct: 0.5, sparkData: [94, 95, 95, 96, 96, 96, 96] },
+  { label: 'Predicted Incident Cost', value: 4.5, prefix: '$', suffix: 'K/m', color: 'text-orange-400', trend: 'down', pct: 8.4, sparkData: [5.2, 5.0, 4.8, 4.7, 4.5, 4.5, 4.5] },
+  { label: 'MTTR Reduction', value: 31, prefix: '-', suffix: '%', color: 'text-violet-400', trend: 'up', pct: 14.3, sparkData: [24, 26, 27, 28, 30, 29, 31] },
+  { label: 'Risk Forecast', value: 72, prefix: 'Score: ', color: 'text-amber-400', trend: 'down', pct: 5.2, sparkData: [78, 76, 75, 74, 72, 72, 72] },
+]
+
+function DashboardKpiCard({ kpi, idx }) {
+  const val = useCounter(kpi.value, idx * 60, 1500, kpi.value >= 1000)
+  const displayVal = typeof val === 'number' ? val : kpi.value
+  const sparkColor = kpi.color.includes('red') ? '#ef4444' : kpi.color.includes('emerald') ? '#34d399' : kpi.color.includes('cyan') ? '#22d3ee' : kpi.color.includes('orange') ? '#f97316' : kpi.color.includes('violet') ? '#a78bfa' : '#f59e0b'
+  return (
+    <div className="rounded-xl border border-white/[0.05] bg-slate-900/30 p-3 hover:border-white/[0.1] transition-all group relative overflow-hidden">
+      <span className="text-[8px] font-mono text-slate-500 uppercase tracking-wider block mb-0.5">{kpi.label}</span>
+      <div className="flex items-baseline justify-between gap-1 mt-1">
+        <span className={`text-2xl sm:text-3xl font-extrabold font-mono tracking-tight ${kpi.color}`}>
+          {kpi.prefix || ''}{displayVal}{kpi.suffix || ''}
+        </span>
+      </div>
+      <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-white/[0.02]">
+        <span className={`text-[9px] font-mono ${kpi.trend === 'up' && kpi.color.includes('red') ? 'text-red-400' : 'text-emerald-400'}`}>
+          {kpi.trend === 'up' ? '\u2191' : kpi.trend === 'down' ? '\u2193' : '\u2192'} {kpi.pct}%
+        </span>
+        <MiniSparkline data={kpi.sparkData} color={sparkColor} width={44} height={12} />
+      </div>
+    </div>
+  )
+}
+
+

@@ -5,6 +5,7 @@ import 'reactflow/dist/style.css'
 import Layout from '../components/Layout'
 import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
+import PageHero from '../components/PageHero'
 
 const initialNodes = [
   { id: 'gateway', position: { x: 475, y: 50 }, data: { label: 'API Gateway', type: 'API', risk: 'medium', team: 'Platform', deps: ['Payments', 'Auth', 'Billing'] } },
@@ -161,21 +162,34 @@ const insightIconMap = {
 
 function CustomNode({ data }) {
   const c = riskColors[data.risk] || riskColors.low
+  const detail = serviceDetails[data.id]
+  const isHealthy = detail && detail.errorRate < 0.5
+  const isDegraded = detail && detail.errorRate >= 0.5 && detail.errorRate < 2
+  const healthDot = isHealthy ? '#22c55e' : isDegraded ? '#f59e0b' : '#ef4444'
+  const healthPulse = isHealthy ? '' : 'animate-pulse'
   return (
     <motion.div
-      whileHover={{ scale: 1.08 }}
+      whileHover={{ scale: 1.1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-      className="rounded-xl border-2 px-3 py-2.5 text-center shadow-lg backdrop-blur-xl min-w-[120px] cursor-pointer relative overflow-hidden group"
+      className="rounded-xl border-2 px-3 py-2.5 text-center shadow-lg backdrop-blur-xl min-w-[120px] cursor-pointer relative overflow-hidden group of-glow-card"
       style={{ backgroundColor: c.bg, borderColor: c.border, boxShadow: c.glow }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
-      <div className="text-[10px] mb-0.5 relative">{typeIcons[data.type] || '\uD83D\uDCE6'}</div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
+      <div className="absolute -top-4 -right-4 h-8 w-8 rounded-full opacity-[0.04] pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${c.border}, transparent)` }} />
+      <div className="flex items-center justify-center gap-1.5 mb-1 relative">
+        <span className="relative flex h-1.5 w-1.5">
+          <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${healthPulse}`} style={{ background: healthDot }} />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: healthDot }} />
+        </span>
+        <span className="text-[11px] relative">{typeIcons[data.type] || '\u2699'}</span>
+      </div>
       <div className="relative">
-        <div className="text-[11px] font-semibold" style={{ color: c.text }}>{data.label}</div>
-        <div className="text-[7px] text-slate-500 mt-px">{data.type} \u00B7 {data.team}</div>
+        <div className="text-xs font-bold" style={{ color: c.text }}>{data.label}</div>
+        <div className="text-[8px] text-slate-500 mt-px">{data.type} &middot; {data.team}</div>
       </div>
       {data.risk === 'high' && (
-        <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+        <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
       )}
     </motion.div>
   )
@@ -649,7 +663,14 @@ const edgeTypes = { animated: AnimatedEdge }
 export default function KnowledgeGraph() {
   return (
     <Layout>
-      <div className="px-2 sm:px-3 pt-2">
+      <div className="px-2 sm:px-3 pt-2 space-y-2">
+        <PageHero
+          title="Live Enterprise Digital Twin"
+          subtitle="Real-time service topology with animated dependency tracing, health monitoring, and blast radius simulation across 10 services, 8 dependencies, and 47 monitored endpoints."
+          impact="$340K"
+          impactLabel="Blast Radius Exposure"
+          confidence={92}
+        />
         <ExecutiveBanner currentPage="/knowledge-graph" />
       </div>
       <div className="overflow-x-hidden">

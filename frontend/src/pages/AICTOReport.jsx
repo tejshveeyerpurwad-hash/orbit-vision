@@ -5,6 +5,9 @@ import StatCard from '../components/StatCard'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
+import PageHero from '../components/PageHero'
+import ExecutiveSummary from '../components/ExecutiveSummary'
+import AIRecommendations from '../components/AIRecommendations'
 
 const reportData = {
   feature: 'Add payment retry support',
@@ -222,7 +225,7 @@ function RingGauge({ value, size = 80, stroke = 6, color = '#22c55e', label = ''
           strokeDasharray={c} strokeDashoffset={offset} className="transition-all duration-1000 ease-out" />
       </svg>
       <span className="text-lg font-bold text-white mt-1"><AnimatedCounter value={value} suffix="%" delay={400} /></span>
-      {label && <span className="text-[9px] text-slate-500">{label}</span>}
+      {label && <span className="text-[11px] text-slate-500">{label}</span>}
     </div>
   )
 }
@@ -245,88 +248,8 @@ export default function AICTOReport() {
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-2">
         <ExecutiveBanner currentPage="/cto-report" />
 
-        {/* === PREMIUM BOARDROOM INTELLIGENCE SECTIONS === */}
-
-        {/* B1. Boardroom Intelligence Dashboard Hero */}
-        <motion.div variants={item} className="relative overflow-hidden rounded-xl border border-white/[0.08] bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-6">
-          <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-cyan-500/[0.05] blur-[120px]" />
-          <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-emerald-500/[0.04] blur-[120px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-violet-500/[0.02] blur-[100px]" />
-          <div className="relative">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/20 to-emerald-500/20">
-                  <svg className="h-4 w-4 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" /></svg>
-                </div>
-                <h2 className="text-2xl font-bold tracking-wider text-white">BOARDROOM INTELLIGENCE DASHBOARD</h2>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] text-slate-500 font-mono tracking-wider">LIVE · Q3 2026</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-              <motion.div className="relative group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-5 overflow-hidden hover:border-emerald-500/30 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute -top-4 -right-4 opacity-30 group-hover:opacity-60 transition-opacity duration-500">
-                  <RingGauge value={85} size={48} stroke={3.5} color="#22c55e" />
-                </div>
-                <div className="relative">
-                  <div className="text-[10px] text-slate-500 font-mono tracking-wider mb-1">Annual Savings</div>
-                  <div className="text-5xl font-bold text-emerald-400 font-mono tracking-tight leading-none">$<AnimatedCounter value={annualSavings / 1000000} decimals={1} />M</div>
-                  <div className="flex items-center gap-1.5 mt-3">
-                    <svg className="h-3.5 w-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
-                    <span className="text-[11px] text-emerald-500/70 font-mono">+{data.roi.percentage}% ROI</span>
-                  </div>
-                </div>
-              </motion.div>
-              <motion.div className="relative group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-5 overflow-hidden hover:border-cyan-500/30 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute -top-4 -right-4 opacity-30 group-hover:opacity-60 transition-opacity duration-500">
-                  <RingGauge value={72} size={48} stroke={3.5} color="#06b6d4" />
-                </div>
-                <div className="relative">
-                  <div className="text-[10px] text-slate-500 font-mono tracking-wider mb-1">Revenue Protected</div>
-                  <div className="text-5xl font-bold text-cyan-400 font-mono tracking-tight leading-none">$<AnimatedCounter value={Math.round(data.roi.monthlySavings / 1000)} />K</div>
-                  <div className="text-[11px] text-slate-500 font-mono mt-3">Monthly incident prevention</div>
-                </div>
-              </motion.div>
-              <motion.div className="relative group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-5 overflow-hidden hover:border-amber-500/30 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute -top-4 -right-4 opacity-30 group-hover:opacity-60 transition-opacity duration-500">
-                  <RingGauge value={opEx} size={48} stroke={3.5} color="#f59e0b" />
-                </div>
-                <div className="relative">
-                  <div className="text-[10px] text-slate-500 font-mono tracking-wider mb-1">Operational Efficiency</div>
-                  <div className="text-5xl font-bold text-amber-400 font-mono tracking-tight leading-none"><AnimatedCounter value={opEx} suffix="%" /></div>
-                  <div className="text-[11px] text-slate-500 font-mono mt-3">Team readiness avg</div>
-                </div>
-              </motion.div>
-              <motion.div className="relative group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-5 overflow-hidden hover:border-violet-500/30 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute -top-4 -right-4 opacity-30 group-hover:opacity-60 transition-opacity duration-500">
-                  <RingGauge value={data.verdict.confidence} size={48} stroke={3.5} color="#8b5cf6" />
-                </div>
-                <div className="relative">
-                  <div className="text-[10px] text-slate-500 font-mono tracking-wider mb-1">Deployment Confidence</div>
-                  <div className="text-5xl font-bold text-violet-400 font-mono tracking-tight leading-none"><AnimatedCounter value={data.verdict.confidence} suffix="%" /></div>
-                  <div className="text-[11px] text-slate-500 font-mono mt-3">Decision confidence</div>
-                </div>
-              </motion.div>
-              <motion.div className="relative group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-5 overflow-hidden hover:border-red-500/30 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute -top-4 -right-4 opacity-30 group-hover:opacity-60 transition-opacity duration-500">
-                  <RingGauge value={data.scenarios[1].riskReduction} size={48} stroke={3.5} color="#ef4444" />
-                </div>
-                <div className="relative">
-                  <div className="text-[10px] text-slate-500 font-mono tracking-wider mb-1">Risk Reduction</div>
-                  <div className="text-5xl font-bold text-red-400 font-mono tracking-tight leading-none"><AnimatedCounter value={data.scenarios[1].riskReduction} suffix="%" /></div>
-                  <div className="text-[11px] text-slate-500 font-mono mt-3">Expected scenario</div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
+        <PageHero title="Executive Boardroom Intelligence" subtitle="AI-powered CTO recommendation for payment retry support with $2.8M projected annual savings" impact="$2.8M" impactLabel="Projected Annual Savings" confidence={87} />
+        <ExecutiveSummary />
 
         {/* B2. Executive Impact Radar */}
         <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-6 overflow-hidden relative">
@@ -457,20 +380,20 @@ export default function AICTOReport() {
                   <div className="space-y-2">
                     {div.risks.map((r, ri) => (
                       <div key={ri} className={`flex items-center justify-between rounded-lg border px-3 py-2 ${scoreColor(r.score)}`}>
-                        <span className="text-[9px] font-mono truncate mr-2">{r.name}</span>
+                        <span className="text-[11px] font-mono truncate mr-2">{r.name}</span>
                         <span className="text-sm font-bold shrink-0">{r.score}</span>
                       </div>
                     ))}
                   </div>
                   <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
-                    <span className="text-[9px] text-slate-500">Avg Risk Score</span>
+                    <span className="text-[11px] text-slate-500">Avg Risk Score</span>
                     <span className="text-lg font-bold font-mono" style={{ color: div.color }}>{div.avg}</span>
                   </div>
                 </div>
               )
             })}
           </div>
-          <div className="mt-4 flex items-center justify-between text-[9px] text-slate-500 pt-3 border-t border-white/[0.04] relative">
+          <div className="mt-4 flex items-center justify-between text-[11px] text-slate-500 pt-3 border-t border-white/[0.04] relative">
             <span>Revenue at Risk: <span className="text-red-400 font-bold">${data.businessImpact.revenueAtRisk.toLocaleString()}/hr</span> <span className="text-slate-400">${(data.businessImpact.revenueAtRisk * 24 * 30).toLocaleString()}/mo worst case</span></span>
             <span className="text-slate-600">Assessed across {data.riskCategories.length} vectors</span>
           </div>
@@ -556,7 +479,7 @@ export default function AICTOReport() {
               </g>
             </svg>
           </div>
-          <div className="flex items-center justify-center gap-6 text-[9px] text-slate-500 font-mono mt-2 relative">
+          <div className="flex items-center justify-center gap-6 text-[11px] text-slate-500 font-mono mt-2 relative">
             <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-orange-500" /> ${(data.roi.investment / 1000).toFixed(0)}K Investment</span>
             <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> ${Math.round(data.roi.monthlySavings / 1000)}K/mo Savings</span>
             <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-cyan-500" /> {data.roi.percentage}% ROI</span>
@@ -595,9 +518,9 @@ export default function AICTOReport() {
               <RingGauge value={data.verdict.confidence} size={72} stroke={5} color="#22c55e" label="Decision Confidence" />
               <div className="text-right">
                 <div className="text-2xl font-bold text-white"><AnimatedCounter value={data.roi.percentage} suffix="%" /></div>
-                <div className="text-[9px] text-slate-500">Projected ROI</div>
+                <div className="text-[11px] text-slate-500">Projected ROI</div>
                 <div className="text-[10px] text-slate-600 mt-1">Breakeven: {data.roi.breakevenHours}h post-deploy</div>
-                <div className="text-[9px] text-slate-600">$<AnimatedCounter value={data.roi.monthlySavings} />/mo savings</div>
+                <div className="text-[11px] text-slate-600">$<AnimatedCounter value={data.roi.monthlySavings} />/mo savings</div>
               </div>
             </div>
           </div>
@@ -625,10 +548,10 @@ export default function AICTOReport() {
                 <span className="text-2xl sm:text-[28px] font-bold text-red-400 font-mono tracking-tight">{data.riskLevel.score}</span>
                 <span className="text-[11px] text-red-500/60 font-mono">/100</span>
               </div>
-              <div className="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Risk Score</div>
+              <div className="text-[11px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Risk Score</div>
               <div className="mt-1.5 flex items-center justify-center gap-1">
                 <span className={'h-1.5 w-1.5 rounded-full ' + (data.riskLevel.score >= 70 ? 'bg-red-500 animate-pulse' : 'bg-yellow-500')} />
-                <span className="text-[8px] text-slate-600 font-mono">{data.riskLevel.level}</span>
+                <span className="text-[10px] text-slate-600 font-mono">{data.riskLevel.level}</span>
               </div>
             </div>
           </div>
@@ -639,8 +562,8 @@ export default function AICTOReport() {
                 <span className="text-2xl sm:text-[28px] font-bold text-amber-400 font-mono tracking-tight">{data.businessImpact.businessScore}</span>
                 <span className="text-[11px] text-amber-500/60 font-mono">/100</span>
               </div>
-              <div className="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Impact Score</div>
-              <div className="text-[8px] text-slate-600 font-mono mt-0.5">Business risk exposure</div>
+              <div className="text-[11px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Impact Score</div>
+              <div className="text-[10px] text-slate-600 font-mono mt-0.5">Business risk exposure</div>
             </div>
           </div>
           <div className="glass-card p-3 text-center relative overflow-hidden group hover:border-emerald-500/30 transition-all">
@@ -650,8 +573,8 @@ export default function AICTOReport() {
                 <span className="text-2xl sm:text-[28px] font-bold text-emerald-400 font-mono tracking-tight"><AnimatedCounter value={data.roi.percentage} suffix="" /></span>
                 <span className="text-[11px] text-emerald-500/60 font-mono">%</span>
               </div>
-              <div className="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">ROI</div>
-              <div className="text-[8px] text-slate-600 font-mono mt-0.5">{data.roi.breakevenHours}h breakeven</div>
+              <div className="text-[11px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">ROI</div>
+              <div className="text-[10px] text-slate-600 font-mono mt-0.5">{data.roi.breakevenHours}h breakeven</div>
             </div>
           </div>
           <div className="glass-card p-3 text-center relative overflow-hidden group hover:border-cyan-500/30 transition-all">
@@ -661,24 +584,24 @@ export default function AICTOReport() {
                 <span className="text-2xl sm:text-[28px] font-bold text-white font-mono tracking-tight">$<AnimatedCounter value={data.engineeringCost.costUSD / 1000} decimals={1} suffix="" /></span>
                 <span className="text-[11px] text-slate-500/60 font-mono">K</span>
               </div>
-              <div className="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Cost</div>
-              <div className="text-[8px] text-slate-600 font-mono mt-0.5">{data.engineeringCost.hours} hrs · 3 sprints</div>
+              <div className="text-[11px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Cost</div>
+              <div className="text-[10px] text-slate-600 font-mono mt-0.5">{data.engineeringCost.hours} hrs · 3 sprints</div>
             </div>
           </div>
           <div className="glass-card p-3 text-center relative overflow-hidden group hover:border-cyan-500/30 transition-all">
             <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="relative">
               <div className="text-2xl sm:text-[28px] font-bold text-cyan-400 font-mono tracking-tight">{data.verdict.confidence}<span className="text-[11px] text-cyan-500/60 font-mono">%</span></div>
-              <div className="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Confidence</div>
-              <div className="text-[8px] text-slate-600 font-mono mt-0.5">14 similar features</div>
+              <div className="text-[11px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Confidence</div>
+              <div className="text-[10px] text-slate-600 font-mono mt-0.5">14 similar features</div>
             </div>
           </div>
           <div className="glass-card p-3 text-center relative overflow-hidden group hover:border-violet-500/30 transition-all">
             <div className="absolute inset-0 bg-gradient-to-b from-violet-500/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="relative">
               <div className="text-lg sm:text-xl font-bold text-violet-400 font-mono tracking-tight">{data.deploymentWindow.recommended}</div>
-              <div className="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Target Date</div>
-              <div className="text-[8px] text-slate-600 font-mono mt-0.5">Recommended launch</div>
+              <div className="text-[11px] text-slate-500 font-mono tracking-wider uppercase mt-0.5">Target Date</div>
+              <div className="text-[10px] text-slate-600 font-mono mt-0.5">Recommended launch</div>
             </div>
           </div>
         </motion.div>
@@ -696,9 +619,9 @@ export default function AICTOReport() {
             <div className="glass-card p-3 relative overflow-hidden group hover:border-red-500/30 transition-all">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-[9px] text-slate-500 font-mono tracking-wider mb-0.5">Revenue at Risk</div>
+                  <div className="text-[11px] text-slate-500 font-mono tracking-wider mb-0.5">Revenue at Risk</div>
                   <div className="text-lg font-bold text-red-400 font-mono">$<AnimatedCounter value={data.businessImpact.revenueAtRisk} />/hr</div>
-                  <div className="text-[8px] text-slate-600 mt-0.5">$288K/month worst case</div>
+                  <div className="text-[10px] text-slate-600 mt-0.5">$288K/month worst case</div>
                 </div>
                 <svg width="52" height="52" viewBox="0 0 52 52" className="-rotate-90 shrink-0">
                   <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(239,68,68,0.12)" strokeWidth="4" />
@@ -712,9 +635,9 @@ export default function AICTOReport() {
             <div className="glass-card p-3 relative overflow-hidden group hover:border-orange-500/30 transition-all">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-[9px] text-slate-500 font-mono tracking-wider mb-0.5">Customer Impact</div>
+                  <div className="text-[11px] text-slate-500 font-mono tracking-wider mb-0.5">Customer Impact</div>
                   <div className="text-lg font-bold text-orange-400 font-mono">{data.businessImpact.customerImpact}</div>
-                  <div className="text-[8px] text-slate-600 mt-0.5">~12K transactions/day</div>
+                  <div className="text-[10px] text-slate-600 mt-0.5">~12K transactions/day</div>
                 </div>
                 <svg width="52" height="52" viewBox="0 0 52 52" className="-rotate-90 shrink-0">
                   <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(249,115,22,0.12)" strokeWidth="4" />
@@ -728,9 +651,9 @@ export default function AICTOReport() {
             <div className="glass-card p-3 relative overflow-hidden group hover:border-yellow-500/30 transition-all">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-[9px] text-slate-500 font-mono tracking-wider mb-0.5">SLA Violation</div>
+                  <div className="text-[11px] text-slate-500 font-mono tracking-wider mb-0.5">SLA Violation</div>
                   <div className="text-lg font-bold text-yellow-400 font-mono">{data.businessImpact.slaViolation}</div>
-                  <div className="text-[8px] text-slate-600 mt-0.5">Exceeds 15 min threshold</div>
+                  <div className="text-[10px] text-slate-600 mt-0.5">Exceeds 15 min threshold</div>
                 </div>
                 <svg width="52" height="52" viewBox="0 0 52 52" className="-rotate-90 shrink-0">
                   <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(234,179,8,0.12)" strokeWidth="4" />
@@ -744,9 +667,9 @@ export default function AICTOReport() {
             <div className="glass-card p-3 relative overflow-hidden group hover:border-cyan-500/30 transition-all">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-[9px] text-slate-500 font-mono tracking-wider mb-0.5">Regulatory</div>
+                  <div className="text-[11px] text-slate-500 font-mono tracking-wider mb-0.5">Regulatory</div>
                   <div className="text-lg font-bold text-cyan-400 font-mono">{data.businessImpact.regulatory}</div>
-                  <div className="text-[8px] text-slate-600 mt-0.5">Level 1 compliance</div>
+                  <div className="text-[10px] text-slate-600 mt-0.5">Level 1 compliance</div>
                 </div>
                 <svg width="52" height="52" viewBox="0 0 52 52" className="-rotate-90 shrink-0">
                   <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(6,182,212,0.12)" strokeWidth="4" />
@@ -772,40 +695,40 @@ export default function AICTOReport() {
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-3">
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 text-center">
               <div className="text-lg font-bold text-white">{data.engineeringCost.hours}</div>
-              <div className="text-[9px] text-slate-600">Total Hours</div>
-              <div className="text-[8px] text-slate-700">136 hrs across 3 sprints</div>
+              <div className="text-[11px] text-slate-600">Total Hours</div>
+              <div className="text-[10px] text-slate-700">136 hrs across 3 sprints</div>
               <div className="h-1 rounded-full bg-slate-800 mt-1.5 overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 0.8 }} className="h-full rounded-full bg-brand" />
               </div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 text-center">
               <div className="text-lg font-bold text-white">{data.engineeringCost.engineers}</div>
-              <div className="text-[9px] text-slate-600">Engineers</div>
-              <div className="text-[8px] text-slate-700">3 teams involved</div>
+              <div className="text-[11px] text-slate-600">Engineers</div>
+              <div className="text-[10px] text-slate-700">3 teams involved</div>
               <div className="h-1 rounded-full bg-slate-800 mt-1.5 overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: '57%' }} transition={{ duration: 0.8 }} className="h-full rounded-full bg-amber-500" />
               </div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 text-center">
               <div className="text-lg font-bold text-white">{data.engineeringCost.sprints}</div>
-              <div className="text-[9px] text-slate-600">Sprints</div>
-              <div className="text-[8px] text-slate-700">2-week iterations</div>
+              <div className="text-[11px] text-slate-600">Sprints</div>
+              <div className="text-[10px] text-slate-700">2-week iterations</div>
               <div className="h-1 rounded-full bg-slate-800 mt-1.5 overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: '43%' }} transition={{ duration: 0.8 }} className="h-full rounded-full bg-violet-500" />
               </div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 text-center">
               <div className="text-lg font-bold text-amber-300">{data.engineeringCost.storyPoints}</div>
-              <div className="text-[9px] text-slate-600">Story Points</div>
-              <div className="text-[8px] text-slate-700">Avg 8.5 SP/engineer</div>
+              <div className="text-[11px] text-slate-600">Story Points</div>
+              <div className="text-[10px] text-slate-700">Avg 8.5 SP/engineer</div>
               <div className="h-1 rounded-full bg-slate-800 mt-1.5 overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: '49%' }} transition={{ duration: 0.8 }} className="h-full rounded-full bg-amber-500" />
               </div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 text-center">
               <div className="text-lg font-bold text-emerald-400">$103</div>
-              <div className="text-[9px] text-slate-600">$/hr Blended</div>
-              <div className="text-[8px] text-slate-700">Including overhead</div>
+              <div className="text-[11px] text-slate-600">$/hr Blended</div>
+              <div className="text-[10px] text-slate-700">Including overhead</div>
               <div className="h-1 rounded-full bg-slate-800 mt-1.5 overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: '65%' }} transition={{ duration: 0.8 }} className="h-full rounded-full bg-emerald-500" />
               </div>
@@ -819,14 +742,14 @@ export default function AICTOReport() {
               return (
                 <div key={p.phase} className={'glass-card p-2 bg-gradient-to-br ' + treemapColors[i] + ' border ' + borderColors[i] + ' hover:scale-[1.02] transition-all'}>
                   <div className={'text-lg font-bold font-mono ' + textColors[i]}>{p.pct}%</div>
-                  <div className="text-[8px] text-slate-400 font-mono leading-tight mt-0.5">{p.phase}</div>
-                  <div className="text-[7px] text-slate-600 font-mono mt-0.5">${p.cost.toLocaleString()} · {p.hours}h</div>
+                  <div className="text-[10px] text-slate-400 font-mono leading-tight mt-0.5">{p.phase}</div>
+                  <div className="text-[10px] text-slate-600 font-mono mt-0.5">${p.cost.toLocaleString()} · {p.hours}h</div>
                 </div>
               )
             })}
           </div>
           <div className="glass-card p-2 flex items-center justify-between">
-            <span className="text-[9px] text-slate-500 font-mono tracking-wider">Cost Efficiency</span>
+            <span className="text-[11px] text-slate-500 font-mono tracking-wider">Cost Efficiency</span>
             <div className="flex items-center gap-2">
               <svg width="36" height="36" viewBox="0 0 36 36" className="-rotate-90">
                 <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" />
@@ -851,7 +774,7 @@ export default function AICTOReport() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div>
-              <div className="text-[9px] text-slate-500 mb-1.5">Staffing Needs</div>
+              <div className="text-[11px] text-slate-500 mb-1.5">Staffing Needs</div>
               {data.resourceAllocation.map((r, i) => {
                 const pct = (r.allocated / r.needed) * 100
                 const ringColor = r.gap > 0 ? '#f59e0b' : '#22c55e'
@@ -865,26 +788,26 @@ export default function AICTOReport() {
                     </svg>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-slate-300 font-mono truncate">{r.resource}</span>
-                        <span className="text-[9px] text-slate-500 font-mono">{r.allocated}/{r.needed} {r.gap > 0 && <span className="text-red-400">-{r.gap}</span>}</span>
+                        <span className="text-[11px] text-slate-300 font-mono truncate">{r.resource}</span>
+                        <span className="text-[11px] text-slate-500 font-mono">{r.allocated}/{r.needed} {r.gap > 0 && <span className="text-red-400">-{r.gap}</span>}</span>
                       </div>
-                      <div className="text-[7px] text-slate-600 truncate">{r.recruiting}</div>
+                      <div className="text-[10px] text-slate-600 truncate">{r.recruiting}</div>
                     </div>
                   </div>
                 )
               })}
             </div>
             <div>
-              <div className="text-[9px] text-slate-500 mb-1.5">External Dependencies</div>
+              <div className="text-[11px] text-slate-500 mb-1.5">External Dependencies</div>
               {data.dependencyGraph.map((d, i) => (
                 <div key={d.dependency} className="flex items-center gap-2 mb-1.5">
                   <StatusDot status={d.status} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-[9px] text-slate-300 truncate">{d.dependency}</div>
-                    <div className="text-[8px] text-slate-500">{d.owner} · Resolution: {d.resolution}</div>
+                    <div className="text-[11px] text-slate-300 truncate">{d.dependency}</div>
+                    <div className="text-[10px] text-slate-500">{d.owner} · Resolution: {d.resolution}</div>
                   </div>
                   <div className="flex items-center gap-1">
-                    {d.criticalPath && <span className="text-[7px] text-red-400 font-bold">CP</span>}
+                    {d.criticalPath && <span className="text-[10px] text-red-400 font-bold">CP</span>}
                     <StatusBadge status={d.risk === 'High' ? 'critical' : d.risk === 'Medium' ? 'warning' : 'info'} label={d.risk} />
                   </div>
                 </div>
@@ -917,8 +840,8 @@ export default function AICTOReport() {
                     animate={{ strokeDashoffset: 2 * Math.PI * 18 * (1 - item.count / 10) }} transition={{ duration: 1.2, delay: i * 0.1, ease: 'easeOut' }} />
                   <text x="24" y="27" textAnchor="middle" fill={item.color} fontSize="14" fontWeight="700" fontFamily="monospace" transform="rotate(90 24 24)">{item.count}</text>
                 </svg>
-                <div className="text-[9px] text-slate-500 font-mono tracking-wider mt-1">{item.label}</div>
-                <div className="text-[8px] text-slate-600 mt-0.5">{i === 0 ? 'Immediate action' : i === 1 ? 'Mitigating' : i === 2 ? 'Scheduled' : 'Resolved'}</div>
+                <div className="text-[11px] text-slate-500 font-mono tracking-wider mt-1">{item.label}</div>
+                <div className="text-[10px] text-slate-600 mt-0.5">{i === 0 ? 'Immediate action' : i === 1 ? 'Mitigating' : i === 2 ? 'Scheduled' : 'Resolved'}</div>
               </div>
             ))}
           </div>
@@ -935,8 +858,8 @@ export default function AICTOReport() {
                     <text x="16" y="19" textAnchor="middle" fill={severityColor} fontSize="8" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{r.score}</text>
                   </svg>
                   <div className="min-w-0">
-                    <div className="text-[9px] text-slate-300 font-mono truncate">{r.service}</div>
-                    <div className="text-[7px] text-slate-600 font-mono">Risk score</div>
+                    <div className="text-[11px] text-slate-300 font-mono truncate">{r.service}</div>
+                    <div className="text-[10px] text-slate-600 font-mono">Risk score</div>
                   </div>
                 </div>
               )
@@ -949,11 +872,11 @@ export default function AICTOReport() {
                   <span className="text-[10px] font-medium text-white truncate">{rc.name}</span>
                   <StatusBadge status={rc.mitigation === 'Active' ? 'success' : rc.mitigation === 'In Progress' ? 'info' : rc.mitigation === 'Planned' ? 'warning' : 'default'} label={rc.mitigation === 'Resolved' ? 'Done' : rc.mitigation} />
                 </div>
-                <div className="flex items-center justify-between text-[8px] text-slate-500">
+                <div className="flex items-center justify-between text-[10px] text-slate-500">
                   <span>{rc.service}</span>
                   <span className={`font-semibold ${rc.severity === 'Critical' ? 'text-red-400' : rc.severity === 'High' ? 'text-orange-400' : rc.severity === 'Medium' ? 'text-yellow-400' : 'text-green-400'}`}>{rc.score} · {rc.severity}</span>
                 </div>
-                <div className="flex items-center gap-1 mt-1 text-[7px] text-slate-600">
+                <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-600">
                   <span>Detection: {rc.detectionTime}</span>
                   <span>·</span>
                   <span>RTO: {rc.rto}</span>
@@ -974,14 +897,14 @@ export default function AICTOReport() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div>
-              <div className="text-[9px] text-slate-500 mb-1.5">Security Findings</div>
+              <div className="text-[11px] text-slate-500 mb-1.5">Security Findings</div>
               <div className="space-y-1">
                 {data.securityFindings.map((sf, i) => (
                   <div key={sf.finding} className="flex items-center gap-2">
                     <StatusDot status={sf.status} />
                     <div className="flex-1 min-w-0">
-                      <div className="text-[9px] text-slate-300 truncate">{sf.finding}</div>
-                      <div className="text-[8px] text-slate-500">Fix: {sf.fixEffort} · {sf.owner} · Due: {sf.dueDate}</div>
+                      <div className="text-[11px] text-slate-300 truncate">{sf.finding}</div>
+                      <div className="text-[10px] text-slate-500">Fix: {sf.fixEffort} · {sf.owner} · Due: {sf.dueDate}</div>
                     </div>
                     <StatusBadge status={sf.severity === 'Critical' ? 'critical' : sf.severity === 'High' ? 'warning' : sf.severity === 'Medium' ? 'info' : 'default'} label={sf.severity} />
                   </div>
@@ -989,14 +912,14 @@ export default function AICTOReport() {
               </div>
             </div>
             <div>
-              <div className="text-[9px] text-slate-500 mb-1.5">Compliance Status</div>
+              <div className="text-[11px] text-slate-500 mb-1.5">Compliance Status</div>
               <div className="space-y-1">
                 {data.complianceChecks.map((c, i) => (
                   <div key={c.standard} className="flex items-center gap-2">
                     <StatusDot status={c.status} />
                     <div className="flex-1 min-w-0">
-                      <div className="text-[9px] text-slate-300 truncate">{c.standard}</div>
-                      <div className="text-[8px] text-slate-500">{c.owner} · {c.required ? 'Required' : 'Optional'}{c.deadline !== 'N/A' ? ` · Deadline: ${c.deadline}` : ''}</div>
+                      <div className="text-[11px] text-slate-300 truncate">{c.standard}</div>
+                      <div className="text-[10px] text-slate-500">{c.owner} · {c.required ? 'Required' : 'Optional'}{c.deadline !== 'N/A' ? ` · Deadline: ${c.deadline}` : ''}</div>
                     </div>
                     <StatusBadge status={c.status === 'Compliant' ? 'success' : c.status === 'In Progress' ? 'info' : 'default'} label={c.status === 'Not Applicable' ? 'N/A' : c.status} />
                   </div>
@@ -1018,23 +941,23 @@ export default function AICTOReport() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
             <div className="rounded-lg border border-emerald-500/10 bg-emerald-500/[0.03] p-3 text-center">
               <div className="text-lg font-bold text-emerald-400"><AnimatedCounter value={data.roi.percentage} suffix="%" /></div>
-              <div className="text-[9px] text-slate-500">Projected ROI</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">12-month horizon</div>
+              <div className="text-[11px] text-slate-500">Projected ROI</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">12-month horizon</div>
             </div>
             <div className="rounded-lg border border-emerald-500/10 bg-emerald-500/[0.03] p-3 text-center">
               <div className="text-lg font-bold text-emerald-400"><AnimatedCounter value={data.roi.breakevenHours} decimals={1} suffix="h" /></div>
-              <div className="text-[9px] text-slate-500">Breakeven Time</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">Post-deployment</div>
+              <div className="text-[11px] text-slate-500">Breakeven Time</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">Post-deployment</div>
             </div>
             <div className="rounded-lg border border-emerald-500/10 bg-emerald-500/[0.03] p-3 text-center">
               <div className="text-lg font-bold text-emerald-400">$<AnimatedCounter value={Math.round(data.roi.monthlySavings / 1000)} suffix="K" /></div>
-              <div className="text-[9px] text-slate-500">Monthly Savings</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">At steady state</div>
+              <div className="text-[11px] text-slate-500">Monthly Savings</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">At steady state</div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
               <div className="text-lg font-bold text-white">$<AnimatedCounter value={Math.round(data.roi.investment / 1000)} suffix="K" /></div>
-              <div className="text-[9px] text-slate-500">Investment</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">Upfront cost</div>
+              <div className="text-[11px] text-slate-500">Investment</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">Upfront cost</div>
             </div>
           </div>
           <div className="flex items-center gap-3 mb-3 glass-card p-3">
@@ -1047,20 +970,20 @@ export default function AICTOReport() {
             </svg>
             <div>
               <div className="text-[10px] text-slate-400 font-mono tracking-wider">ROI Progress</div>
-              <div className="text-[8px] text-slate-600">Target: 100% ROI = Breakeven</div>
+              <div className="text-[10px] text-slate-600">Target: 100% ROI = Breakeven</div>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-[7px] text-slate-600">Invested: ${(data.roi.investment / 1000).toFixed(0)}K</span>
-                <span className="text-[7px] text-slate-600">·</span>
-                <span className="text-[7px] text-emerald-400">Returned: ${(data.roi.totalReturn / 1000).toFixed(0)}K</span>
+                <span className="text-[10px] text-slate-600">Invested: ${(data.roi.investment / 1000).toFixed(0)}K</span>
+                <span className="text-[10px] text-slate-600">·</span>
+                <span className="text-[10px] text-emerald-400">Returned: ${(data.roi.totalReturn / 1000).toFixed(0)}K</span>
               </div>
             </div>
           </div>
           <div className="glass-card p-3 relative">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[9px] text-slate-500 font-mono tracking-wider">Savings Projection — 12 Month Cumulative</span>
+              <span className="text-[11px] text-slate-500 font-mono tracking-wider">Savings Projection — 12 Month Cumulative</span>
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1 text-[8px]"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Cumulative</span>
-                <span className="flex items-center gap-1 text-[8px]"><span className="h-2 w-2 rounded-full bg-amber-500" /> Monthly</span>
+                <span className="flex items-center gap-1 text-[10px]"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Cumulative</span>
+                <span className="flex items-center gap-1 text-[10px]"><span className="h-2 w-2 rounded-full bg-amber-500" /> Monthly</span>
               </div>
             </div>
             <svg viewBox="0 0 600 200" className="w-full" style={{ minHeight: 160 }}>
@@ -1108,7 +1031,7 @@ export default function AICTOReport() {
                 )
               })()}
             </svg>
-            <div className="flex items-center justify-center gap-4 text-[8px] text-slate-600 font-mono mt-1">
+            <div className="flex items-center justify-center gap-4 text-[10px] text-slate-600 font-mono mt-1">
               <span className="flex items-center gap-1"><span className="h-1.5 w-4 rounded-sm bg-emerald-500/60" /> Cumulative Savings</span>
               <span className="flex items-center gap-1"><span className="h-1.5 w-4 rounded-sm bg-amber-500/60" /> Monthly Savings</span>
               <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" /> Breakeven</span>
@@ -1128,16 +1051,16 @@ export default function AICTOReport() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
             {data.monitoringAlerts.map((ma, i) => (
               <div key={ma.metric} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-                <div className="text-[9px] font-medium text-white mb-0.5">{ma.metric}</div>
-                <div className="text-[8px] text-slate-400 mb-1">Threshold: {ma.threshold}</div>
+                <div className="text-[11px] font-medium text-white mb-0.5">{ma.metric}</div>
+                <div className="text-[10px] text-slate-400 mb-1">Threshold: {ma.threshold}</div>
                 <div className="flex items-center gap-1">
                   <StatusBadge status={ma.severity === 'Critical' ? 'critical' : 'warning'} label={ma.severity} />
-                  <span className="text-[7px] text-slate-600 ml-auto">{ma.response}</span>
+                  <span className="text-[10px] text-slate-600 ml-auto">{ma.response}</span>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-2 flex items-center gap-2 text-[8px] text-slate-600">
+          <div className="mt-2 flex items-center gap-2 text-[10px] text-slate-600">
             <span className="font-medium text-slate-500">Observability:</span>
             <span>{data.deploymentConfig.observability}</span>
             <span className="mx-1">|</span>
@@ -1157,43 +1080,43 @@ export default function AICTOReport() {
           </div>
           <div className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 mb-3">
             <div className="text-center">
-              <div className="text-[9px] text-slate-600">Earliest</div>
+              <div className="text-[11px] text-slate-600">Earliest</div>
               <div className="text-sm font-bold text-white">{data.deploymentWindow.earliest}</div>
-              <div className="text-[8px] text-slate-700">Aggressive timeline</div>
+              <div className="text-[10px] text-slate-700">Aggressive timeline</div>
             </div>
             <div className="text-slate-700 text-lg">→</div>
             <div className="text-center">
-              <div className="text-[9px] text-slate-600">Recommended</div>
+              <div className="text-[11px] text-slate-600">Recommended</div>
               <div className="text-sm font-bold text-emerald-400">{data.deploymentWindow.recommended}</div>
-              <div className="text-[8px] text-emerald-500/50">Target launch date</div>
+              <div className="text-[10px] text-emerald-500/50">Target launch date</div>
             </div>
             <div className="text-slate-700 text-lg">→</div>
             <div className="text-center">
-              <div className="text-[9px] text-slate-600">Latest</div>
+              <div className="text-[11px] text-slate-600">Latest</div>
               <div className="text-sm font-bold text-white">{data.deploymentWindow.latest}</div>
-              <div className="text-[8px] text-slate-700">Hard deadline</div>
+              <div className="text-[10px] text-slate-700">Hard deadline</div>
             </div>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-              <div className="text-[9px] text-slate-500 mb-0.5">Strategy</div>
+              <div className="text-[11px] text-slate-500 mb-0.5">Strategy</div>
               <div className="text-[10px] font-medium text-white truncate">{data.deploymentConfig.strategy}</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">Progressive roll-out pattern</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">Progressive roll-out pattern</div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-              <div className="text-[9px] text-slate-500 mb-0.5">Rollback Plan</div>
+              <div className="text-[11px] text-slate-500 mb-0.5">Rollback Plan</div>
               <div className="text-[10px] font-medium text-white leading-tight truncate">{data.deploymentConfig.rollbackPlan}</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">Automated trigger conditions</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">Automated trigger conditions</div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-              <div className="text-[9px] text-slate-500 mb-0.5">Canary Steps</div>
+              <div className="text-[11px] text-slate-500 mb-0.5">Canary Steps</div>
               <div className="text-[10px] font-medium text-white truncate">{data.deploymentConfig.canarySteps}</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">{data.deploymentConfig.canaryDuration}</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">{data.deploymentConfig.canaryDuration}</div>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-              <div className="text-[9px] text-slate-500 mb-0.5">Blast Radius</div>
+              <div className="text-[11px] text-slate-500 mb-0.5">Blast Radius</div>
               <div className="text-[10px] font-medium text-white truncate">{data.deploymentConfig.blastRadius}</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">Isolated canary cluster</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">Isolated canary cluster</div>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -1204,8 +1127,8 @@ export default function AICTOReport() {
                     <StatusDot status={e.status} />
                     <span className="text-[10px] font-medium text-white">{e.env}</span>
                   </div>
-                  <div className="text-[8px] text-slate-500 mt-0.5">Config: {e.config} · Data: {e.dataVolume}</div>
-                  <div className="text-[7px] text-slate-600">Access: {e.access} · Refresh: {e.refreshRate}</div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Config: {e.config} · Data: {e.dataVolume}</div>
+                  <div className="text-[10px] text-slate-600">Access: {e.access} · Refresh: {e.refreshRate}</div>
                 </div>
                 <StatusBadge status={e.status === 'Ready' || e.status === 'Live' ? 'success' : e.status === 'Provisioning' ? 'info' : 'default'} label={e.status} />
               </div>
@@ -1245,16 +1168,16 @@ export default function AICTOReport() {
                           animate={{ strokeDashoffset: 2 * Math.PI * 12 * (1 - m.value / 100) }} transition={{ duration: 0.8, delay: mi * 0.15, ease: 'easeOut' }} />
                         <text x="16" y="19" textAnchor="middle" fill={m.color} fontSize="7" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{m.value}%</text>
                       </svg>
-                      <span className="text-[7px] text-slate-500 font-mono mt-0.5">{m.label}</span>
+                      <span className="text-[10px] text-slate-500 font-mono mt-0.5">{m.label}</span>
                     </div>
                   ))}
                 </div>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04]">
-                  <span className="text-[8px] text-slate-600">{t.members} members · {t.sprintVelocity} SP/sprint</span>
+                  <span className="text-[10px] text-slate-600">{t.members} members · {t.sprintVelocity} SP/sprint</span>
                 </div>
-                <div className="text-[8px] text-slate-500 mt-0.5">Focus: {t.focusArea}</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">Focus: {t.focusArea}</div>
                 <div className="mt-1.5">
-                  <span className={`text-[8px] font-medium ${t.load >= 80 ? 'text-red-400' : t.load >= 60 ? 'text-yellow-400' : 'text-green-400'}`}>
+                  <span className={`text-[10px] font-medium ${t.load >= 80 ? 'text-red-400' : t.load >= 60 ? 'text-yellow-400' : 'text-green-400'}`}>
                     {t.load >= 80 ? 'ACTION: Add 1 contractor for Sprint 2 workload' : t.load >= 60 ? 'MONITOR: Capacity adequate, watch for scope creep' : 'READY: Available for additional work'}
                   </span>
                 </div>
@@ -1273,52 +1196,52 @@ export default function AICTOReport() {
           </div>
           <div className="grid grid-cols-2 gap-2 mb-2">
             <div className="rounded-lg border border-red-500/10 bg-red-500/[0.03] p-3">
-              <div className="text-[9px] text-slate-500 mb-0.5">Investment (Cost)</div>
+              <div className="text-[11px] text-slate-500 mb-0.5">Investment (Cost)</div>
               <div className="text-lg font-bold text-red-400">$<AnimatedCounter value={data.engineeringCost.costUSD} /></div>
-              <div className="text-[8px] text-slate-600 mt-0.5">One-time engineering cost</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">One-time engineering cost</div>
               <div className="mt-2 space-y-1">
                 {data.costBreakdown.map((c, i) => (
                   <div key={c.phase} className="flex items-center gap-1">
                     <div className="h-1 w-1 rounded-full bg-slate-600 shrink-0" />
-                    <span className="text-[8px] text-slate-500 flex-1 truncate">{c.phase}</span>
-                    <span className="text-[8px] text-slate-400">${c.cost.toLocaleString()}</span>
+                    <span className="text-[10px] text-slate-500 flex-1 truncate">{c.phase}</span>
+                    <span className="text-[10px] text-slate-400">${c.cost.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
               <div className="mt-2 pt-2 border-t border-red-500/10 flex items-center justify-between">
-                <span className="text-[8px] text-slate-500">Total</span>
+                <span className="text-[10px] text-slate-500">Total</span>
                 <span className="text-[10px] font-bold text-red-400">$14,000</span>
               </div>
             </div>
             <div className="rounded-lg border border-emerald-500/10 bg-emerald-500/[0.03] p-3">
-              <div className="text-[9px] text-slate-500 mb-0.5">Projected Savings (Benefit)</div>
+              <div className="text-[11px] text-slate-500 mb-0.5">Projected Savings (Benefit)</div>
               <div className="text-lg font-bold text-emerald-400">$<AnimatedCounter value={data.roi.monthlySavings} />/mo</div>
-              <div className="text-[8px] text-slate-600 mt-0.5">$2.8M+ over 12 months</div>
+              <div className="text-[10px] text-slate-600 mt-0.5">$2.8M+ over 12 months</div>
               <div className="mt-2 space-y-1">
                 <div className="flex items-center gap-1">
                   <div className="h-1 w-1 rounded-full bg-emerald-500 shrink-0" />
-                  <span className="text-[8px] text-slate-500 flex-1">Revenue protected (incident prevention)</span>
-                  <span className="text-[8px] text-emerald-400">$288K/mo</span>
+                  <span className="text-[10px] text-slate-500 flex-1">Revenue protected (incident prevention)</span>
+                  <span className="text-[10px] text-emerald-400">$288K/mo</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="h-1 w-1 rounded-full bg-emerald-500 shrink-0" />
-                  <span className="text-[8px] text-slate-500 flex-1">SLA penalty avoidance</span>
-                  <span className="text-[8px] text-emerald-400">$12K/mo</span>
+                  <span className="text-[10px] text-slate-500 flex-1">SLA penalty avoidance</span>
+                  <span className="text-[10px] text-emerald-400">$12K/mo</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="h-1 w-1 rounded-full bg-emerald-500 shrink-0" />
-                  <span className="text-[8px] text-slate-500 flex-1">Operational efficiency (reduced toil)</span>
-                  <span className="text-[8px] text-emerald-400">$18K/mo</span>
+                  <span className="text-[10px] text-slate-500 flex-1">Operational efficiency (reduced toil)</span>
+                  <span className="text-[10px] text-emerald-400">$18K/mo</span>
                 </div>
               </div>
               <div className="mt-2 pt-2 border-t border-emerald-500/10 flex items-center justify-between">
-                <span className="text-[8px] text-slate-500">Monthly total</span>
+                <span className="text-[10px] text-slate-500">Monthly total</span>
                 <span className="text-[10px] font-bold text-emerald-400">$318K/mo</span>
               </div>
             </div>
           </div>
           <div className="glass-card p-3">
-            <div className="text-[9px] text-slate-500 mb-2 font-mono tracking-wider">Breakeven Timeline — Cumulative Savings</div>
+            <div className="text-[11px] text-slate-500 mb-2 font-mono tracking-wider">Breakeven Timeline — Cumulative Savings</div>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-1">
               {data.monthlyProjection.map((m, i) => {
                 const pct = Math.min((m.cumulative / data.engineeringCost.costUSD) * 100, 100)
@@ -1364,18 +1287,18 @@ export default function AICTOReport() {
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-semibold text-white">{m.name}</span>
                           <StatusBadge status={m.status === 'Complete' ? 'success' : m.status === 'In Progress' ? 'info' : m.status === 'At Risk' ? 'critical' : 'default'} label={m.status} />
-                          <span className="text-[8px] text-slate-600 font-mono">({m.phase})</span>
+                          <span className="text-[10px] text-slate-600 font-mono">({m.phase})</span>
                         </div>
-                        <span className="text-[9px] text-slate-500 font-mono">{m.date}</span>
+                        <span className="text-[11px] text-slate-500 font-mono">{m.date}</span>
                       </div>
                       <div className="flex items-center gap-2 mb-1.5">
                         <div className="flex-1 h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
                           <motion.div initial={{ width: 0 }} animate={{ width: `${m.progress}%` }} transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
                             className={'h-full rounded-full ' + (m.status === 'Complete' ? 'bg-gradient-to-r from-emerald-500 to-green-500' : m.status === 'In Progress' ? 'bg-gradient-to-r from-amber-500 to-orange-500' : m.status === 'At Risk' ? 'bg-gradient-to-r from-red-500 to-rose-500' : 'bg-slate-600')} />
                         </div>
-                        <span className={'text-[9px] font-mono font-bold w-8 text-right ' + (m.status === 'Complete' ? 'text-emerald-400' : m.status === 'In Progress' ? 'text-amber-400' : m.status === 'At Risk' ? 'text-red-400' : 'text-slate-500')}>{m.progress}%</span>
+                        <span className={'text-[11px] font-mono font-bold w-8 text-right ' + (m.status === 'Complete' ? 'text-emerald-400' : m.status === 'In Progress' ? 'text-amber-400' : m.status === 'At Risk' ? 'text-red-400' : 'text-slate-500')}>{m.progress}%</span>
                       </div>
-                      <div className="flex items-center justify-between text-[8px] text-slate-600">
+                      <div className="flex items-center justify-between text-[10px] text-slate-600">
                         <span className="font-mono">Owner: {m.owner}</span>
                         {m.blockers !== 'None' && <span className="text-red-400/70 truncate max-w-[240px]">⛔ {m.blockers}</span>}
                       </div>
@@ -1387,41 +1310,7 @@ export default function AICTOReport() {
           </div>
         </motion.div>
 
-        {/* 14. AI Recommendations */}
-        <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-500/20">
-              <svg className="h-3.5 w-3.5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
-            </div>
-            <h2 className="text-sm font-bold text-white">AI Recommendations</h2>
-            <StatusBadge status="critical" label="2 P0 · 3 P1 · 2 P2" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
-            {data.aiRecommendations.map((r, i) => (
-              <div key={i} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-                <div className="flex items-center justify-between mb-1.5">
-                  <StatusBadge status={r.priority === 'P0' ? 'critical' : r.priority === 'P1' ? 'warning' : 'default'} label={r.priority} />
-                  <span className="text-[9px] text-slate-500">{r.owner} · {r.effort}</span>
-                </div>
-                <p className="text-[10px] text-slate-300 leading-relaxed mb-1">{r.action}</p>
-                <p className="text-[8px] text-slate-500 mb-1">Impact: {r.impact}</p>
-                <p className="text-[7px] text-slate-600 mb-1.5">Why: {r.rationale}</p>
-                <div className="flex items-center gap-1.5">
-                  <svg width="28" height="28" viewBox="0 0 28 28" className="shrink-0 -rotate-90">
-                    <circle cx="14" cy="14" r="10" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
-                    <motion.circle cx="14" cy="14" r="10" fill="none" stroke={r.confidence >= 90 ? '#22c55e' : r.confidence >= 80 ? '#f59e0b' : '#f97316'} strokeWidth="3" strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 10} initial={{ strokeDashoffset: 2 * Math.PI * 10 }}
-                      animate={{ strokeDashoffset: 2 * Math.PI * 10 * (1 - r.confidence / 100) }} transition={{ duration: 1, delay: i * 0.08, ease: 'easeOut' }} />
-                    <text x="14" y="17" textAnchor="middle" fill={r.confidence >= 90 ? '#22c55e' : r.confidence >= 80 ? '#f59e0b' : '#f97316'} fontSize="6" fontWeight="700" fontFamily="monospace" transform="rotate(90 14 14)">{r.confidence}%</text>
-                  </svg>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-[8px] text-slate-500">Confidence</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        <AIRecommendations recommendations={data.aiRecommendations.map(r => ({...r, priority: r.priority === 'P0' ? 'critical' : r.priority === 'P1' ? 'high' : 'medium'}))} />
 
         {/* 15. Risk Mitigation Plan */}
         <motion.div variants={item} className="rounded-xl border border-white/[0.06] bg-slate-900/50 p-4">
@@ -1438,13 +1327,13 @@ export default function AICTOReport() {
                   <span className="text-[10px] font-medium text-white">{mp.risk}</span>
                   <StatusBadge status={mp.severity === 'Critical' ? 'critical' : mp.severity === 'High' ? 'warning' : 'info'} label={mp.severity} />
                 </div>
-                <p className="text-[9px] text-slate-400 mb-1.5 leading-relaxed">{mp.strategy}</p>
-                <div className="flex items-center justify-between text-[8px] text-slate-500 mb-1.5">
+                <p className="text-[11px] text-slate-400 mb-1.5 leading-relaxed">{mp.strategy}</p>
+                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1.5">
                   <span>Owner: {mp.owner}</span>
                   <span>Timeline: {mp.timeline}</span>
                   <span>Cost: ${mp.costImpact.toLocaleString()}</span>
                 </div>
-                <p className="text-[8px] text-slate-600 mb-1.5">Success metric: {mp.successMetric}</p>
+                <p className="text-[10px] text-slate-600 mb-1.5">Success metric: {mp.successMetric}</p>
                 <div className="flex items-center gap-1.5">
                   <svg width="28" height="28" viewBox="0 0 28 28" className="shrink-0 -rotate-90">
                     <circle cx="14" cy="14" r="10" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
@@ -1454,7 +1343,7 @@ export default function AICTOReport() {
                     <text x="14" y="17" textAnchor="middle" fill={mp.reduction >= 85 ? '#22c55e' : mp.reduction >= 70 ? '#f59e0b' : '#f97316'} fontSize="6" fontWeight="700" fontFamily="monospace" transform="rotate(90 14 14)">{mp.reduction}%</text>
                   </svg>
                   <div className="flex-1 min-w-0">
-                    <span className="text-[8px] text-slate-500">Risk Reduction</span>
+                    <span className="text-[10px] text-slate-500">Risk Reduction</span>
                   </div>
                 </div>
               </div>
@@ -1475,7 +1364,7 @@ export default function AICTOReport() {
               <div key={s.name} className={`rounded-lg border p-3 ${i === 1 ? 'border-amber-500/20 bg-amber-500/[0.03]' : 'border-white/[0.06] bg-white/[0.02]'}`}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-white">{s.name}</span>
-                  <span className="text-[8px] text-slate-500">{s.probability}% probability</span>
+                  <span className="text-[10px] text-slate-500">{s.probability}% probability</span>
                 </div>
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5">
@@ -1486,31 +1375,31 @@ export default function AICTOReport() {
                         animate={{ strokeDashoffset: 2 * Math.PI * 10 * (1 - s.riskReduction / 100) }} transition={{ duration: 0.8, delay: i * 0.1, ease: 'easeOut' }} />
                       <text x="14" y="17" textAnchor="middle" fill={i === 0 ? '#22c55e' : i === 1 ? '#f59e0b' : '#ef4444'} fontSize="6" fontWeight="700" fontFamily="monospace" transform="rotate(90 14 14)">{s.riskReduction}%</text>
                     </svg>
-                    <span className="text-[9px] text-slate-500">Risk Reduction</span>
+                    <span className="text-[11px] text-slate-500">Risk Reduction</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] text-slate-500">ROI</span>
+                    <span className="text-[11px] text-slate-500">ROI</span>
                     <span className={`text-[10px] font-medium ${i === 0 ? 'text-emerald-400' : i === 1 ? 'text-amber-400' : 'text-red-400'}`}>{s.roi}%</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] text-slate-500">Upfront Cost</span>
+                    <span className="text-[11px] text-slate-500">Upfront Cost</span>
                     <span className="text-[10px] font-medium text-white">${(s.cost / 1000).toFixed(0)}K</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] text-slate-500">Timeline</span>
+                    <span className="text-[11px] text-slate-500">Timeline</span>
                     <span className="text-[10px] font-medium text-white">{s.timeline}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] text-slate-500">Year 1 Savings</span>
+                    <span className="text-[11px] text-slate-500">Year 1 Savings</span>
                     <span className="text-[10px] font-medium text-white">$<AnimatedCounter value={Math.round(s.savingsYear1 / 1000000)} decimals={1} suffix="M" delay={i * 200} /></span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] text-slate-500">Residual Risk</span>
+                    <span className="text-[11px] text-slate-500">Residual Risk</span>
                     <span className="text-[10px] font-medium text-white">{s.riskScore}/100</span>
                   </div>
                 </div>
                 {i === 1 && <div className="mt-2 pt-2 border-t border-amber-500/10 text-center">
-                  <span className="text-[8px] text-amber-400 font-medium">Most Likely Scenario</span>
+                  <span className="text-[10px] text-amber-400 font-medium">Most Likely Scenario</span>
                 </div>}
               </div>
             ))}
@@ -1528,11 +1417,11 @@ export default function AICTOReport() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">
             {data.communicationPlan.map((cp, i) => (
               <div key={cp.stakeholder} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-                <div className="text-[9px] font-medium text-white mb-0.5">{cp.stakeholder}</div>
-                <div className="text-[8px] text-slate-400">{cp.channel}</div>
-                <div className="text-[8px] text-slate-500 mt-0.5">Frequency: {cp.frequency}</div>
-                <div className="text-[8px] text-slate-500">Owner: {cp.owner}</div>
-                <div className="text-[7px] text-slate-600 mt-0.5">Format: {cp.format}</div>
+                <div className="text-[11px] font-medium text-white mb-0.5">{cp.stakeholder}</div>
+                <div className="text-[10px] text-slate-400">{cp.channel}</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">Frequency: {cp.frequency}</div>
+                <div className="text-[10px] text-slate-500">Owner: {cp.owner}</div>
+                <div className="text-[10px] text-slate-600 mt-0.5">Format: {cp.format}</div>
               </div>
             ))}
           </div>
@@ -1564,8 +1453,8 @@ export default function AICTOReport() {
                     <text x="24" y="27" textAnchor="middle" fill={item.color} fontSize="12" fontWeight="700" fontFamily="monospace" transform="rotate(90 24 24)">{item.value}{item.unit === 'days' ? 'd' : item.unit === '%' ? '%' : ''}</text>
                   </svg>
                 </div>
-                <div className="text-[9px] text-slate-500 font-mono tracking-wider">{item.label}</div>
-                <div className="text-[8px] text-slate-600 mt-0.5">{item.sub}</div>
+                <div className="text-[11px] text-slate-500 font-mono tracking-wider">{item.label}</div>
+                <div className="text-[10px] text-slate-600 mt-0.5">{item.sub}</div>
               </div>
             ))}
           </div>
@@ -1584,8 +1473,8 @@ export default function AICTOReport() {
                   <text x="18" y="21" textAnchor="middle" fill={item.color} fontSize="9" fontWeight="700" fontFamily="monospace" transform="rotate(90 18 18)">{item.value}%</text>
                 </svg>
                 <div>
-                  <div className="text-[9px] text-slate-300 font-mono">{item.label}</div>
-                  <div className="text-[8px] text-slate-600 font-mono">Score</div>
+                  <div className="text-[11px] text-slate-300 font-mono">{item.label}</div>
+                  <div className="text-[10px] text-slate-600 font-mono">Score</div>
                 </div>
               </div>
             ))}
@@ -1594,13 +1483,13 @@ export default function AICTOReport() {
             {data.technicalDebt.categories.map((d, i) => (
               <div key={d.area} className="rounded border border-white/[0.06] bg-white/[0.02] p-2 flex items-center justify-between">
                 <div className="min-w-0 flex-1">
-                  <div className="text-[9px] font-medium text-white truncate">{d.area}</div>
-                  <div className="flex items-center gap-1.5 text-[8px] text-slate-500">
+                  <div className="text-[11px] font-medium text-white truncate">{d.area}</div>
+                  <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
                     <span>{d.days} days effort</span>
                     <span>·</span>
                     <StatusBadge status={d.priority === 'P1' ? 'warning' : d.priority === 'P2' ? 'info' : 'default'} label={d.priority} />
                   </div>
-                  <div className="text-[7px] text-slate-600 mt-0.5 truncate">{d.resolution}</div>
+                  <div className="text-[10px] text-slate-600 mt-0.5 truncate">{d.resolution}</div>
                 </div>
                 <StatusBadge status={d.severity === 'High' ? 'warning' : d.severity === 'Medium' ? 'info' : 'default'} label={d.severity} />
               </div>
@@ -1624,31 +1513,31 @@ export default function AICTOReport() {
                 <div className="rounded-lg border border-brand/10 bg-brand/[0.03] p-2.5">
                   <div className="flex items-center gap-1 mb-1">
                     <svg className="h-3 w-3 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                    <span className="text-[9px] font-semibold text-brand-light">Team Readiness Note</span>
+                    <span className="text-[11px] font-semibold text-brand-light">Team Readiness Note</span>
                   </div>
-                  <p className="text-[9px] text-slate-400">{data.recommendation.teamReadiness}</p>
+                  <p className="text-[11px] text-slate-400">{data.recommendation.teamReadiness}</p>
                 </div>
                 <div className="rounded-lg border border-yellow-500/10 bg-yellow-500/[0.03] p-2.5">
                   <div className="flex items-center gap-1 mb-1">
                     <svg className="h-3 w-3 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
-                    <span className="text-[9px] font-semibold text-yellow-400">Alternative Considered</span>
+                    <span className="text-[11px] font-semibold text-yellow-400">Alternative Considered</span>
                   </div>
-                  <p className="text-[9px] text-slate-400">{data.recommendation.alternative}</p>
+                  <p className="text-[11px] text-slate-400">{data.recommendation.alternative}</p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col gap-2">
               <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                <div className="text-[9px] text-slate-500 mb-1">Decision Confidence</div>
+                <div className="text-[11px] text-slate-500 mb-1">Decision Confidence</div>
                 <RingGauge value={data.verdict.confidence} size={60} stroke={4} color="#22c55e" />
               </div>
               <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                <div className="text-[9px] text-slate-500 mb-1">Risk/Reward Ratio</div>
+                <div className="text-[11px] text-slate-500 mb-1">Risk/Reward Ratio</div>
                 <div className="text-lg font-bold text-amber-400">1:{Math.round(data.roi.percentage / data.riskLevel.score * 100) / 100}</div>
-                <div className="text-[8px] text-slate-500">Reward per risk point</div>
+                <div className="text-[10px] text-slate-500">Reward per risk point</div>
               </div>
               <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 text-center">
-                <div className="flex items-center justify-center gap-1 text-[8px] text-slate-500">
+                <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500">
                   <span>Verdict:</span>
                   <StatusBadge status="success" label={data.verdict.shouldBuild ? 'BUILD' : 'REJECT'} />
                 </div>
@@ -1663,7 +1552,7 @@ export default function AICTOReport() {
                 animate={{ strokeDashoffset: 2 * Math.PI * 14 * (1 - data.verdict.confidence / 100) }} transition={{ duration: 1.2, ease: 'easeOut' }} />
               <text x="18" y="21" textAnchor="middle" fill="#22c55e" fontSize="9" fontWeight="700" fontFamily="monospace" transform="rotate(90 18 18)">{data.verdict.confidence}%</text>
             </svg>
-            <span className="text-[9px] text-slate-500 font-mono tracking-wider">Confidence Score</span>
+            <span className="text-[11px] text-slate-500 font-mono tracking-wider">Confidence Score</span>
           </div>
         </motion.div>
 

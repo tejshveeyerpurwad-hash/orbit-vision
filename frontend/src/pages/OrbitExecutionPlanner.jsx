@@ -4,6 +4,9 @@ import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
+import PageHero from '../components/PageHero'
+import ExecutiveSummary from '../components/ExecutiveSummary'
+import AIRecommendations from '../components/AIRecommendations'
 
 const presets = [
   'Add payment retry support',
@@ -184,9 +187,9 @@ function AnimatedGauge({ value, label, sub }) {
       </svg>
       <div className="relative -mt-[68px] flex flex-col items-center">
         <span className="text-2xl font-bold text-white">{pct}<span className="text-sm text-slate-500">%</span></span>
-        {sub && <span className="text-[9px] text-slate-600 mt-0.5">{sub}</span>}
+        {sub && <span className="text-[11px] text-slate-600 mt-0.5">{sub}</span>}
       </div>
-      {label && <span className="text-[9px] font-medium text-slate-500 mt-1 text-center leading-tight">{label}</span>}
+      {label && <span className="text-[11px] font-medium text-slate-500 mt-1 text-center leading-tight">{label}</span>}
     </div>
   )
 }
@@ -228,22 +231,22 @@ function WorkItemCard({ item }) {
           <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${statusDot}`} />
           <span className="text-xs text-slate-300 truncate">{itemTitle}</span>
         </div>
-        <span className="text-[9px] text-slate-600 shrink-0">{item?.points ?? 0} pts</span>
+        <span className="text-[11px] text-slate-600 shrink-0">{item?.points ?? 0} pts</span>
       </div>
       <div className="flex items-center gap-1.5 mt-1.5">
-        <span className={`rounded px-1.5 py-0.5 text-[7px] font-bold ${
+        <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
           itemType === 'feat' ? 'bg-emerald-500/10 text-emerald-400' :
           itemType === 'test' ? 'bg-amber-500/10 text-amber-400' :
           itemType === 'chore' ? 'bg-yellow-500/10 text-yellow-400' :
           'bg-slate-500/10 text-slate-400'
         }`}>{itemType || '?'}</span>
-        <span className={`rounded px-1 py-0.5 text-[7px] font-bold ${
+        <span className={`rounded px-1 py-0.5 text-[10px] font-bold ${
           String(item?.priority ?? '') === 'P0' ? 'bg-red-500/10 text-red-400' :
           String(item?.priority ?? '') === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
           'bg-slate-500/10 text-slate-400'
         }`}>{String(item?.priority ?? '')}</span>
-        <span className="text-[9px] text-slate-600">{String(item?.assignee ?? '')}</span>
-        <span className="ml-auto text-[9px] text-slate-700">S{item?.sprint ?? ''}</span>
+        <span className="text-[11px] text-slate-600">{String(item?.assignee ?? '')}</span>
+        <span className="ml-auto text-[11px] text-slate-700">S{item?.sprint ?? ''}</span>
       </div>
     </div>
   )
@@ -310,7 +313,7 @@ function DeploymentCard({ dep, index }) {
         <StatusBadge status={depStatus === 'running' ? 'running' : depStatus} label={depStatus} />
       </div>
       <div className="flex items-center gap-3 text-[10px] text-slate-500 flex-wrap">
-        <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${depEnv === 'production' ? 'bg-purple-500/10 text-purple-400' : 'bg-cyan-500/10 text-cyan-400'}`}>{depEnv || '?'}</span>
+        <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${depEnv === 'production' ? 'bg-purple-500/10 text-purple-400' : 'bg-cyan-500/10 text-cyan-400'}`}>{depEnv || '?'}</span>
         <span>{String(dep?.date ?? '')}</span>
         <span>{String(dep?.duration ?? '')}</span>
         <span>{dep?.changes ?? 0} changes</span>
@@ -345,7 +348,7 @@ function BlockerCard({ blocker, index, expanded, onToggle }) {
           <span className="text-xs font-semibold text-slate-200 truncate">{String(blocker?.title ?? '')}</span>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${sevBg}`}>{blkSev}</span>
+          <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${sevBg}`}>{blkSev}</span>
           <StatusBadge status={blkStatus === 'resolved' ? 'success' : blkStatus === 'resolving' ? 'warning' : 'critical'} label={blkStatus} />
           <svg className={`h-3.5 w-3.5 text-slate-600 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -356,7 +359,7 @@ function BlockerCard({ blocker, index, expanded, onToggle }) {
       <AnimatePresence>
         {expanded && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-            <div className="flex items-center gap-3 text-[9px] text-slate-600 mb-2 flex-wrap pt-1 border-t border-white/[0.06]">
+            <div className="flex items-center gap-3 text-[11px] text-slate-600 mb-2 flex-wrap pt-1 border-t border-white/[0.06]">
               <span>Owner: {String(blocker?.owner ?? '')}</span>
               <span>Raised: {String(blocker?.raisedDate ?? '')}</span>
               <span>Linked: {(blocker?.linkedItems || []).join(', ')}</span>
@@ -370,12 +373,12 @@ function BlockerCard({ blocker, index, expanded, onToggle }) {
                 <text x="14" y="17" textAnchor="middle" fill={blkProgress >= 100 ? '#22c55e' : blkProgress >= 50 ? '#f59e0b' : '#ef4444'} fontSize="6" fontWeight="700" fontFamily="monospace" transform="rotate(90 14 14)">{blkProgress}%</text>
               </svg>
               <div className="flex-1">
-                <span className="text-[8px] text-slate-600 font-mono">Resolution Progress</span>
+                <span className="text-[10px] text-slate-600 font-mono">Resolution Progress</span>
               </div>
               {blkStatus !== 'resolved' && (
                 <div className="flex gap-1 shrink-0" onClick={e => e.stopPropagation()}>
-                  <button className="rounded bg-white/[0.06] px-2 py-1 text-[8px] font-medium text-slate-400 hover:bg-white/[0.1] hover:text-white transition-colors">Resolve</button>
-                  <button className="rounded bg-white/[0.06] px-2 py-1 text-[8px] font-medium text-slate-400 hover:bg-white/[0.1] hover:text-white transition-colors">Assign</button>
+                  <button className="rounded bg-white/[0.06] px-2 py-1 text-[10px] font-medium text-slate-400 hover:bg-white/[0.1] hover:text-white transition-colors">Resolve</button>
+                  <button className="rounded bg-white/[0.06] px-2 py-1 text-[10px] font-medium text-slate-400 hover:bg-white/[0.1] hover:text-white transition-colors">Assign</button>
                 </div>
               )}
             </div>
@@ -404,9 +407,9 @@ function FeatureCard({ feature, index }) {
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${featStatus === 'done' ? 'bg-emerald-500' : featStatus === 'in_progress' ? 'bg-amber-500' : 'bg-slate-600'}`} />
           <span className="text-xs font-medium text-slate-200 truncate">{typeof feature?.name === 'object' ? JSON.stringify(feature.name) : String(feature?.name ?? '')}</span>
-          <span className={`rounded px-1.5 py-0.5 text-[7px] font-bold shrink-0 ${priorityColor}`}>{featPriority}</span>
+          <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold shrink-0 ${priorityColor}`}>{featPriority}</span>
         </div>
-        <span className="text-[9px] text-slate-600 shrink-0">{featProgress}%</span>
+        <span className="text-[11px] text-slate-600 shrink-0">{featProgress}%</span>
       </div>
       <div className="flex items-center gap-2">
         <svg width="28" height="28" viewBox="0 0 28 28" className="-rotate-90 shrink-0">
@@ -417,9 +420,9 @@ function FeatureCard({ feature, index }) {
           <text x="14" y="17" textAnchor="middle" fill={featProgress >= 100 ? '#22c55e' : featProgress >= 50 ? '#f59e0b' : '#64748b'} fontSize="6" fontWeight="700" fontFamily="monospace" transform="rotate(90 14 14)">{featProgress}%</text>
         </svg>
         <div className="flex items-center gap-2">
-          <span className="text-[9px] text-slate-600 font-mono">{String(feature?.owner ?? '')}</span>
-          <span className={`text-[9px] font-mono ${statusColor}`}>{featStatus.replace('_', ' ')}</span>
-          <span className="text-[9px] text-slate-700 font-mono">S{feature?.sprint ?? ''}</span>
+          <span className="text-[11px] text-slate-600 font-mono">{String(feature?.owner ?? '')}</span>
+          <span className={`text-[11px] font-mono ${statusColor}`}>{featStatus.replace('_', ' ')}</span>
+          <span className="text-[11px] text-slate-700 font-mono">S{feature?.sprint ?? ''}</span>
         </div>
       </div>
     </motion.div>
@@ -514,6 +517,8 @@ export default function OrbitExecutionPlanner() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-8">
         <ExecutiveBanner currentPage="/execution-planner" />
+        <PageHero title="AI Mission Control / Launch Sequence" subtitle="Real-time execution planning across 4 services, 3 teams, and 3 sprints — deployment readiness at 71% with 2 active blockers." impact="42" impactLabel="Completion %" confidence={87} />
+        <ExecutiveSummary />
 
         {/* ===== 1. NASA MISSION CONTROL HERO BANNER ===== */}
         <motion.div variants={item} className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-6 sm:p-8">
@@ -545,7 +550,7 @@ export default function OrbitExecutionPlanner() {
                   <text x="18" y="21" textAnchor="middle" fill="#f59e0b" fontSize="9" fontWeight="700" fontFamily="monospace" transform="rotate(90 18 18)">{d.overview.completionPct}%</text>
                 </svg>
                 <div>
-                  <span className="text-[8px] text-slate-600 font-mono">COMPLETION</span>
+                  <span className="text-[10px] text-slate-600 font-mono">COMPLETION</span>
                 </div>
               </div>
             </div>
@@ -616,7 +621,7 @@ export default function OrbitExecutionPlanner() {
             </div>
             <div>
               <h2 className="text-sm font-bold text-white tracking-wider">Mission Status Wall</h2>
-              <p className="text-[8px] text-slate-600 font-mono tracking-[0.15em]">REAL-TIME MISSION METRICS</p>
+              <p className="text-[10px] text-slate-600 font-mono tracking-[0.15em]">REAL-TIME MISSION METRICS</p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -633,7 +638,7 @@ export default function OrbitExecutionPlanner() {
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-current opacity-[0.02]" />
                 {metric.ring ? (
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] text-slate-500 font-mono tracking-wider uppercase">{metric.label}</span>
+                    <span className="text-[11px] text-slate-500 font-mono tracking-wider uppercase">{metric.label}</span>
                     <svg width="44" height="44" viewBox="0 0 44 44" className="-rotate-90 shrink-0">
                       <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3.5" />
                       <motion.circle cx="22" cy="22" r="18" fill="none" stroke={metric.color} strokeWidth="3.5" strokeLinecap="round"
@@ -644,11 +649,11 @@ export default function OrbitExecutionPlanner() {
                   </div>
                 ) : (
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] text-slate-500 font-mono tracking-wider uppercase">{metric.label}</span>
+                    <span className="text-[11px] text-slate-500 font-mono tracking-wider uppercase">{metric.label}</span>
                     {metric.critical && (
                       <div className="flex items-center gap-1">
                         <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
-                        <span className="text-[8px] text-red-400 font-mono font-bold">ALERT</span>
+                        <span className="text-[10px] text-red-400 font-mono font-bold">ALERT</span>
                       </div>
                     )}
                   </div>
@@ -673,7 +678,7 @@ export default function OrbitExecutionPlanner() {
             </div>
             <div>
               <h2 className="text-sm font-bold text-white tracking-wider">Squad Coordination Map</h2>
-              <p className="text-[8px] text-slate-600 font-mono tracking-[0.15em]">TEAM-SERVICE DEPENDENCY LATTICE</p>
+              <p className="text-[10px] text-slate-600 font-mono tracking-[0.15em]">TEAM-SERVICE DEPENDENCY LATTICE</p>
             </div>
           </div>
           <div className="relative w-full h-72 rounded-lg border border-white/[0.04] bg-slate-900/30 overflow-hidden">
@@ -732,12 +737,12 @@ export default function OrbitExecutionPlanner() {
                       <motion.div key={t.name} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.1 }}
                         className="pointer-events-auto rounded-lg border border-white/[0.08] bg-slate-900/80 backdrop-blur-sm p-3 hover:border-white/[0.15] transition-all">
                         <div className="flex items-center gap-2 mb-1">
-                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-[9px] font-bold" style={{ backgroundColor: loadColor + '20', color: loadColor }}>
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-[11px] font-bold" style={{ backgroundColor: loadColor + '20', color: loadColor }}>
                             {t.name[0]}
                           </div>
                           <div className="min-w-0">
                             <span className="text-xs font-semibold text-white">{t.name}</span>
-                            <div className="flex items-center gap-1 text-[7px] text-slate-500 font-mono">
+                            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-mono">
                               <span>{t.lead}</span>
                               <span className="text-slate-700">&middot;</span>
                               <span>{t.sprintPoints} pts</span>
@@ -766,8 +771,8 @@ export default function OrbitExecutionPlanner() {
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: statusColor }} />
                           <div className="min-w-0">
                             <span className="text-xs font-semibold text-white">{s.name}</span>
-                            <div className="flex items-center gap-1 text-[7px] text-slate-500 font-mono">
-                              <span className="rounded px-1 py-0.5 text-[7px] font-bold" style={{ backgroundColor: impColor + '20', color: impColor }}>
+                            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-mono">
+                              <span className="rounded px-1 py-0.5 text-[10px] font-bold" style={{ backgroundColor: impColor + '20', color: impColor }}>
                                 {String(s?.impact ?? '').toUpperCase()}
                               </span>
                               <span className="text-slate-600">{svcStatus.replace('_', ' ')}</span>
@@ -794,7 +799,7 @@ export default function OrbitExecutionPlanner() {
             </div>
             <div>
               <h2 className="text-sm font-bold text-white tracking-wider">Launch Readiness Score</h2>
-              <p className="text-[8px] text-slate-600 font-mono tracking-[0.15em]">PRE-FLIGHT CHECKLIST</p>
+              <p className="text-[10px] text-slate-600 font-mono tracking-[0.15em]">PRE-FLIGHT CHECKLIST</p>
             </div>
           </div>
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-center">
@@ -817,8 +822,8 @@ export default function OrbitExecutionPlanner() {
                   return (
                     <>
                       <span className="text-4xl sm:text-5xl font-bold font-mono text-white">{pct}<span className="text-lg text-emerald-400">%</span></span>
-                      <span className="text-[8px] text-slate-500 font-mono tracking-[0.1em] mt-1">LAUNCH READINESS</span>
-                      <span className="text-[7px] text-slate-600 font-mono mt-0.5">{passing}/{total} checks passing</span>
+                      <span className="text-[10px] text-slate-500 font-mono tracking-[0.1em] mt-1">LAUNCH READINESS</span>
+                      <span className="text-[10px] text-slate-600 font-mono mt-0.5">{passing}/{total} checks passing</span>
                     </>
                   )
                 })()}
@@ -842,8 +847,8 @@ export default function OrbitExecutionPlanner() {
                       )}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[9px] text-slate-300 truncate font-mono">{typeof c?.name === 'object' ? JSON.stringify(c.name) : String(c?.name ?? '')}</div>
-                      <span className={`rounded px-1 py-0.5 text-[7px] font-bold ${isPass ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                      <div className="text-[11px] text-slate-300 truncate font-mono">{typeof c?.name === 'object' ? JSON.stringify(c.name) : String(c?.name ?? '')}</div>
+                      <span className={`rounded px-1 py-0.5 text-[10px] font-bold ${isPass ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
                         {String(c?.category ?? '')}
                       </span>
                     </div>
@@ -864,13 +869,13 @@ export default function OrbitExecutionPlanner() {
             </div>
             <div>
               <h2 className="text-sm font-bold text-white tracking-wider">Mission Timeline</h2>
-              <p className="text-[8px] text-slate-600 font-mono tracking-[0.15em]">SPACE LAUNCH SEQUENCE</p>
+              <p className="text-[10px] text-slate-600 font-mono tracking-[0.15em]">SPACE LAUNCH SEQUENCE</p>
             </div>
             <div className="ml-auto flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-1.5">
               <svg className="h-3 w-3 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-[9px] font-mono text-amber-400">MISSION ELAPSED: {d.timeline ? d.timeline.filter(t => t.status === 'completed' || t.status === 'in_progress').length : 0}/{d.timeline ? d.timeline.length : 0} PHASES</span>
+              <span className="text-[11px] font-mono text-amber-400">MISSION ELAPSED: {d.timeline ? d.timeline.filter(t => t.status === 'completed' || t.status === 'in_progress').length : 0}/{d.timeline ? d.timeline.length : 0} PHASES</span>
             </div>
           </div>
           <div className="relative pb-2">
@@ -890,7 +895,7 @@ export default function OrbitExecutionPlanner() {
                       <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: phaseColor }} />
                       <span className="text-[10px] font-bold text-white tracking-wide font-mono">{typeof phase?.phase === 'object' ? JSON.stringify(phase.phase) : String(phase?.phase ?? '')}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-[8px] text-slate-500 font-mono mb-2">
+                    <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono mb-2">
                       <span>{String(phase?.start ?? '')} - {String(phase?.end ?? '')}</span>
                       <span className="text-slate-700">&middot;</span>
                       <span>{String(phase?.duration ?? '')}</span>
@@ -904,7 +909,7 @@ export default function OrbitExecutionPlanner() {
                         <text x="16" y="19" textAnchor="middle" fill={phaseColor} fontSize="8" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{phase?.progress || 0}%</text>
                       </svg>
                       <div>
-                        <span className={`rounded px-1.5 py-0.5 text-[7px] font-bold font-mono ${
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold font-mono ${
                           phaseStatus === 'completed' ? 'bg-emerald-500/10 text-emerald-400' :
                           phaseStatus === 'in_progress' ? 'bg-amber-500/10 text-amber-400 animate-pulse' :
                           'bg-slate-500/10 text-slate-400'
@@ -1020,7 +1025,7 @@ export default function OrbitExecutionPlanner() {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} style={{ color: m.color }}><path strokeLinecap="round" strokeLinejoin="round" d={m.icon} /></svg>
-                        <span className="text-[9px] text-slate-500 font-mono tracking-wider uppercase">{m.label}</span>
+                        <span className="text-[11px] text-slate-500 font-mono tracking-wider uppercase">{m.label}</span>
                       </div>
                       <svg width="44" height="44" viewBox="0 0 44 44" className="-rotate-90 shrink-0">
                         <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3.5" />
@@ -1032,7 +1037,7 @@ export default function OrbitExecutionPlanner() {
                     </div>
                     <div className="mt-3">
                       <div className="text-lg sm:text-xl font-bold font-mono tracking-tight" style={{ color: m.color }}><AnimatedCounter value={m.value} suffix={m.unit} /></div>
-                      <div className="text-[8px] text-slate-600 font-mono mt-0.5">{m.sub}</div>
+                      <div className="text-[10px] text-slate-600 font-mono mt-0.5">{m.sub}</div>
                     </div>
                   </motion.div>
                 ))}
@@ -1074,7 +1079,7 @@ export default function OrbitExecutionPlanner() {
                           <text x="26" y="30" textAnchor="middle" fill={pod.color} fontSize="12" fontWeight="700" fontFamily="monospace" transform="rotate(90 26 26)">{pct}%</text>
                         </svg>
                       </div>
-                      <div className="space-y-1 text-[8px] font-mono">
+                      <div className="space-y-1 text-[10px] font-mono">
                         <div className="flex items-center justify-between">
                           <span className="text-slate-600">Points</span>
                           <span className="text-slate-400">{pod.points?.completed ?? 0}/{pod.points?.total ?? 0}</span>
@@ -1089,9 +1094,9 @@ export default function OrbitExecutionPlanner() {
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                           {pod.members?.slice(0, 3).map(m => (
-                            <span key={m} className="rounded-full bg-slate-800 px-1 py-0.5 text-[7px] text-slate-500">{m}</span>
+                            <span key={m} className="rounded-full bg-slate-800 px-1 py-0.5 text-[10px] text-slate-500">{m}</span>
                           ))}
-                          {pod.members?.length > 3 && <span className="text-[7px] text-slate-600">+{pod.members.length - 3}</span>}
+                          {pod.members?.length > 3 && <span className="text-[10px] text-slate-600">+{pod.members.length - 3}</span>}
                         </div>
                       </div>
                     </motion.div>
@@ -1128,7 +1133,7 @@ export default function OrbitExecutionPlanner() {
                       <div className="flex items-center gap-1 mt-2">
                         {members.map((m, mi) => {
                           const key = typeof m === 'string' ? m : mi
-                          return <span key={key} className="rounded-full bg-slate-800 px-1.5 py-0.5 text-[7px] text-slate-500 font-mono">{typeof m === 'string' ? m : ''}</span>
+                          return <span key={key} className="rounded-full bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-500 font-mono">{typeof m === 'string' ? m : ''}</span>
                         })}
                       </div>
                     </motion.div>
@@ -1189,7 +1194,7 @@ export default function OrbitExecutionPlanner() {
                               <span className="h-2 w-2 rounded-full bg-slate-500" />
                               <h4 className="text-[10px] font-semibold text-slate-400 uppercase">To Do</h4>
                             </div>
-                            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-slate-500">{todo.length}</span>
+                            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[11px] text-slate-500">{todo.length}</span>
                           </div>
                           <div className="space-y-1.5">
                             {todo.length > 0 ? todo.map((item, i) => <WorkItemCard key={item?.title || i} item={item} />) : (
@@ -1203,7 +1208,7 @@ export default function OrbitExecutionPlanner() {
                               <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
                               <h4 className="text-[10px] font-semibold text-amber-400 uppercase">In Progress</h4>
                             </div>
-                            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-slate-500">{inProgress.length}</span>
+                            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[11px] text-slate-500">{inProgress.length}</span>
                           </div>
                           <div className="space-y-1.5">
                             {inProgress.length > 0 ? inProgress.map((item, i) => <WorkItemCard key={item?.title || i} item={item} />) : (
@@ -1217,7 +1222,7 @@ export default function OrbitExecutionPlanner() {
                               <span className="h-2 w-2 rounded-full bg-emerald-500" />
                               <h4 className="text-[10px] font-semibold text-emerald-400 uppercase">Done</h4>
                             </div>
-                            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-slate-500">{done.length}</span>
+                            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[11px] text-slate-500">{done.length}</span>
                           </div>
                           <div className="space-y-1.5">
                             {done.length > 0 ? done.map((item, i) => <WorkItemCard key={item?.title || i} item={item} />) : (
@@ -1256,10 +1261,10 @@ export default function OrbitExecutionPlanner() {
                             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${i === 0 ? 'bg-amber-500/20 text-amber-300' : i === 1 ? 'bg-blue-500/20 text-blue-300' : 'bg-emerald-500/20 text-emerald-300'}`}>{String(t?.name ?? '')[0] || '?'}</div>
                             <div>
                               <div className="text-sm font-semibold text-white">{String(t?.name ?? '')}</div>
-                              <div className="text-[9px] text-slate-600">{String(t?.role ?? '')}</div>
+                              <div className="text-[11px] text-slate-600">{String(t?.role ?? '')}</div>
                             </div>
                           </div>
-                          {isOverloaded && <span className="rounded bg-red-500/10 px-1.5 py-0.5 text-[8px] font-bold text-red-400 animate-pulse">OVERLOADED</span>}
+                          {isOverloaded && <span className="rounded bg-red-500/10 px-1.5 py-0.5 text-[10px] font-bold text-red-400 animate-pulse">OVERLOADED</span>}
                         </div>
                         <div className="flex items-center gap-2 text-[10px] text-slate-500 mb-2">
                           <span>{t?.members ?? 0} members</span>
@@ -1348,7 +1353,7 @@ export default function OrbitExecutionPlanner() {
                         <div className="flex-1 min-w-0 -mt-0.5">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-sm font-semibold text-slate-200">{typeof m?.name === 'object' ? JSON.stringify(m.name) : String(m?.name ?? '')}</span>
-                            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[8px] font-medium text-slate-500">{String(m?.sprint ?? '')}</span>
+                            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">{String(m?.sprint ?? '')}</span>
                             <StatusBadge status={mStatus === 'done' ? 'success' : mStatus === 'in_progress' ? 'running' : 'pending'} label={mStatus === 'in_progress' ? 'In Progress' : mStatus === 'done' ? 'Done' : 'Planned'} />
                           </div>
                           <p className="text-[10px] text-slate-600 mt-1">{typeof m?.desc === 'object' ? JSON.stringify(m.desc) : String(m?.desc ?? '')}</p>
@@ -1384,7 +1389,7 @@ export default function OrbitExecutionPlanner() {
                     <span className="text-[10px] text-slate-500 font-mono tracking-wider mt-1">READY</span>
                     <div className="flex items-center gap-1 mt-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      <span className="text-[8px] text-slate-600 font-mono">LIVE</span>
+                      <span className="text-[10px] text-slate-600 font-mono">LIVE</span>
                     </div>
                   </div>
                 </div>
@@ -1403,8 +1408,8 @@ export default function OrbitExecutionPlanner() {
                             )}
                           </div>
                           <div className="min-w-0">
-                            <div className="text-[9px] text-slate-300 truncate font-mono">{typeof c?.name === 'object' ? JSON.stringify(c.name) : String(c?.name ?? '')}</div>
-                            <div className="text-[7px] text-slate-600">{String(c?.category ?? '')}</div>
+                            <div className="text-[11px] text-slate-300 truncate font-mono">{typeof c?.name === 'object' ? JSON.stringify(c.name) : String(c?.name ?? '')}</div>
+                            <div className="text-[10px] text-slate-600">{String(c?.category ?? '')}</div>
                           </div>
                         </motion.div>
                       )
@@ -1507,7 +1512,7 @@ export default function OrbitExecutionPlanner() {
                           <text x="16" y="19" textAnchor="middle" fill={rSev === 'critical' ? '#ef4444' : rSev === 'high' ? '#f97316' : '#eab308'} fontSize="8" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{sevPct}%</text>
                         </svg>
                         <div className="flex-1 min-w-0">
-                          <span className="text-[9px] text-slate-500 font-mono">Severity</span>
+                          <span className="text-[11px] text-slate-500 font-mono">Severity</span>
                         </div>
                       </div>
                     </motion.div>
@@ -1536,19 +1541,19 @@ export default function OrbitExecutionPlanner() {
                   <BurndownChart totalPoints={d.overview.totalPoints} />
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
                     <div className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
-                      <div className="text-[8px] text-slate-600">Total</div>
+                      <div className="text-[10px] text-slate-600">Total</div>
                       <div className="text-sm font-bold text-white"><AnimatedCounter value={d.overview.totalPoints} /></div>
                     </div>
                     <div className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
-                      <div className="text-[8px] text-slate-600">Remaining</div>
+                      <div className="text-[10px] text-slate-600">Remaining</div>
                       <div className="text-sm font-bold text-orange-400"><AnimatedCounter value={d.overview.pointsRemaining} /></div>
                     </div>
                     <div className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
-                      <div className="text-[8px] text-slate-600">Completed</div>
+                      <div className="text-[10px] text-slate-600">Completed</div>
                       <div className="text-sm font-bold text-emerald-400"><AnimatedCounter value={d.overview.pointsCompleted} /></div>
                     </div>
                     <div className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
-                      <div className="text-[8px] text-slate-600">On Track</div>
+                      <div className="text-[10px] text-slate-600">On Track</div>
                       <div className={`text-sm font-bold ${d.overview.onTrack ? 'text-emerald-400' : 'text-red-400'}`}>{d.overview.onTrack ? 'Yes' : 'No'}</div>
                     </div>
                   </div>
@@ -1567,9 +1572,9 @@ export default function OrbitExecutionPlanner() {
                       if (!v || typeof v !== 'object') return null
                       return (
                         <div key={v?.sprint ?? i} className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
-                          <div className="text-[8px] text-slate-600">Sprint {v?.sprint ?? ''}</div>
+                          <div className="text-[10px] text-slate-600">Sprint {v?.sprint ?? ''}</div>
                           <div className="text-base font-bold text-white"><AnimatedCounter value={typeof v?.points === 'number' ? v.points : 0} /></div>
-                          <div className="text-[7px] text-slate-600">points</div>
+                          <div className="text-[10px] text-slate-600">points</div>
                         </div>
                       )
                     })}
@@ -1579,43 +1584,7 @@ export default function OrbitExecutionPlanner() {
             </motion.div>
 
             {/* ===== SECTION 11: AI RECOMMENDATIONS ===== */}
-            <motion.div variants={item} id="ai-rec" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/20 border border-indigo-500/20">
-                  <svg className="h-4 w-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
-                </div>
-                <h2 className="text-sm font-bold text-white">AI Recommendations</h2>
-                <StatusBadge status="info" label={`${d.aiRecommendations.length} insights`} />
-              </div>
-              <div className="grid gap-3">
-                {(d.aiRecommendations || []).map((rec, i) => {
-                  if (!rec || typeof rec !== 'object') return null
-                  const recPriority = String(rec?.priority ?? '')
-                  const borderColor = recPriority === 'P0' ? 'border-l-red-500/60' : recPriority === 'P1' ? 'border-l-yellow-500/60' : 'border-l-slate-500/60'
-                  const priColor = recPriority === 'P0' ? 'bg-red-500/10 text-red-400' : recPriority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-slate-500/10 text-slate-400'
-                  return (
-                    <motion.div key={rec?.action || i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={`rounded-lg border border-white/[0.06] border-l-2 ${borderColor} bg-white/[0.02] p-3.5 hover:border-white/[0.12] transition-all`}>
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${priColor}`}>{recPriority}</span>
-                          <span className="text-xs font-medium text-slate-200">{typeof rec?.action === 'object' ? JSON.stringify(rec.action) : String(rec?.action ?? '')}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 text-[10px] text-slate-500 flex-wrap">
-                        <span className="text-slate-600">Impact:</span>
-                        <span>{typeof rec?.impact === 'object' ? JSON.stringify(rec.impact) : String(rec?.impact ?? '')}</span>
-                        <span className="text-slate-700">&middot;</span>
-                        <span className="text-slate-600">Effort:</span>
-                        <span className="font-medium text-slate-400">{String(rec?.effort ?? '')}</span>
-                        <span className="text-slate-700">&middot;</span>
-                        <span className="text-slate-600">Owner:</span>
-                        <span>{String(rec?.owner ?? '')}</span>
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            </motion.div>
+            <AIRecommendations recommendations={mockData.aiRecommendations.map(r => ({ ...r, priority: r.priority === 'P0' ? 'critical' : r.priority === 'P1' ? 'high' : 'medium' }))} />
 
             {/* ===== SECTION 12: RECENT ACTIVITY FEED ===== */}
             <motion.div variants={item} id="activity" className="scroll-mt-20 rounded-xl border border-white/[0.06] bg-slate-950/50 p-3 sm:p-4">
@@ -1658,7 +1627,7 @@ export default function OrbitExecutionPlanner() {
                             <span className="text-[10px] text-slate-500">{actAction}</span>
                             <span className="text-[10px] text-slate-400 truncate">{typeof act?.target === 'object' ? JSON.stringify(act.target) : String(act?.target ?? '')}</span>
                           </div>
-                          <span className="text-[8px] text-slate-700">{String(act?.timestamp ?? '')}</span>
+                          <span className="text-[10px] text-slate-700">{String(act?.timestamp ?? '')}</span>
                         </div>
                       </motion.div>
                     )

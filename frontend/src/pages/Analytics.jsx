@@ -4,6 +4,8 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import Layout from '../components/Layout'
 import StatCard from '../components/StatCard'
 import StatusBadge from '../components/StatusBadge'
+import PageHero from '../components/PageHero'
+import ExecutiveSummary from '../components/ExecutiveSummary'
 
 const incidentTrends = [
   { month: 'Jan', incidents: 12, prevented: 8, autoResolved: 5, escalated: 7, p1: 2, p2: 4, p3: 6 },
@@ -364,10 +366,8 @@ export default function Analytics() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-3 overflow-x-hidden">
 
-        <motion.div variants={item}>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Analytics</h1>
-          <p className="mt-1 text-sm text-slate-500">Platform-wide metrics and performance insights</p>
-        </motion.div>
+        <PageHero title="Platform Analytics & AI Performance Center" subtitle="Real-time observability across 47 services — incident trends, deployment success rates, cost impact analysis, and predictive forecasting." impact="97.2" impactLabel="Uptime % (30d)" confidence={94} />
+        <ExecutiveSummary />
 
         <motion.div variants={item} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <StatCard label="Total Incidents" value="66" trend="↓ 12% this quarter" color="text-red-400" />
@@ -389,7 +389,7 @@ export default function Analytics() {
                     <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">{e.desc}</p>
                     <div className="flex items-center gap-1.5 mt-2">
                       <span className="text-sm font-bold text-white">{e.metric}</span>
-                      <span className="text-[9px] text-slate-600">{e.metricLabel}</span>
+                      <span className="text-[11px] text-slate-600">{e.metricLabel}</span>
                     </div>
                   </div>
                 </div>
@@ -415,19 +415,19 @@ export default function Analytics() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
               <div className="text-center rounded-lg bg-slate-800/20 p-1.5 border border-white/[0.03]">
                 <p className="text-[11px] font-bold text-red-400">66</p>
-                <p className="text-[9px] text-slate-600">Total Incidents</p>
+                <p className="text-[11px] text-slate-600">Total Incidents</p>
               </div>
               <div className="text-center rounded-lg bg-slate-800/20 p-1.5 border border-white/[0.03]">
                 <p className="text-[11px] font-bold text-green-400">81</p>
-                <p className="text-[9px] text-slate-600">Prevented</p>
+                <p className="text-[11px] text-slate-600">Prevented</p>
               </div>
               <div className="text-center rounded-lg bg-slate-800/20 p-1.5 border border-white/[0.03]">
                 <p className="text-[11px] font-bold text-cyan-400">53</p>
-                <p className="text-[9px] text-slate-600">Auto-Resolved</p>
+                <p className="text-[11px] text-slate-600">Auto-Resolved</p>
               </div>
               <div className="text-center rounded-lg bg-slate-800/20 p-1.5 border border-white/[0.03]">
                 <p className="text-[11px] font-bold text-yellow-400">31</p>
-                <p className="text-[9px] text-slate-600">Escalated</p>
+                <p className="text-[11px] text-slate-600">Escalated</p>
               </div>
             </div>
           </ChartCard>
@@ -481,7 +481,7 @@ export default function Analytics() {
                     <span className="h-2 w-2 rounded-full" style={{ backgroundColor: r.color }} />
                     <span className="text-[10px] text-slate-500">{r.name}</span>
                     <span className="text-[10px] text-slate-600">({r.count})</span>
-                    <span className="text-[9px]" style={{ color: r.trend.startsWith('+') ? '#22c55e' : '#ef4444' }}>{r.trend}</span>
+                    <span className="text-[11px]" style={{ color: r.trend.startsWith('+') ? '#22c55e' : '#ef4444' }}>{r.trend}</span>
                   </div>
                 ))}
               </div>
@@ -504,7 +504,7 @@ export default function Analytics() {
               {teamData.map((t) => (
                 <div key={t.name} className="text-center">
                   <p className="text-[10px] font-semibold text-white">{t.velocity}</p>
-                  <p className="text-[8px] text-slate-600 truncate">{t.name}</p>
+                  <p className="text-[10px] text-slate-600 truncate">{t.name}</p>
                 </div>
               ))}
             </div>
@@ -525,8 +525,8 @@ export default function Analytics() {
                   <p className="text-[11px] font-semibold text-white">
                     {h.value}{h.name === 'Uptime' || h.name === 'Error Rate' ? '%' : h.name === 'Latency' ? 'ms' : h.name === 'Throughput' ? 'K' : '%'}
                   </p>
-                  <p className="text-[8px] text-slate-600 truncate">{h.name}</p>
-                  <p className="text-[8px]" style={{ color: h.trend.startsWith('+') ? '#22c55e' : '#ef4444' }}>{h.trend}</p>
+                  <p className="text-[10px] text-slate-600 truncate">{h.name}</p>
+                  <p className="text-[10px]" style={{ color: h.trend.startsWith('+') ? '#22c55e' : '#ef4444' }}>{h.trend}</p>
                 </div>
               ))}
             </div>
@@ -540,7 +540,7 @@ export default function Analytics() {
                   <button
                     key={r}
                     onClick={() => setSelectedRegion(r)}
-                    className={`text-[9px] px-2 py-0.5 rounded-full border transition-colors ${
+                    className={`text-[11px] px-2 py-0.5 rounded-full border transition-colors ${
                       selectedRegion === r
                         ? 'border-white/20 bg-white/10 text-white'
                         : 'border-white/[0.04] text-slate-500 hover:text-slate-300'
@@ -559,30 +559,30 @@ export default function Analytics() {
                     </div>
                     <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                       <div>
-                        <p className="text-[9px] text-slate-600">Incidents</p>
+                        <p className="text-[11px] text-slate-600">Incidents</p>
                         <p className="text-[11px] font-medium text-slate-300">{s.incidents}</p>
                       </div>
                       <div>
-                        <p className="text-[9px] text-slate-600">Deploy</p>
+                        <p className="text-[11px] text-slate-600">Deploy</p>
                         <p className="text-[11px] font-medium text-slate-300">{s.deploySuccess}%</p>
                       </div>
                       <div>
-                        <p className="text-[9px] text-slate-600">P95 Latency</p>
+                        <p className="text-[11px] text-slate-600">P95 Latency</p>
                         <p className="text-[11px] font-medium text-slate-300">{s.latency}ms</p>
                       </div>
                       <div>
-                        <p className="text-[9px] text-slate-600">Errors</p>
+                        <p className="text-[11px] text-slate-600">Errors</p>
                         <p className="text-[11px] font-medium text-slate-300">{s.errorRate}%</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-1 mt-1.5 pt-1 border-t border-white/[0.04]">
                       <div className="flex items-center gap-1">
-                        <span className="text-[8px] text-slate-600">CPU:</span>
-                        <span className="text-[8px] text-slate-400">{s.cpu}%</span>
+                        <span className="text-[10px] text-slate-600">CPU:</span>
+                        <span className="text-[10px] text-slate-400">{s.cpu}%</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <span className="text-[8px] text-slate-600">Mem:</span>
-                        <span className="text-[8px] text-slate-400">{s.memory}%</span>
+                        <span className="text-[10px] text-slate-600">Mem:</span>
+                        <span className="text-[10px] text-slate-400">{s.memory}%</span>
                       </div>
                     </div>
                   </div>
@@ -613,24 +613,24 @@ export default function Analytics() {
             {filteredTimeline.map((inc) => (
               <div key={inc.id} className="flex items-center gap-3 rounded-lg border border-white/[0.03] bg-slate-800/20 px-3 py-2 hover:bg-slate-800/40 transition-colors">
                 <div className="flex flex-col items-center gap-0.5 w-14 shrink-0">
-                  <span className="text-[9px] text-slate-600 font-medium">{inc.date.slice(5)}</span>
+                  <span className="text-[11px] text-slate-600 font-medium">{inc.date.slice(5)}</span>
                 </div>
                 <div className={`w-2 h-2 rounded-full shrink-0 ${severityColor(inc.severity)}`} />
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <span className="text-[10px] font-semibold text-white capitalize">{inc.severity}</span>
-                  <span className="text-[9px] text-slate-600">·</span>
+                  <span className="text-[11px] text-slate-600">·</span>
                   <span className="text-[10px] text-slate-300">{inc.service}</span>
-                  <span className="text-[9px] text-slate-600">·</span>
-                  <span className="text-[9px] text-slate-500 truncate">{inc.desc}</span>
+                  <span className="text-[11px] text-slate-600">·</span>
+                  <span className="text-[11px] text-slate-500 truncate">{inc.desc}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <div className="hidden lg:flex gap-1">
                     {inc.tags.slice(0, 2).map((t) => (
-                      <span key={t} className="text-[8px] bg-slate-800/60 text-slate-500 px-1 py-0.5 rounded">{t}</span>
+                      <span key={t} className="text-[10px] bg-slate-800/60 text-slate-500 px-1 py-0.5 rounded">{t}</span>
                     ))}
                   </div>
-                  <span className="text-[9px] text-slate-600">{inc.runbook}</span>
-                  <span className="text-[9px] text-slate-600">{inc.duration}</span>
+                  <span className="text-[11px] text-slate-600">{inc.runbook}</span>
+                  <span className="text-[11px] text-slate-600">{inc.duration}</span>
                   <StatusBadge status={inc.status} />
                 </div>
               </div>
@@ -656,19 +656,19 @@ export default function Analytics() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[11px] font-bold text-cyan-400">{weeklyDeployments.reduce((a, b) => a + b.deploys, 0)}</p>
-                <p className="text-[8px] text-slate-600">Total Deploys</p>
+                <p className="text-[10px] text-slate-600">Total Deploys</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[11px] font-bold text-red-400">{weeklyDeployments.reduce((a, b) => a + b.failures, 0)}</p>
-                <p className="text-[8px] text-slate-600">Failures</p>
+                <p className="text-[10px] text-slate-600">Failures</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[11px] font-bold text-yellow-400">{weeklyDeployments.reduce((a, b) => a + b.rollbacks, 0)}</p>
-                <p className="text-[8px] text-slate-600">Rollbacks</p>
+                <p className="text-[10px] text-slate-600">Rollbacks</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[11px] font-bold text-green-400">{weeklyDeployments.reduce((a, b) => a + b.hotfixes, 0)}</p>
-                <p className="text-[8px] text-slate-600">Hotfixes</p>
+                <p className="text-[10px] text-slate-600">Hotfixes</p>
               </div>
             </div>
           </ChartCard>
@@ -692,7 +692,7 @@ export default function Analytics() {
               {mttrData.map((m) => (
                 <div key={m.name} className="text-center">
                   <p className="text-[10px] font-semibold text-white">{m.minutes}m</p>
-                  <p className="text-[8px] text-slate-600">{m.trend}</p>
+                  <p className="text-[10px] text-slate-600">{m.trend}</p>
                 </div>
               ))}
             </div>
@@ -709,7 +709,7 @@ export default function Analytics() {
               <Area type="monotone" dataKey="minutes" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.12} strokeWidth={2} name="MTTR" />
             </AreaChart>
           </ResponsiveContainer>
-          <div className="flex items-center justify-between mt-1 text-[9px] text-slate-600">
+          <div className="flex items-center justify-between mt-1 text-[11px] text-slate-600">
             <span>Best week: W23 (32m)</span>
             <span>Worst week: W14 (70m)</span>
             <span>Average: {(weeklyMttrTrend.reduce((a, b) => a + b.minutes, 0) / weeklyMttrTrend.length).toFixed(0)}m</span>
@@ -724,12 +724,12 @@ export default function Analytics() {
                   <div className="flex items-center justify-between mb-1">
                     <div className="min-w-0 flex-1">
                       <p className="text-[11px] text-slate-300 font-medium">{s.label}</p>
-                      <p className="text-[8px] text-slate-600 mt-0.5 truncate">{s.description}</p>
+                      <p className="text-[10px] text-slate-600 mt-0.5 truncate">{s.description}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0 ml-2">
                       <div className="text-right">
                         <p className="text-[11px] font-semibold text-white">{s.value}</p>
-                        <p className="text-[8px] text-slate-600">goal: {s.goal}</p>
+                        <p className="text-[10px] text-slate-600">goal: {s.goal}</p>
                       </div>
                       <StatusBadge status={s.status} />
                     </div>
@@ -741,12 +741,12 @@ export default function Analytics() {
                         strokeDasharray={2 * Math.PI * 9} strokeDashoffset={2 * Math.PI * 9 * (1 - Math.min(s.bar, 100) / 100)} />
                       <text x="12" y="15" textAnchor="middle" fill={slaBarColor(s.bar)} fontSize="5" fontWeight="700" fontFamily="monospace" transform="rotate(90 12 12)">{Math.round(Math.min(s.bar, 100))}%</text>
                     </svg>
-                    <span className="text-[8px] text-slate-600 w-10 text-right">{s.trend}</span>
+                    <span className="text-[10px] text-slate-600 w-10 text-right">{s.trend}</span>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04] text-[9px] text-slate-600">
+            <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04] text-[11px] text-slate-600">
               <span>Metrics meeting/exceeding: <span className="text-green-400 font-semibold">7/7</span></span>
               <span>Overall SLA score: <span className="text-white font-semibold">98.2%</span></span>
             </div>
@@ -764,7 +764,7 @@ export default function Analytics() {
                 <Bar dataKey="consumed" fill="#ef4444" radius={[0, 3, 3, 0]} name="Consumed" stackId="a" />
               </BarChart>
             </ResponsiveContainer>
-            <div className="flex items-center justify-between text-[9px] text-slate-600 mt-1">
+            <div className="flex items-center justify-between text-[11px] text-slate-600 mt-1">
               <span>Total remaining: <span className="text-green-400 font-semibold">85.3%</span></span>
               <span>Total consumed: <span className="text-red-400 font-semibold">14.7%</span></span>
             </div>
@@ -779,7 +779,7 @@ export default function Analytics() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
                         <h4 className="text-[11px] font-semibold text-white">{a.title}</h4>
-                        <span className={`text-[8px] px-1 py-0.5 rounded-full ${
+                        <span className={`text-[10px] px-1 py-0.5 rounded-full ${
                           a.tag === 'Reliability' ? 'bg-emerald-500/10 text-emerald-400' :
                           a.tag === 'Performance' ? 'bg-cyan-500/10 text-cyan-400' :
                           a.tag === 'Delivery' ? 'bg-purple-500/10 text-purple-400' :
@@ -790,9 +790,9 @@ export default function Analytics() {
                           'bg-slate-500/10 text-slate-400'
                         }`}>{a.tag}</span>
                       </div>
-                      <p className="text-[9px] text-slate-500 leading-relaxed">{a.desc}</p>
+                      <p className="text-[11px] text-slate-500 leading-relaxed">{a.desc}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className={`text-[8px] font-medium ${
+                        <span className={`text-[10px] font-medium ${
                           a.impact === 'high' ? 'text-green-400' : a.impact === 'medium' ? 'text-yellow-400' : 'text-blue-400'
                         }`}>
                           {a.impact.toUpperCase()} IMPACT
@@ -803,7 +803,7 @@ export default function Analytics() {
                              <circle cx="10" cy="10" r="7" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round"
                                strokeDasharray={2 * Math.PI * 7} strokeDashoffset={2 * Math.PI * 7 * (1 - a.confidence / 100)} />
                            </svg>
-                           <span className="text-[8px] text-slate-600">{a.confidence}%</span>
+                           <span className="text-[10px] text-slate-600">{a.confidence}%</span>
                          </div>
                       </div>
                     </div>
@@ -836,8 +836,8 @@ export default function Analytics() {
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 mt-1">
               {dbPerformance.map((d) => (
                 <div key={d.name} className="text-center">
-                  <p className="text-[8px] font-semibold" style={{ color: d.poolUtilization > 85 ? '#ef4444' : d.poolUtilization > 70 ? '#f59e0b' : '#22c55e' }}>{d.poolUtilization}%</p>
-                  <p className="text-[7px] text-slate-600 truncate">{d.name}</p>
+                  <p className="text-[10px] font-semibold" style={{ color: d.poolUtilization > 85 ? '#ef4444' : d.poolUtilization > 70 ? '#f59e0b' : '#22c55e' }}>{d.poolUtilization}%</p>
+                  <p className="text-[10px] text-slate-600 truncate">{d.name}</p>
                 </div>
               ))}
             </div>
@@ -860,22 +860,22 @@ export default function Analytics() {
             <div className="grid grid-cols-3 gap-1 mt-1">
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-green-400">{cacheMetrics.reduce((a, b) => a + b.hits, 0).toLocaleString()}</p>
-                <p className="text-[7px] text-slate-600">Total Hits</p>
+                <p className="text-[10px] text-slate-600">Total Hits</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-yellow-400">{cacheMetrics.reduce((a, b) => a + b.misses, 0).toLocaleString()}</p>
-                <p className="text-[7px] text-slate-600">Total Misses</p>
+                <p className="text-[10px] text-slate-600">Total Misses</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-cyan-400">{(() => { const t = cacheMetrics.reduce((a, b) => a + b.hits + b.misses, 0); return t > 0 ? ((cacheMetrics.reduce((a, b) => a + b.hits, 0) / t) * 100).toFixed(1) : '0.0' })()}%</p>
-                <p className="text-[7px] text-slate-600">Overall Hit Rate</p>
+                <p className="text-[10px] text-slate-600">Overall Hit Rate</p>
               </div>
             </div>
           </ChartCard>
 
           <ChartCard title="Release Train Health" subtitle="Recent release train performance" delay={0.58}>
             <div className="space-y-1.5">
-              <div className="hidden sm:grid grid-cols-6 gap-1 text-[8px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
+              <div className="hidden sm:grid grid-cols-6 gap-1 text-[10px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
                 <span>Train</span>
                 <span className="text-center">Changes</span>
                 <span className="text-center">Incidents</span>
@@ -884,8 +884,8 @@ export default function Analytics() {
                 <span className="text-center">Rollback</span>
               </div>
               {releaseTrains.map((r) => (
-                <div key={r.train} className="grid grid-cols-3 sm:grid-cols-6 gap-1 text-[9px] text-slate-300 py-0.5 border-b border-white/[0.02] last:border-0 items-center">
-                  <span className="font-medium text-white text-[8px]">{r.train}</span>
+                <div key={r.train} className="grid grid-cols-3 sm:grid-cols-6 gap-1 text-[11px] text-slate-300 py-0.5 border-b border-white/[0.02] last:border-0 items-center">
+                  <span className="font-medium text-white text-[10px]">{r.train}</span>
                   <span className="text-center">{r.changes}</span>
                   <span className="text-center" style={{ color: r.incidents > 2 ? '#ef4444' : r.incidents > 1 ? '#f59e0b' : '#22c55e' }}>{r.incidents}</span>
                   <span className="text-center text-cyan-400">{r.passRate}%</span>
@@ -909,16 +909,16 @@ export default function Analytics() {
                       <text x="12" y="15" textAnchor="middle" fill={c.pct > 25 ? '#ef4444' : c.pct > 15 ? '#f59e0b' : c.pct > 8 ? '#06b6d4' : '#22c55e'} fontSize="5" fontWeight="700" fontFamily="monospace" transform="rotate(90 12 12)">{Math.round(c.pct)}%</text>
                     </svg>
                     <div className="w-24 shrink-0">
-                      <p className="text-[9px] text-slate-300 truncate">{c.cause}</p>
+                      <p className="text-[11px] text-slate-300 truncate">{c.cause}</p>
                     </div>
                   <div className="w-10 text-right shrink-0">
-                    <p className="text-[9px] font-semibold text-white">{c.count}</p>
+                    <p className="text-[11px] font-semibold text-white">{c.count}</p>
                   </div>
                   <div className="w-12 text-right shrink-0">
-                    <p className="text-[8px] text-slate-600">{c.pct}%</p>
+                    <p className="text-[10px] text-slate-600">{c.pct}%</p>
                   </div>
                   <div className="w-10 text-right shrink-0">
-                    <p className="text-[8px]" style={{ color: c.trend.startsWith('+') ? '#ef4444' : '#22c55e' }}>{c.trend}</p>
+                    <p className="text-[10px]" style={{ color: c.trend.startsWith('+') ? '#ef4444' : '#22c55e' }}>{c.trend}</p>
                   </div>
                 </div>
               ))}
@@ -927,7 +927,7 @@ export default function Analytics() {
 
           <ChartCard title="Alert Fatigue Analysis" subtitle="Alert volume by service (last 30 days)" delay={0.62}>
             <div className="space-y-1.5">
-              <div className="hidden sm:grid grid-cols-6 gap-1 text-[8px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
+              <div className="hidden sm:grid grid-cols-6 gap-1 text-[10px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
                 <span>Service</span>
                 <span className="text-center">Crit</span>
                 <span className="text-center">Warn</span>
@@ -936,8 +936,8 @@ export default function Analytics() {
                 <span className="text-center">Noise</span>
               </div>
               {alertFatigue.map((a) => (
-                <div key={a.service} className="grid grid-cols-3 sm:grid-cols-6 gap-1 text-[9px] text-slate-300 py-0.5 border-b border-white/[0.02] last:border-0 items-center">
-                  <span className="font-medium text-white text-[8px]">{a.service}</span>
+                <div key={a.service} className="grid grid-cols-3 sm:grid-cols-6 gap-1 text-[11px] text-slate-300 py-0.5 border-b border-white/[0.02] last:border-0 items-center">
+                  <span className="font-medium text-white text-[10px]">{a.service}</span>
                   <span className="text-center" style={{ color: a.critical > 5 ? '#ef4444' : '#f59e0b' }}>{a.critical}</span>
                   <span className="text-center text-yellow-400">{a.warning}</span>
                   <span className="text-center text-slate-500">{a.info}</span>
@@ -946,7 +946,7 @@ export default function Analytics() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04] text-[8px] text-slate-600">
+            <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04] text-[10px] text-slate-600">
               <span>Total alerts: {alertFatigue.reduce((a, b) => a + b.critical + b.warning + b.info, 0)}</span>
               <span>Actionable: {alertFatigue.reduce((a, b) => a + b.actionable, 0)}</span>
               <span>Noise: {alertFatigue.reduce((a, b) => a + b.noise, 0)}</span>
@@ -972,19 +972,19 @@ export default function Analytics() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-1">
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-green-400">{weeklySprintHealth.reduce((a, b) => a + b.completed, 0)}</p>
-                <p className="text-[7px] text-slate-600">Total Done</p>
+                <p className="text-[10px] text-slate-600">Total Done</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-slate-400">{weeklySprintHealth.reduce((a, b) => a + b.planned, 0)}</p>
-                <p className="text-[7px] text-slate-600">Total Planned</p>
+                <p className="text-[10px] text-slate-600">Total Planned</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-red-400">{weeklySprintHealth.reduce((a, b) => a + b.bugs, 0)}</p>
-                <p className="text-[7px] text-slate-600">Bugs Found</p>
+                <p className="text-[10px] text-slate-600">Bugs Found</p>
               </div>
               <div className="text-center rounded bg-slate-800/10 p-1">
                 <p className="text-[10px] font-bold text-yellow-400">{weeklySprintHealth.reduce((a, b) => a + b.debt, 0)}</p>
-                <p className="text-[7px] text-slate-600">Tech Debt</p>
+                <p className="text-[10px] text-slate-600">Tech Debt</p>
               </div>
             </div>
           </ChartCard>
@@ -999,14 +999,14 @@ export default function Analytics() {
                       <StatusBadge status={d.status} />
                     </div>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-[8px] text-slate-600">Uptime: {d.uptime}%</span>
-                      <span className="text-[8px] text-slate-600">Latency: {d.latency}ms</span>
-                      <span className="text-[8px] text-slate-600">Errors: {d.errors}%</span>
+                      <span className="text-[10px] text-slate-600">Uptime: {d.uptime}%</span>
+                      <span className="text-[10px] text-slate-600">Latency: {d.latency}ms</span>
+                      <span className="text-[10px] text-slate-600">Errors: {d.errors}%</span>
                     </div>
                   </div>
                   <div className="w-10 text-right shrink-0">
-                    <p className="text-[8px] text-slate-600">{d.pctTraffic}%</p>
-                    <p className="text-[7px] text-slate-700">traffic</p>
+                    <p className="text-[10px] text-slate-600">{d.pctTraffic}%</p>
+                    <p className="text-[10px] text-slate-700">traffic</p>
                   </div>
                 </div>
               ))}
@@ -1039,8 +1039,8 @@ export default function Analytics() {
                 {rollbackReasons.map((r) => (
                   <div key={r.reason} className="flex items-center gap-1">
                     <span className="h-2 w-2 rounded-full" style={{ backgroundColor: r.color }} />
-                    <span className="text-[8px] text-slate-500">{r.reason}</span>
-                    <span className="text-[8px] text-slate-600">({r.count})</span>
+                    <span className="text-[10px] text-slate-500">{r.reason}</span>
+                    <span className="text-[10px] text-slate-600">({r.count})</span>
                   </div>
                 ))}
               </div>
@@ -1053,11 +1053,11 @@ export default function Analytics() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {costImpactData.map((c, i) => (
                 <div key={i} className="rounded-lg border border-white/[0.05] bg-slate-800/30 p-2 hover:bg-slate-800/50 transition-colors">
-                  <p className="text-[9px] text-slate-600">{c.label}</p>
+                  <p className="text-[11px] text-slate-600">{c.label}</p>
                   <p className={`text-sm font-bold ${c.color}`}>{c.value}</p>
                   <div className="flex items-center justify-between mt-0.5">
-                    <p className="text-[9px] text-slate-600">{c.change}</p>
-                    <p className="text-[7px] text-slate-700 truncate ml-1 max-w-[80px]">{c.detail}</p>
+                    <p className="text-[11px] text-slate-600">{c.change}</p>
+                    <p className="text-[10px] text-slate-700 truncate ml-1 max-w-[80px]">{c.detail}</p>
                   </div>
                 </div>
               ))}
@@ -1090,8 +1090,8 @@ export default function Analytics() {
                 {changeTypeBreakdown.map((c) => (
                   <div key={c.name} className="flex items-center gap-1">
                     <span className="h-2 w-2 rounded-full" style={{ backgroundColor: c.color }} />
-                    <span className="text-[9px] text-slate-500">{c.name}</span>
-                    <span className="text-[9px] text-slate-600">({c.value})</span>
+                    <span className="text-[11px] text-slate-500">{c.name}</span>
+                    <span className="text-[11px] text-slate-600">({c.value})</span>
                   </div>
                 ))}
               </div>
@@ -1122,9 +1122,9 @@ export default function Analytics() {
                 <p className="text-[11px] font-bold text-white">{t.month}</p>
                 <div className="flex items-center justify-center gap-2 mt-1">
                   <span className="text-[11px] text-red-400 font-semibold">{t.predicted}</span>
-                  <span className="text-[8px] text-slate-600">±{((t.upper - t.lower) / 2).toFixed(0)}</span>
+                  <span className="text-[10px] text-slate-600">±{((t.upper - t.lower) / 2).toFixed(0)}</span>
                 </div>
-                <p className="text-[8px] text-slate-600">{t.prevented} prevented · {t.autoResolved} auto</p>
+                <p className="text-[10px] text-slate-600">{t.prevented} prevented · {t.autoResolved} auto</p>
                   <svg width="20" height="20" viewBox="0 0 20 20" className="-rotate-90 mx-auto mt-1">
                     <circle cx="10" cy="10" r="7" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="2.5" />
                     <circle cx="10" cy="10" r="7" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round"
@@ -1146,7 +1146,7 @@ export default function Analytics() {
                 <Area type="monotone" dataKey="count" stroke="#ef4444" fill="#ef4444" fillOpacity={0.12} strokeWidth={2} name="Incidents" />
               </AreaChart>
             </ResponsiveContainer>
-            <div className="flex items-center justify-between mt-1 text-[9px] text-slate-600">
+            <div className="flex items-center justify-between mt-1 text-[11px] text-slate-600">
               <span>Peak hours: 08:00–12:00 (deploy window)</span>
               <span>Avg: {(hourlyIncidents.reduce((a, b) => a + b.count, 0) / 24).toFixed(1)}/hr</span>
               <span>Quiet: 22:00–05:00</span>
@@ -1170,10 +1170,10 @@ export default function Analytics() {
                     <p className="text-[10px] font-semibold text-white">{s.value}</p>
                   </div>
                   <div className="w-24 text-right shrink-0">
-                    <p className="text-[8px] text-slate-600">Resp: {s.avgResponse}</p>
+                    <p className="text-[10px] text-slate-600">Resp: {s.avgResponse}</p>
                   </div>
                   <div className="w-14 text-right shrink-0">
-                    <p className="text-[8px] text-slate-600">{s.sla}</p>
+                    <p className="text-[10px] text-slate-600">{s.sla}</p>
                   </div>
                 </div>
               ))}
@@ -1184,7 +1184,7 @@ export default function Analytics() {
         <div className="grid gap-3 lg:grid-cols-2">
           <ChartCard title="On-Call Response Metrics" subtitle="Weekly on-call performance" delay={0.85}>
             <div className="space-y-1.5">
-              <div className="hidden sm:grid grid-cols-5 gap-2 text-[8px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
+              <div className="hidden sm:grid grid-cols-5 gap-2 text-[10px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
                 <span>Week</span>
                 <span className="text-center">Pages</span>
                 <span className="text-center">Ack'd</span>
@@ -1193,7 +1193,7 @@ export default function Analytics() {
               </div>
               {onCallData.map((o) => (
                 <div key={o.shift} className="grid grid-cols-3 sm:grid-cols-5 gap-2 text-[10px] text-slate-300 py-1 border-b border-white/[0.02] last:border-0 items-center">
-                  <span className="font-medium text-[9px]">{o.shift}</span>
+                  <span className="font-medium text-[11px]">{o.shift}</span>
                   <span className="text-center text-slate-400">{o.pagesReceived}</span>
                   <span className="text-center text-green-400">{o.acknowledged}</span>
                   <span className="text-center" style={{ color: o.missed > 0 ? '#ef4444' : '#22c55e' }}>{o.missed}</span>
@@ -1201,7 +1201,7 @@ export default function Analytics() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04] text-[8px] text-slate-600">
+            <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.04] text-[10px] text-slate-600">
               <span>Total pages: {onCallData.reduce((a, b) => a + b.pagesReceived, 0)}</span>
               <span>Ack rate: {(() => { const p = onCallData.reduce((a, b) => a + b.pagesReceived, 0); return p > 0 ? ((onCallData.reduce((a, b) => a + b.acknowledged, 0) / p) * 100).toFixed(0) : '100' })()}%</span>
               <span>Missed: {onCallData.reduce((a, b) => a + b.missed, 0)}</span>
@@ -1210,7 +1210,7 @@ export default function Analytics() {
 
           <ChartCard title="Team Velocity Detail" subtitle="Per-team sprint metrics for current period" delay={0.9}>
             <div className="space-y-1">
-              <div className="hidden sm:grid grid-cols-8 gap-1 text-[7px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
+              <div className="hidden sm:grid grid-cols-8 gap-1 text-[10px] text-slate-600 font-medium pb-1 border-b border-white/[0.04]">
                 <span>Team</span>
                 <span className="text-center">PRs</span>
                 <span className="text-center">Rvws</span>
@@ -1221,8 +1221,8 @@ export default function Analytics() {
                 <span className="text-center">Size</span>
               </div>
               {teamData.map((t) => (
-                <div key={t.name} className="grid grid-cols-4 sm:grid-cols-8 gap-1 text-[9px] text-slate-300 py-0.5 border-b border-white/[0.02] last:border-0 items-center">
-                  <span className="font-medium text-white truncate text-[8px]">{t.name}</span>
+                <div key={t.name} className="grid grid-cols-4 sm:grid-cols-8 gap-1 text-[11px] text-slate-300 py-0.5 border-b border-white/[0.02] last:border-0 items-center">
+                  <span className="font-medium text-white truncate text-[10px]">{t.name}</span>
                   <span className="text-center">{t.prs}</span>
                   <span className="text-center">{t.reviews}</span>
                   <span className="text-center">{t.deployments}</span>
@@ -1247,15 +1247,15 @@ export default function Analytics() {
                 <div className="flex justify-center gap-3 sm:gap-1">
                   <div className="text-center">
                     <p className="text-[10px] font-bold text-emerald-400">{r.uptime}%</p>
-                    <p className="text-[7px] text-slate-600">Uptime</p>
+                    <p className="text-[10px] text-slate-600">Uptime</p>
                   </div>
                   <div className="text-center">
                     <p className="text-[10px] font-bold text-cyan-400">{r.latency}ms</p>
-                    <p className="text-[7px] text-slate-600">Latency</p>
+                    <p className="text-[10px] text-slate-600">Latency</p>
                   </div>
                   <div className="text-center">
                     <p className="text-[10px] font-bold text-yellow-400">{r.errors}%</p>
-                    <p className="text-[7px] text-slate-600">Errors</p>
+                    <p className="text-[10px] text-slate-600">Errors</p>
                   </div>
                 </div>
               </div>
@@ -1273,43 +1273,43 @@ export default function Analytics() {
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mt-3">
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-emerald-400">99.97%</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">Uptime</p>
-              <p className="text-[8px] text-emerald-500/70">↑ 0.02%</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">Uptime</p>
+              <p className="text-[10px] text-emerald-500/70">↑ 0.02%</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-cyan-400">42ms</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">P95 Latency</p>
-              <p className="text-[8px] text-green-500/70">↓ 8ms</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">P95 Latency</p>
+              <p className="text-[10px] text-green-500/70">↓ 8ms</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-yellow-400">0.3%</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">Error Rate</p>
-              <p className="text-[8px] text-green-500/70">↓ 0.2%</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">Error Rate</p>
+              <p className="text-[10px] text-green-500/70">↓ 0.2%</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-purple-400">8.2K</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">Req/s</p>
-              <p className="text-[8px] text-emerald-500/70">↑ 1.2K</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">Req/s</p>
+              <p className="text-[10px] text-emerald-500/70">↑ 1.2K</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-red-400">67%</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">Saturation</p>
-              <p className="text-[8px] text-green-500/70">↓ 5%</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">Saturation</p>
+              <p className="text-[10px] text-green-500/70">↓ 5%</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-green-400">12</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">Active Svc</p>
-              <p className="text-[8px] text-slate-600">All healthy</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">Active Svc</p>
+              <p className="text-[10px] text-slate-600">All healthy</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-blue-400">340</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">Hrs Saved</p>
-              <p className="text-[8px] text-emerald-500/70">↑ 42%</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">Hrs Saved</p>
+              <p className="text-[10px] text-emerald-500/70">↑ 42%</p>
             </div>
             <div className="text-center p-2 rounded-lg bg-slate-800/20 border border-white/[0.03] hover:bg-slate-800/40 transition-colors">
               <p className="text-xs font-bold text-indigo-400">94</p>
-              <p className="text-[9px] text-slate-600 mt-0.5">NPS Score</p>
-              <p className="text-[8px] text-emerald-500/70">↑ 8 pts</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">NPS Score</p>
+              <p className="text-[10px] text-emerald-500/70">↑ 8 pts</p>
             </div>
           </div>
         </motion.div>

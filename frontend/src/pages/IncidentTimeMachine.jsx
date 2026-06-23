@@ -4,6 +4,9 @@ import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
+import PageHero from '../components/PageHero'
+import ExecutiveSummary from '../components/ExecutiveSummary'
+import InvestigationWorkflow from '../components/InvestigationWorkflow'
 
 const presets = [
   'Deploy new payment gateway with retry logic',
@@ -334,26 +337,26 @@ function DeploymentCard({ deploy, index }) {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-[10px] font-mono font-semibold text-cyan-400">{deploy.service}</span>
-          <span className="text-[9px] font-mono text-slate-600">{deploy.version}</span>
+          <span className="text-[11px] font-mono text-slate-600">{deploy.version}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${oc.bg} ${oc.text} ${oc.border}`}>{deploy.outcome}</span>
-          <span className="text-[9px] text-slate-600">{deploy.date}</span>
+          <span className={`rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${oc.bg} ${oc.text} ${oc.border}`}>{deploy.outcome}</span>
+          <span className="text-[11px] text-slate-600">{deploy.date}</span>
         </div>
       </div>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono text-slate-600 bg-white/[0.04] px-1.5 py-0.5 rounded">{deploy.env}</span>
+          <span className="text-[11px] font-mono text-slate-600 bg-white/[0.04] px-1.5 py-0.5 rounded">{deploy.env}</span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-[9px] text-slate-600">Risk:</span>
+          <span className="text-[11px] text-slate-600">Risk:</span>
           <span className={`text-[10px] font-bold font-mono ${deploy.risk > 70 ? 'text-red-400' : deploy.risk > 40 ? 'text-yellow-400' : 'text-green-400'}`}>{deploy.risk}%</span>
         </div>
       </div>
       <button
         type="button"
         onClick={() => setShowComparison(!showComparison)}
-        className="w-full flex items-center justify-center gap-1.5 rounded-md bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 text-[9px] text-slate-500 hover:text-cyan-400 hover:border-cyan-500/20 transition-all"
+        className="w-full flex items-center justify-center gap-1.5 rounded-md bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 text-[11px] text-slate-500 hover:text-cyan-400 hover:border-cyan-500/20 transition-all"
       >
         <svg className={`w-3 h-3 transition-transform ${showComparison ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -374,13 +377,13 @@ function DeploymentCard({ deploy, index }) {
                 const improved = m.label === 'Throughput' ? m.afterVal > m.beforeVal : m.afterVal < m.beforeVal
                 return (
                   <div key={m.label} className="flex items-center gap-3">
-                    <span className="text-[9px] text-slate-600 w-16 shrink-0">{m.label}</span>
+                    <span className="text-[11px] text-slate-600 w-16 shrink-0">{m.label}</span>
                     <div className="flex items-center gap-2 flex-1">
-                      <span className="text-[9px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded">{m.before}</span>
+                      <span className="text-[11px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded">{m.before}</span>
                       <svg className="w-3 h-3 text-slate-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
-                      <span className={`text-[9px] font-mono ${worsened ? 'text-red-400 bg-red-500/10' : improved ? 'text-green-400 bg-green-500/10' : 'text-yellow-400 bg-yellow-500/10'} px-1.5 py-0.5 rounded`}>{m.after}</span>
+                      <span className={`text-[11px] font-mono ${worsened ? 'text-red-400 bg-red-500/10' : improved ? 'text-green-400 bg-green-500/10' : 'text-yellow-400 bg-yellow-500/10'} px-1.5 py-0.5 rounded`}>{m.after}</span>
                       {worsened && <svg className="w-3 h-3 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" /></svg>}
                       {improved && <svg className="w-3 h-3 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" /></svg>}
                     </div>
@@ -438,13 +441,13 @@ function ReplayCard({ replay, index }) {
       <div className="flex items-center justify-between mb-3">
         <div>
           <h4 className="text-xs font-semibold text-white mb-0.5">{replay.title}</h4>
-          <div className="flex items-center gap-2 text-[9px] text-slate-600">
+          <div className="flex items-center gap-2 text-[11px] text-slate-600">
             <span className="font-mono">{replay.date}</span>
             <span className="text-slate-700">|</span>
             <span>{replay.duration}</span>
           </div>
         </div>
-        <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${sev.badge}`}>{replay.severity}</span>
+        <span className={`rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${sev.badge}`}>{replay.severity}</span>
       </div>
       <div className="flex items-center gap-2 mb-3">
         <svg width="36" height="36" viewBox="0 0 36 36" className="-rotate-90 shrink-0">
@@ -471,7 +474,7 @@ function ReplayCard({ replay, index }) {
               x: currentStep >= i ? 0 : -5,
             }}
             transition={{ duration: 0.3 }}
-            className={`flex items-center gap-2 px-2 py-1 rounded text-[9px] ${
+            className={`flex items-center gap-2 px-2 py-1 rounded text-[11px] ${
               currentStep === i
                 ? 'bg-purple-500/10 border border-purple-500/20'
                 : currentStep > i
@@ -483,7 +486,7 @@ function ReplayCard({ replay, index }) {
             <span className="font-mono text-slate-600 w-10 shrink-0">{step.time}</span>
             <span className={`flex-1 ${currentStep >= i ? 'text-slate-300' : 'text-slate-700'}`}>{step.action}</span>
             {currentStep >= i && (
-              <span className={`text-[7px] px-1 py-0.5 rounded ${
+              <span className={`text-[10px] px-1 py-0.5 rounded ${
                 step.type === 'Trigger' ? 'bg-red-500/10 text-red-400' :
                 step.type === 'Detection' ? 'bg-yellow-500/10 text-yellow-400' :
                 step.type === 'Alert' ? 'bg-orange-500/10 text-orange-400' :
@@ -634,11 +637,11 @@ function RecoveryTimelineCard({ steps }) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-semibold text-white">{step.step}</h4>
-                  <span className="text-[9px] font-mono text-cyan-400">{step.duration}</span>
+                  <span className="text-[11px] font-mono text-cyan-400">{step.duration}</span>
                 </div>
-                <p className="text-[9px] text-slate-500 leading-tight truncate">{step.detail}</p>
+                <p className="text-[11px] text-slate-500 leading-tight truncate">{step.detail}</p>
               </div>
-              <span className="text-[8px] font-mono text-slate-600 bg-white/[0.03] px-1.5 py-0.5 rounded shrink-0">{step.owner}</span>
+              <span className="text-[10px] font-mono text-slate-600 bg-white/[0.03] px-1.5 py-0.5 rounded shrink-0">{step.owner}</span>
             </div>
             <div className="flex items-center gap-2 ml-4">
               <svg width="28" height="28" viewBox="0 0 28 28" className="-rotate-90 shrink-0">
@@ -677,12 +680,12 @@ function RootCauseChainCard({ rca, index }) {
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold font-mono ${sev.badge}`}>{rca.id}</span>
+          <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold font-mono ${sev.badge}`}>{rca.id}</span>
           <h4 className="text-xs font-semibold text-white">{rca.title}</h4>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-semibold ${sev.badge}`}>{rca.severity}</span>
-          <span className="text-[8px] font-mono text-slate-600">{rca.confidence}% conf</span>
+          <span className={`rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${sev.badge}`}>{rca.severity}</span>
+          <span className="text-[10px] font-mono text-slate-600">{rca.confidence}% conf</span>
         </div>
       </div>
 
@@ -690,8 +693,8 @@ function RootCauseChainCard({ rca, index }) {
         {chainSteps.map((step, si) => (
           <div key={step.label} className="flex items-start gap-1 shrink-0">
             <div className="w-44 rounded-lg border p-2.5" style={{ borderColor: `${step.color}30`, backgroundColor: `${step.color}08` }}>
-              <span className="text-[8px] font-semibold uppercase tracking-wider block mb-1" style={{ color: step.color }}>{step.label}</span>
-              <p className="text-[9px] text-slate-400 leading-relaxed">{step.value}</p>
+              <span className="text-[10px] font-semibold uppercase tracking-wider block mb-1" style={{ color: step.color }}>{step.label}</span>
+              <p className="text-[11px] text-slate-400 leading-relaxed">{step.value}</p>
             </div>
             {si < chainSteps.length - 1 && (
               <div className="flex items-center pt-6">
@@ -705,12 +708,12 @@ function RootCauseChainCard({ rca, index }) {
       </div>
 
       <div className="mb-3">
-        <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider block mb-1.5">Event Timeline</span>
+        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-1.5">Event Timeline</span>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] overflow-hidden">
           {rca.eventTimeline.map((ev, j) => (
             <div key={j} className={`flex items-center gap-3 px-3 py-1.5 ${j < rca.eventTimeline.length - 1 ? 'border-b border-white/[0.04]' : ''}`}>
-              <span className="text-[8px] font-mono font-semibold text-cyan-400 shrink-0 w-10">{ev.time}</span>
-              <span className="text-[9px] text-slate-400">{ev.event}</span>
+              <span className="text-[10px] font-mono font-semibold text-cyan-400 shrink-0 w-10">{ev.time}</span>
+              <span className="text-[11px] text-slate-400">{ev.event}</span>
             </div>
           ))}
         </div>
@@ -718,12 +721,12 @@ function RootCauseChainCard({ rca, index }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         <div className="rounded-lg border border-green-500/10 bg-green-500/[0.02] p-2.5">
-          <span className="text-[8px] font-semibold text-green-400 uppercase tracking-wider block mb-1">Lessons Learned</span>
-          <p className="text-[9px] text-slate-400 leading-relaxed">{rca.lessons}</p>
+          <span className="text-[10px] font-semibold text-green-400 uppercase tracking-wider block mb-1">Lessons Learned</span>
+          <p className="text-[11px] text-slate-400 leading-relaxed">{rca.lessons}</p>
         </div>
         <div className="rounded-lg border border-cyan-500/10 bg-cyan-500/[0.02] p-2.5">
-          <span className="text-[8px] font-semibold text-cyan-400 uppercase tracking-wider block mb-1">Prevention</span>
-          <p className="text-[9px] text-slate-400 leading-relaxed">{rca.prevention}</p>
+          <span className="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider block mb-1">Prevention</span>
+          <p className="text-[11px] text-slate-400 leading-relaxed">{rca.prevention}</p>
         </div>
       </div>
     </motion.div>
@@ -756,13 +759,13 @@ function LessonCard({ lesson, index }) {
         <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${st.dot}`} style={{ boxShadow: `0 0 6px ${st.dot.replace('bg-', '')}60` }} />
         <div className="flex-1 min-w-0">
           <h4 className="text-xs font-medium text-white mb-1">{lesson.lesson}</h4>
-          <div className="flex items-center gap-2 text-[8px] text-slate-600 mb-1.5">
+          <div className="flex items-center gap-2 text-[10px] text-slate-600 mb-1.5">
             <span>{lesson.incident}</span>
             <span className="text-slate-700">|</span>
-            <span className={`rounded-full border px-1 py-0.5 text-[7px] ${catColor.bg}`}>{lesson.category}</span>
-            <span className={`rounded-full border px-1 py-0.5 text-[7px] ${sevBadge(lesson.severity)}`}>{lesson.severity}</span>
+            <span className={`rounded-full border px-1 py-0.5 text-[10px] ${catColor.bg}`}>{lesson.category}</span>
+            <span className={`rounded-full border px-1 py-0.5 text-[10px] ${sevBadge(lesson.severity)}`}>{lesson.severity}</span>
           </div>
-          <span className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[7px] font-semibold ${st.bg}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${st.bg}`}>
             <span className={`w-1 h-1 rounded-full ${st.dot}`} />
             {lesson.status === 'in_progress' ? 'In Progress' : lesson.status.charAt(0).toUpperCase() + lesson.status.slice(1)}
           </span>
@@ -797,8 +800,8 @@ function PredictionCard({ pred, index }) {
       className={`rounded-lg border ${sc.border} ${sc.bg} p-4 hover:border-white/[0.12] transition-all`}
     >
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">{pred.window}</span>
-        <span className={`text-[9px] font-semibold font-mono ${sc.text}`}>{pred.severity.toUpperCase()}</span>
+        <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">{pred.window}</span>
+        <span className={`text-[11px] font-semibold font-mono ${sc.text}`}>{pred.severity.toUpperCase()}</span>
       </div>
       <div className="flex items-center gap-3 mb-3">
         <div className="relative">
@@ -816,10 +819,10 @@ function PredictionCard({ pred, index }) {
           <span className="absolute inset-0 flex items-center justify-center text-xs font-bold font-mono" style={{ color: sc.glow }}>{pred.probability}%</span>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[9px] text-slate-400 leading-relaxed mb-1">{pred.reasoning}</p>
+          <p className="text-[11px] text-slate-400 leading-relaxed mb-1">{pred.reasoning}</p>
           <div className="rounded-md bg-slate-800/60 border border-white/[0.04] px-2 py-1">
-            <span className="text-[7px] font-semibold text-cyan-400 uppercase tracking-wider block">Recommended Action</span>
-            <span className="text-[8px] text-slate-300">{pred.action}</span>
+            <span className="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider block">Recommended Action</span>
+            <span className="text-[10px] text-slate-300">{pred.action}</span>
           </div>
         </div>
       </div>
@@ -850,9 +853,9 @@ function ImpactForecastCard({ forecasts }) {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-semibold text-white">{f.service}</span>
-                <span className={`rounded-full px-1.5 py-0.5 text-[7px] font-semibold ${ic.bg} ${ic.text} border border-transparent`}>{f.impact}</span>
+                <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${ic.bg} ${ic.text} border border-transparent`}>{f.impact}</span>
               </div>
-              <span className="text-[9px] font-mono font-bold" style={{ color: ic.text.replace('text-', '#') }}>{f.risk}%</span>
+              <span className="text-[11px] font-mono font-bold" style={{ color: ic.text.replace('text-', '#') }}>{f.risk}%</span>
             </div>
             <svg width="32" height="32" viewBox="0 0 32 32" className="-rotate-90 shrink-0">
               <circle cx="16" cy="16" r="12" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
@@ -909,7 +912,7 @@ function HistoricalComparisonCard({ metric }) {
               animate={{ strokeDashoffset: 2 * Math.PI * 12 * (1 - (states[phase].value / maxVal)) }} transition={{ duration: 0.5 }} />
             <text x="16" y="19" textAnchor="middle" fill={states[phase].color} fontSize="7" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{Math.round((states[phase].value / maxVal) * 100)}%</text>
           </svg>
-          <span className="text-[8px] text-slate-600 mt-1 block">{states[phase].label}</span>
+          <span className="text-[10px] text-slate-600 mt-1 block">{states[phase].label}</span>
         </motion.div>
       </AnimatePresence>
     </div>
@@ -964,7 +967,7 @@ function AnimatedRecoveryTimeline() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-[11px] font-mono font-semibold text-slate-400 uppercase tracking-[0.2em]">Incident Recovery Timeline</h2>
-          <p className="text-[9px] text-slate-600 font-mono mt-0.5">Animated forensic replay — Payment Pipeline Outage · Jun 1, 2024</p>
+          <p className="text-[11px] text-slate-600 font-mono mt-0.5">Animated forensic replay — Payment Pipeline Outage · Jun 1, 2024</p>
         </div>
         <button
           onClick={startReplay}
@@ -1023,15 +1026,15 @@ function AnimatedRecoveryTimeline() {
                     )}
                   </div>
                   {/* Step number badge */}
-                  <span className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold font-mono ${isDone ? 'bg-emerald-500 text-white' : isActive ? 'text-white' : 'bg-slate-800 text-slate-600'}`}
+                  <span className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold font-mono ${isDone ? 'bg-emerald-500 text-white' : isActive ? 'text-white' : 'bg-slate-800 text-slate-600'}`}
                     style={isActive ? { backgroundColor: step.color } : {}}>
                     {isDone ? '✓' : i + 1}
                   </span>
                 </div>
-                <span className={`mt-1.5 text-[9px] font-semibold tracking-wide transition-colors ${isActive ? 'text-white' : isDone ? 'text-emerald-400' : 'text-slate-600'}`}>
+                <span className={`mt-1.5 text-[11px] font-semibold tracking-wide transition-colors ${isActive ? 'text-white' : isDone ? 'text-emerald-400' : 'text-slate-600'}`}>
                   {step.label}
                 </span>
-                <span className={`text-[8px] font-mono ${isActive ? '' : isDone ? 'text-emerald-600' : 'text-slate-700'}`}
+                <span className={`text-[10px] font-mono ${isActive ? '' : isDone ? 'text-emerald-600' : 'text-slate-700'}`}
                   style={isActive ? { color: step.color } : {}}>
                   T+{step.time}
                 </span>
@@ -1081,7 +1084,7 @@ function AnimatedRecoveryTimeline() {
             </div>
             <div className="shrink-0 flex items-center gap-2">
               <div className="text-right">
-                <div className="text-[8px] text-slate-600 font-mono">AI Confidence</div>
+                <div className="text-[10px] text-slate-600 font-mono">AI Confidence</div>
                 <div className="text-[11px] font-bold font-mono" style={{ color: steps[activeStep].color }}>{steps[activeStep].confidence}%</div>
               </div>
               <svg width="28" height="28" viewBox="0 0 28 28" className="-rotate-90">
@@ -1100,11 +1103,11 @@ function AnimatedRecoveryTimeline() {
       <div className="mt-3 pt-3 border-t border-white/[0.04] grid grid-cols-3 sm:grid-cols-5 gap-2">
         {steps.map(step => (
           <div key={step.id} className="text-center">
-            <div className="text-[8px] font-mono text-slate-600 truncate">{step.label}</div>
-            <div className="text-[9px] font-bold font-mono mt-0.5" style={{ color: completed.has(step.id) ? '#22c55e' : activeStep === step.id ? step.color : '#334155' }}>
+            <div className="text-[10px] font-mono text-slate-600 truncate">{step.label}</div>
+            <div className="text-[11px] font-bold font-mono mt-0.5" style={{ color: completed.has(step.id) ? '#22c55e' : activeStep === step.id ? step.color : '#334155' }}>
               T+{step.time}
             </div>
-            <div className="text-[7px] font-mono text-slate-700">{step.confidence}% conf</div>
+            <div className="text-[10px] font-mono text-slate-700">{step.confidence}% conf</div>
           </div>
         ))}
       </div>
@@ -1157,6 +1160,9 @@ export default function IncidentTimeMachine() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-2">
         <ExecutiveBanner currentPage="/time-machine" />
+        <PageHero title="Chronological Incident Forensics Engine" subtitle="AI-powered forensic analysis across 847 timelines, 156 replayed incidents, and 23 detected patterns — investigate root causes before they escalate." impact="156" impactLabel="Incidents Replayed" confidence={91} />
+        <ExecutiveSummary />
+        <InvestigationWorkflow />
         <motion.div variants={item}>
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-4">
@@ -1175,7 +1181,7 @@ export default function IncidentTimeMachine() {
             </div>
             <div className="hidden sm:flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/5 px-4 py-1.5">
               <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-[9px] font-mono text-green-400 tracking-wider uppercase">Active Timeline</span>
+              <span className="text-[11px] font-mono text-green-400 tracking-wider uppercase">Active Timeline</span>
             </div>
           </div>
         </motion.div>
@@ -1275,8 +1281,8 @@ export default function IncidentTimeMachine() {
                 </svg>
               </div>
               <div className={`text-lg font-extrabold font-mono tracking-tight ${ins.color}`}>{ins.value}</div>
-              <div className="text-[9px] font-mono text-slate-500 mt-0.5 uppercase tracking-wider">{ins.label}</div>
-              <div className="text-[8px] text-slate-700 mt-1">{ins.sub}</div>
+              <div className="text-[11px] font-mono text-slate-500 mt-0.5 uppercase tracking-wider">{ins.label}</div>
+              <div className="text-[10px] text-slate-700 mt-1">{ins.sub}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -1379,16 +1385,16 @@ export default function IncidentTimeMachine() {
                             <div className={`w-1.5 h-1.5 rounded-full ${sev.dot} mx-auto mt-[2px]`} />
                           </div>
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[9px] font-mono text-slate-600">{ev.date}</span>
-                            <span className={`rounded-full border px-1.5 py-0.5 text-[7px] font-semibold ${sev.badge}`}>{ev.severity}</span>
+                            <span className="text-[11px] font-mono text-slate-600">{ev.date}</span>
+                            <span className={`rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${sev.badge}`}>{ev.severity}</span>
                           </div>
                           <h4 className="text-xs font-semibold text-white mb-1 leading-tight">{ev.title}</h4>
-                          <p className="text-[9px] text-slate-500 mb-2 leading-relaxed">{ev.description}</p>
+                          <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">{ev.description}</p>
                           <div className="flex items-center justify-between">
-                            <span className="text-[8px] font-mono text-slate-600">{ev.duration}</span>
+                            <span className="text-[10px] font-mono text-slate-600">{ev.duration}</span>
                             <div className="flex gap-1">
                               {ev.services.slice(0, 2).map(s => (
-                                <span key={s} className="rounded bg-white/[0.04] px-1 py-0.5 text-[7px] font-mono text-slate-600">{s.split(' ')[0]}</span>
+                                <span key={s} className="rounded bg-white/[0.04] px-1 py-0.5 text-[10px] font-mono text-slate-600">{s.split(' ')[0]}</span>
                               ))}
                             </div>
                           </div>
@@ -1410,19 +1416,19 @@ export default function IncidentTimeMachine() {
               <motion.div variants={item} className="space-y-2">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">Impact Score</span>
+                    <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Impact Score</span>
                     <p className="text-lg font-bold text-red-400 mt-0.5">
                       {Math.round((results.impactForecast || []).reduce((a, f) => a + (f?.risk ?? 0), 0) / Math.max((results.impactForecast || []).length, 1))}%
                     </p>
                   </div>
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">Recovery Duration</span>
+                    <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Recovery Duration</span>
                     <p className="text-lg font-bold text-cyan-400 mt-0.5">
                       {(results.recoveryTimeline || []).reduce((a, s) => a + (parseInt(s?.duration) || 0), 0)}min
                     </p>
                   </div>
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">Team Involved</span>
+                    <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Team Involved</span>
                     <p className="text-lg font-bold text-purple-400 mt-0.5 truncate">
                       {[...new Set((results.recoveryTimeline || []).map(s => s?.owner))].join(', ')}
                     </p>
@@ -1446,12 +1452,12 @@ export default function IncidentTimeMachine() {
                           <button key={i} type="button" onClick={() => setActiveTimelineIdx(activeTimelineIdx === i ? -1 : i)} className="flex flex-col items-center shrink-0 w-20 group relative">
                             <div className={`w-3 h-3 rounded-full ${sev.dot} ring-2 ring-slate-900 transition-transform group-hover:scale-125`}
                               style={{ boxShadow: activeTimelineIdx === i ? `0 0 8px ${dotColors[ev?.severity] || '#eab308'}` : 'none' }} />
-                            <span className="text-[7px] font-mono text-slate-600 text-center leading-tight truncate w-full mt-0.5">{ev?.title?.split(' ').slice(0, 2).join(' ') || ''}</span>
+                            <span className="text-[10px] font-mono text-slate-600 text-center leading-tight truncate w-full mt-0.5">{ev?.title?.split(' ').slice(0, 2).join(' ') || ''}</span>
                             <span className="text-[6px] font-mono text-slate-700">{ev?.date?.slice(5) || ''}</span>
                             {activeTimelineIdx === i && (
                               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-1 p-1.5 rounded bg-slate-800 border border-white/[0.06] absolute top-8 z-20 w-36">
-                                <p className="text-[8px] text-slate-300">{ev?.description}</p>
-                                <span className="text-[7px] font-mono text-cyan-400">{ev?.duration}</span>
+                                <p className="text-[10px] text-slate-300">{ev?.description}</p>
+                                <span className="text-[10px] font-mono text-cyan-400">{ev?.duration}</span>
                               </motion.div>
                             )}
                           </button>
@@ -1463,7 +1469,7 @@ export default function IncidentTimeMachine() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <h3 className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Failure Path</h3>
+                    <h3 className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Failure Path</h3>
                     <div className="flex items-end gap-0.5 h-16">
                       {(evolution || []).map((e, i) => (
                         <div key={i} className="flex-1 flex flex-col items-center justify-end gap-0.5">
@@ -1488,16 +1494,16 @@ export default function IncidentTimeMachine() {
                   </div>
 
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <h3 className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Root Cause</h3>
+                    <h3 className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Root Cause</h3>
                     {((results.rootCauses || [])[0]) && (
                       <div>
-                        <p className="text-[9px] font-semibold text-white truncate">{(results.rootCauses[0])?.title}</p>
+                        <p className="text-[11px] font-semibold text-white truncate">{(results.rootCauses[0])?.title}</p>
                         <div className="mt-1 space-y-0.5">
                           {((results.rootCauses[0])?.eventTimeline || []).slice(0, 3).map((ev, j) => (
                             <div key={j} className="flex items-center gap-1">
                               <div className="w-1 h-1 rounded-full bg-cyan-400 shrink-0" />
-                              <span className="text-[7px] font-mono text-cyan-400 shrink-0">{ev?.time || ''}</span>
-                              <span className="text-[7px] text-slate-500 truncate">{ev?.event || ''}</span>
+                              <span className="text-[10px] font-mono text-cyan-400 shrink-0">{ev?.time || ''}</span>
+                              <span className="text-[10px] text-slate-500 truncate">{ev?.event || ''}</span>
                             </div>
                           ))}
                         </div>
@@ -1506,7 +1512,7 @@ export default function IncidentTimeMachine() {
                   </div>
 
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <h3 className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Recovery</h3>
+                    <h3 className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Recovery</h3>
                     <div className="flex items-end gap-1 h-16">
                       {(results.recoveryTimeline || []).map((step, i) => {
                         const stepColors = ['#a855f7', '#22d3ee', '#d946ef', '#f59e0b', '#22c55e']
@@ -1522,7 +1528,7 @@ export default function IncidentTimeMachine() {
                             />
                             <span className="text-[6px] font-mono text-slate-700">{step?.step?.slice(0, 3) || ''}</span>
                             <div className="hidden group-hover:block absolute bottom-full mb-1 z-20 bg-slate-800 border border-white/[0.06] rounded p-1 w-28 pointer-events-none">
-                              <p className="text-[7px] text-slate-300">{step?.step}: {step?.duration}</p>
+                              <p className="text-[10px] text-slate-300">{step?.step}: {step?.duration}</p>
                               <p className="text-[6px] text-slate-500">{step?.detail}</p>
                             </div>
                           </div>
@@ -1532,7 +1538,7 @@ export default function IncidentTimeMachine() {
                   </div>
 
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
-                    <h3 className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Blast Radius</h3>
+                    <h3 className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Blast Radius</h3>
                     <div className="space-y-1">
                       {(results.impactForecast || []).slice(0, 4).map((f) => {
                         const impactColors = { downtime: '#ef4444', delay: '#f59e0b', overload: '#a855f7', failure: '#f97316' }
@@ -1544,9 +1550,9 @@ export default function IncidentTimeMachine() {
                                 strokeDasharray={2 * Math.PI * 7} initial={{ strokeDashoffset: 2 * Math.PI * 7 }}
                                 animate={{ strokeDashoffset: 2 * Math.PI * 7 * (1 - (f?.risk ?? 0) / 100) }} transition={{ duration: 0.5 }} />
                             </svg>
-                            <span className="text-[7px] text-slate-500 w-10 truncate">{f?.service?.split(' ')[0] || ''}</span>
+                            <span className="text-[10px] text-slate-500 w-10 truncate">{f?.service?.split(' ')[0] || ''}</span>
                             <div className="flex-1 min-w-0">
-                              <span className="text-[7px] font-mono text-slate-600">{f?.risk ?? 0}%</span>
+                              <span className="text-[10px] font-mono text-slate-600">{f?.risk ?? 0}%</span>
                             </div>
                           </div>
                         )
@@ -1569,8 +1575,8 @@ export default function IncidentTimeMachine() {
                     {(replays || []).slice(0, 3).map((r, i) => (
                       <div key={i} className="flex items-center gap-2 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-1.5 shrink-0">
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] font-semibold text-white truncate">{r?.title}</p>
-                          <span className="text-[7px] font-mono text-slate-600">{r?.date} · {r?.duration}</span>
+                          <p className="text-[11px] font-semibold text-white truncate">{r?.title}</p>
+                          <span className="text-[10px] font-mono text-slate-600">{r?.date} · {r?.duration}</span>
                         </div>
                         <button type="button" className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center hover:bg-cyan-500/30 transition-all shrink-0">
                           <svg className="w-2.5 h-2.5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
@@ -1720,8 +1726,8 @@ export default function IncidentTimeMachine() {
                               </div>
                             </div>
                             <div className="flex flex-col items-end gap-1">
-                              <span className={`rounded-full px-1.5 py-0.5 text-[7px] font-semibold ${statusColor}`}>{p.status}</span>
-                              <span className="text-[8px] text-slate-600">{p.confidence}% conf</span>
+                              <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${statusColor}`}>{p.status}</span>
+                              <span className="text-[10px] text-slate-600">{p.confidence}% conf</span>
                             </div>
                           </div>
                           <div className="flex justify-center my-2">
@@ -1741,11 +1747,11 @@ export default function IncidentTimeMachine() {
                                     animate={{ strokeDashoffset: 2 * Math.PI * 12 * (1 - sev.count / total) }} transition={{ duration: 0.8, delay: si * 0.1 }} />
                                   <text x="16" y="19" textAnchor="middle" fill={sev.color} fontSize="8" fontWeight="700" fontFamily="monospace" transform="rotate(90 16 16)">{sev.count}</text>
                                 </svg>
-                                <span className="text-[7px] text-slate-500 font-mono">{sev.label}</span>
+                                <span className="text-[10px] text-slate-500 font-mono">{sev.label}</span>
                               </div>
                             ))}
                           </div>
-                          <div className="flex items-center justify-between text-[8px] text-slate-700 border-t border-white/[0.06] pt-2 font-mono">
+                          <div className="flex items-center justify-between text-[10px] text-slate-700 border-t border-white/[0.06] pt-2 font-mono">
                             <span>First: {p.firstSeen}</span>
                             <span>Last: {p.lastSeen}</span>
                           </div>
@@ -1803,7 +1809,7 @@ export default function IncidentTimeMachine() {
                         >
                           <div className="flex items-start gap-3">
                             <div className="flex flex-col items-center gap-1 mt-0.5 min-w-[32px]">
-                              <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
+                              <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
                                 r.priority === 'P0' ? 'bg-red-500/10 text-red-400' :
                                 r.priority === 'P1' ? 'bg-yellow-500/10 text-yellow-400' :
                                 'bg-slate-500/10 text-slate-400'
@@ -1812,8 +1818,8 @@ export default function IncidentTimeMachine() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-xs font-medium text-white mb-0.5">{r.action}</p>
-                              <p className="text-[9px] text-slate-500 leading-relaxed mb-1.5">{r.detail}</p>
-                              <div className="flex items-center gap-3 text-[8px] text-slate-600 flex-wrap">
+                              <p className="text-[11px] text-slate-500 leading-relaxed mb-1.5">{r.detail}</p>
+                              <div className="flex items-center gap-3 text-[10px] text-slate-600 flex-wrap">
                                 <span className="flex items-center gap-1">
                                   <svg className="w-2.5 h-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.94-4.125L12 1.5l-2.06 3.375m2.94 0h-2.94M10.5 6.375L6.44 2.25m.06 4.5L2.25 10.5m4.5 0l2.81 2.81M15 12l-2.25 2.25M15 12l2.25-2.25M5.25 12l-2.25 2.25m4.5 0l2.25-2.25" />
@@ -1875,12 +1881,12 @@ export default function IncidentTimeMachine() {
                                 >
                                   {f.risk}%
                                 </div>
-                                <span className="text-[7px] text-slate-600 mt-1 whitespace-nowrap">{f.service.split(' ')[0]}</span>
+                                <span className="text-[10px] text-slate-600 mt-1 whitespace-nowrap">{f.service.split(' ')[0]}</span>
                               </div>
                             )
                           })}
                         </div>
-                        <p className="text-[9px] text-slate-500 text-center leading-relaxed">
+                        <p className="text-[11px] text-slate-500 text-center leading-relaxed">
                           Combined risk score: <span className="text-red-400 font-semibold font-mono">
                             {Math.round(results.impactForecast.reduce((a, f) => a + f.risk, 0) / results.impactForecast.length)}%
                           </span> — High priority intervention recommended
@@ -1939,7 +1945,7 @@ export default function IncidentTimeMachine() {
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-mono text-slate-600">You are here:</span>
+                      <span className="text-[11px] font-mono text-slate-600">You are here:</span>
                       <span className="text-xs font-mono font-semibold text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded border border-cyan-500/20">June 2024</span>
                     </div>
                     <div className="flex gap-2 flex-wrap">
@@ -1950,7 +1956,7 @@ export default function IncidentTimeMachine() {
                             key={label}
                             type="button"
                             onClick={() => setTimeNav(label)}
-                            className={`px-3 py-1.5 rounded-lg text-[9px] font-mono font-semibold transition-all ${
+                            className={`px-3 py-1.5 rounded-lg text-[11px] font-mono font-semibold transition-all ${
                               isActive
                                 ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30'
                                 : 'bg-white/[0.03] text-slate-600 border border-white/[0.06] hover:border-purple-500/20 hover:text-slate-300'

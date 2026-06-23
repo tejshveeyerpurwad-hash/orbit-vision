@@ -59,6 +59,19 @@ const GLOBAL_STYLES = `
 
   * { font-family: 'Inter', system-ui, -apple-system, sans-serif; box-sizing: border-box; }
 
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(6,182,212,0.15); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(6,182,212,0.3); }
+
+  /* ── Font size baseline - Minimum readable text ── */
+  html { font-size: 15px; }
+  @media (max-width: 640px) { html { font-size: 14px; } }
+
+  /* ── Selection ── */
+  ::selection { background: rgba(6,182,212,0.2); color: #fff; }
+
   /* ── Theme variables ── */
   :root {
     --bg-base: #0a0f1d;
@@ -146,6 +159,44 @@ const GLOBAL_STYLES = `
   @keyframes glitch-pulse { 0%,100%{opacity:.6;} 50%{opacity:1;} }
   @keyframes grad-border { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
   @keyframes slide-down { from{opacity:0;transform:translateY(-8px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes breath-glow { 0%,100%{opacity:.4;} 50%{opacity:.8;} }
+  @keyframes scanline { 0%{transform:translateY(-100%);} 100%{transform:translateY(100vh);} }
+  @keyframes data-flow { 0%{stroke-dashoffset:100;} 100%{stroke-dashoffset:0;} }
+  @keyframes pulse-ring { 0%{transform:scale(.8);opacity:1;} 100%{transform:scale(2);opacity:0;} }
+  @keyframes grad-shift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+
+  .of-glow-card {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(15,23,42,0.6), rgba(15,23,42,0.3));
+    border: 1px solid rgba(6,182,212,0.08);
+    backdrop-filter: blur(16px);
+    transition: border-color .3s, box-shadow .3s, transform .2s;
+  }
+  .of-glow-card:hover {
+    border-color: rgba(6,182,212,0.2);
+    box-shadow: 0 0 30px -8px rgba(6,182,212,0.12), inset 0 0 30px -20px rgba(6,182,212,0.05);
+    transform: translateY(-1px);
+  }
+  .of-glow-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.15), transparent);
+    opacity: 0; transition: opacity .3s;
+  }
+  .of-glow-card:hover::before { opacity: 1; }
+
+  .of-scanline {
+    position: fixed; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.06), transparent);
+    animation: scanline 8s linear infinite; pointer-events: none; z-index: 9999;
+  }
+  .of-light .of-scanline { display: none; }
+
+  .of-edge-glow {
+    box-shadow: 0 0 0 1px rgba(6,182,212,0.06), 0 0 20px -4px rgba(6,182,212,0.04);
+  }
+
+  .of-kpi-glow { animation: breath-glow 3s ease-in-out infinite; }
+  .of-data-line { stroke-dasharray: 100; animation: data-flow 2s linear infinite; }
 
   .nb-orbit { animation: orbit-spin 8s linear infinite; }
   .nb-ping  { animation: ping-slow 1.8s cubic-bezier(0,0,0.2,1) infinite; }
@@ -333,6 +384,9 @@ function PremiumBackground({ isDark }) {
           <circle key={i} cx={cx} cy={cy} r="2.5" fill="#06b6d4" opacity={isDark ? 0.2 : 0.1} />
         ))}
       </svg>
+
+      {/* Scanline overlay */}
+      <div className="of-scanline" />
 
       {/* Floating particles */}
       {PARTICLES.map((p, i) => (

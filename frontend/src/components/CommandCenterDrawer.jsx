@@ -120,7 +120,7 @@ export default function CommandCenterDrawer({ open, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-            className="fixed top-0 left-0 z-50 flex h-full w-[340px] flex-col backdrop-blur-2xl border-r overflow-hidden"
+            className="fixed top-0 left-0 z-50 flex h-full w-[85vw] max-w-[380px] min-w-[300px] flex-col backdrop-blur-2xl border-r overflow-hidden"
             style={{ background: 'rgba(10,15,29,0.92)', borderColor: 'rgba(255,255,255,0.07)' }}
           >
             <div className="flex items-center justify-between shrink-0 px-5 border-b" style={{ height: '56px', borderColor: 'rgba(255,255,255,0.07)' }}>
@@ -145,7 +145,7 @@ export default function CommandCenterDrawer({ open, onClose }) {
               {sections.map((section) => (
                 <div key={section.title}>
                   <div className="flex items-center gap-2 mb-2.5">
-                    <div className={`h-1.5 w-1.5 rounded-full bg-${section.color}-400`} />
+                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: section.color === 'emerald' ? '#34d399' : section.color === 'violet' ? '#a78bfa' : section.color === 'indigo' ? '#818cf8' : section.color === 'sky' ? '#38bdf8' : section.color === 'amber' ? '#fbbf24' : '#a78bfa' }} />
                     <span className="text-[9px] font-semibold tracking-[0.15em] uppercase" style={{ color: 'var(--text-muted)' }}>{section.title}</span>
                   </div>
                   <div className="space-y-0.5">

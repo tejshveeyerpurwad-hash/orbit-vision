@@ -853,7 +853,7 @@ export default function IntelligenceCenter() {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none" />
                 <div className="relative rounded-xl border border-white/[0.06] bg-white/[0.03] p-4 text-center backdrop-blur-sm">
@@ -1301,7 +1301,7 @@ export default function IntelligenceCenter() {
               </div>
             </div>
             <h2 className="text-[10px] text-slate-300 font-mono mb-1.5 leading-relaxed">{data.title}</h2>
-            <div className="grid grid-cols-4 gap-1.5 mb-1.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mb-1.5">
               <div className="glass-card p-1.5 text-center">
                 <div className="text-base font-bold text-cyan-400"><AnimatedCounter value={data.totalFailures} /></div>
                 <div className="text-[7px] text-slate-500 font-mono tracking-wide">Total Failures</div>

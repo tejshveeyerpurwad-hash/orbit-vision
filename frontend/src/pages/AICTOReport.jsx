@@ -902,7 +902,7 @@ export default function AICTOReport() {
             <h2 className="text-sm font-bold text-white">Risk Assessment Matrix</h2>
             <StatusBadge status="warning" label={`Score: ${data.riskLevel.score}/100 - ${data.riskLevel.level}`} />
           </div>
-          <div className="grid grid-cols-4 gap-2 mb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
             {[
               { label: 'Critical', count: data.riskLevel.criticalRisks, color: '#ef4444', bgColor: 'from-red-500/10 to-red-600/5', borderColor: 'border-red-500/20' },
               { label: 'High', count: data.riskLevel.highRisks, color: '#f97316', bgColor: 'from-orange-500/10 to-orange-600/5', borderColor: 'border-orange-500/20' },

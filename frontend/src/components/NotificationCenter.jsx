@@ -2,21 +2,21 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const NOTIFICATIONS = [
-  { id: 'n1', category: 'Critical Alerts', icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z', color: '#ef4444', unread: true, time: '2 min ago', message: 'Payment Service risk increased to 92%', detail: 'Circuit breaker saturation threshold crossed. Immediate attention required.' },
-  { id: 'n2', category: 'Critical Alerts', icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z', color: '#ef4444', unread: true, time: '5 min ago', message: 'Retry queue saturation detected', detail: 'Queue depth at 12k messages. Auto-scaling triggered.' },
-  { id: 'n3', category: 'Risk Warnings', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z', color: '#f59e0b', unread: true, time: '8 min ago', message: 'Redis memory pressure warning', detail: 'Memory usage at 82%. Eviction policy may activate within 6h.' },
-  { id: 'n4', category: 'Deployments', icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5', color: '#22d3ee', unread: true, time: '12 min ago', message: 'Circuit breaker deployed', detail: 'Payment service circuit breaker v2.1 deployed to production canary (10%).' },
-  { id: 'n5', category: 'Deployments', icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5', color: '#22d3ee', unread: false, time: '18 min ago', message: 'Billing worker rollback completed', detail: 'v3.0.1 rolled back after health check failure. v3.0.0 restored.' },
-  { id: 'n6', category: 'AI Findings', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z', color: '#8b5cf6', unread: true, time: '22 min ago', message: 'AI found recurring outage pattern', detail: 'Pattern matching shows 78% similarity to incident INC-2024-312. Root cause: Redis dependency.' },
-  { id: 'n7', category: 'AI Findings', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z', color: '#8b5cf6', unread: false, time: '35 min ago', message: 'MTTR improved by 18%', detail: 'Weekly MTTR reduced from 29.3min to 24.0min. Automated runbooks driving improvement.' },
+  { id: 'n1', category: 'Incident Alerts', icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z', color: '#ef4444', unread: true, time: '2 min ago', message: 'Payment Service risk increased to 92%', detail: 'Circuit breaker saturation threshold crossed. Immediate attention required.' },
+  { id: 'n2', category: 'Incident Alerts', icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z', color: '#ef4444', unread: true, time: '5 min ago', message: 'Retry queue saturation detected', detail: 'Queue depth at 12k messages. Auto-scaling triggered.' },
+  { id: 'n3', category: 'Risk Alerts', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z', color: '#f59e0b', unread: true, time: '8 min ago', message: 'Redis memory pressure warning', detail: 'Memory usage at 82%. Eviction policy may activate within 6h.' },
+  { id: 'n4', category: 'Deployment Alerts', icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5', color: '#22d3ee', unread: true, time: '12 min ago', message: 'Circuit breaker deployed', detail: 'Payment service circuit breaker v2.1 deployed to production canary (10%).' },
+  { id: 'n5', category: 'Deployment Alerts', icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5', color: '#22d3ee', unread: false, time: '18 min ago', message: 'Billing worker rollback completed', detail: 'v3.0.1 rolled back after health check failure. v3.0.0 restored.' },
+  { id: 'n6', category: 'Investigation Completed', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z', color: '#8b5cf6', unread: true, time: '22 min ago', message: 'AI found recurring outage pattern', detail: 'Pattern matching shows 78% similarity to incident INC-2024-312. Root cause: Redis dependency.' },
+  { id: 'n7', category: 'Investigation Completed', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', color: '#34d399', unread: false, time: '35 min ago', message: 'Payment incident resolved', detail: 'Root cause identified — circuit breaker gap. MTTR: 24min. Runbook updated.' },
   { id: 'n8', category: 'Team Activity', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z', color: '#06b6d4', unread: true, time: '28 min ago', message: 'SRE team updated runbook', detail: 'Runbook "Payment Service Degradation" updated with new circuit breaker procedures.' },
   { id: 'n9', category: 'Team Activity', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z', color: '#06b6d4', unread: false, time: '45 min ago', message: '@alice merged PR #342', detail: 'OAuth token rotation fix with 3 approvals. All checks passed.' },
-  { id: 'n10', category: 'Approvals', icon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z', color: '#34d399', unread: true, time: '30 min ago', message: 'Emergency scaling approved', detail: 'Payment worker pool +12 pods approved by @carol. Estimated completion: 4 min.' },
-  { id: 'n11', category: 'Approvals', icon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z', color: '#34d399', unread: false, time: '1h ago', message: 'Redis cluster migration approved', detail: '3 shard migration plan approved by SRE team. Implementation window: next maintenance.' },
-  { id: 'n12', category: 'Risk Warnings', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z', color: '#f59e0b', unread: false, time: '1.5h ago', message: 'API Gateway latency exceeds threshold', detail: 'P99 latency at 340ms vs 200ms SLO. Rate limiting engaged.' },
+  { id: 'n10', category: 'Risk Alerts', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z', color: '#f59e0b', unread: false, time: '1.5h ago', message: 'API Gateway latency exceeds threshold', detail: 'P99 latency at 340ms vs 200ms SLO. Rate limiting engaged.' },
+  { id: 'n11', category: 'Risk Alerts', icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z', color: '#ef4444', unread: true, time: '18 min ago', message: 'Revenue risk increased to $2.4M/hr', detail: 'Payment pipeline degradation affecting 3 enterprise customers. SLA breach imminent.' },
+  { id: 'n12', category: 'Deployment Alerts', icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5', color: '#22d3ee', unread: true, time: '3 min ago', message: 'Redis cluster deployment v6.2.8', detail: 'Rolling update in progress — 2/4 nodes complete. 0 errors reported.' },
 ]
 
-const CATEGORIES = ['All', 'Critical Alerts', 'Deployments', 'AI Findings', 'Risk Warnings', 'Team Activity', 'Approvals']
+const CATEGORIES = ['All', 'Incident Alerts', 'Deployment Alerts', 'Risk Alerts', 'Investigation Completed', 'Team Activity']
 
 export default function NotificationCenter({ open, onClose }) {
   const [activeFilter, setActiveFilter] = useState('All')
@@ -34,7 +34,6 @@ export default function NotificationCenter({ open, onClose }) {
   }, [open, onClose])
 
   const unreadCount = items.filter(n => n.unread).length
-
   const filtered = activeFilter === 'All' ? items : items.filter(n => n.category === activeFilter)
 
   const markAllRead = () => {
@@ -43,6 +42,10 @@ export default function NotificationCenter({ open, onClose }) {
       setItems(prev => prev.map(n => ({ ...n, unread: false })))
       setMarkingAll(false)
     }, 400)
+  }
+
+  const clearNotifications = () => {
+    setItems([])
   }
 
   const toggleRead = (id) => {
@@ -89,6 +92,18 @@ export default function NotificationCenter({ open, onClose }) {
                 </div>
               </div>
               <div className="flex items-center gap-1.5">
+                {items.length > 0 && (
+                  <button onClick={clearNotifications}
+                    className="flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[9px] font-semibold transition-all hover:border-red-500/30 hover:text-red-400"
+                    style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+                    title="Clear all notifications"
+                  >
+                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                    Clear
+                  </button>
+                )}
                 {unreadCount > 0 && (
                   <button onClick={markAllRead}
                     className="flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[9px] font-semibold transition-all hover:border-cyan-500/30 hover:text-cyan-400"
@@ -101,7 +116,7 @@ export default function NotificationCenter({ open, onClose }) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     )}
-                    Mark all read
+                    Mark read
                   </button>
                 )}
                 <button onClick={onClose}

@@ -6,6 +6,7 @@ import Footer from './Footer'
 import CommandPalette from './CommandPalette'
 import NotificationCenter from './NotificationCenter'
 import CommandCenterDrawer from './CommandCenterDrawer'
+import { initLayoutGuard } from '../utils/layoutGuard'
 
 /* ─────────────────────────────────────────────────────────────
    Navigation definition
@@ -93,6 +94,7 @@ const GLOBAL_STYLES = `
   }
   .of-bg-grid {
     position: fixed; inset: -80px; pointer-events: none; z-index: 0;
+    max-width: calc(100vw + 160px); overflow: hidden;
     background-image:
       linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
@@ -305,7 +307,7 @@ const PARTICLES = [
 
 function PremiumBackground({ isDark }) {
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }} aria-hidden>
+    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0, maxWidth:'100vw' }} aria-hidden>
       {/* Animated grid */}
       <div className="of-bg-grid" />
 
@@ -496,6 +498,9 @@ export default function Layout({ children }) {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  /* Layout overflow guard */
+  useEffect(() => initLayoutGuard(), [])
+
   /* ⌘K */
   useEffect(() => {
     const handler = (e) => {
@@ -542,7 +547,8 @@ export default function Layout({ children }) {
 
   return (
     <div className={`flex min-h-screen relative ${isDark ? '' : 'of-light'}`}
-      style={{ fontFamily:"'Inter',system-ui,-apple-system,sans-serif", background:'var(--bg-base)', color:'var(--text-primary)' }}>
+      style={{ fontFamily:"'Inter',system-ui,-apple-system,sans-serif", background:'var(--bg-base)', color:'var(--text-primary)', overflowX:'hidden', maxWidth:'100vw' }}
+      data-layout-root>
       <style>{GLOBAL_STYLES}</style>
 
       {/* ── Premium animated background ── */}
@@ -608,7 +614,7 @@ export default function Layout({ children }) {
               onClick={() => setMobileMenuOpen(false)} />
             <motion.aside initial={{ x:'-100%' }} animate={{ x:0 }} exit={{ x:'-100%' }}
               transition={{ type:'spring', stiffness:400, damping:40 }}
-              className="fixed top-0 left-0 z-50 flex h-full w-72 flex-col backdrop-blur-2xl border-r lg:hidden"
+              className="fixed top-0 left-0 z-50 flex h-full w-[85vw] max-w-[320px] min-w-[280px] flex-col backdrop-blur-2xl border-r lg:hidden"
               style={{ background:'var(--bg-base)', borderColor:'var(--border)' }}>
               <div className="flex h-16 items-center justify-between border-b px-5" style={{ borderColor:'var(--border)' }}>
                 <Link to="/" className="flex items-center gap-2.5">
@@ -966,7 +972,7 @@ export default function Layout({ children }) {
         ════════════════════════════════════════════════ */}
         <main className="flex-1">
           <div className={`${presentMode ? 'p-0' : 'p-2 sm:p-3 lg:p-4 pb-16 lg:pb-4'}`}>
-            <div className={`mx-auto w-full ${presentMode ? 'max-w-full' : 'max-w-[98vw]'}`}>
+            <div className={`mx-auto w-full ${presentMode ? 'max-w-full' : 'max-w-full'}`}>
               {children}
             </div>
           </div>
@@ -1031,13 +1037,13 @@ export default function Layout({ children }) {
                 </Link>
               )
             })}
-            {/* More button */}
+            {/* More button — uses 9-dot grid icon, NOT hamburger (avoids duplicate ☰) */}
             <button onClick={() => setMobileMenuOpen(true)}
               className="flex flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 transition-all min-w-0"
               style={{ color: mobileMenuOpen ? '#22d3ee' : 'var(--text-muted)' }}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
               </svg>
               <span className="text-[8px] font-medium leading-none">More</span>
             </button>

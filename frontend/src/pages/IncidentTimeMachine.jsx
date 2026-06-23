@@ -1097,7 +1097,7 @@ function AnimatedRecoveryTimeline() {
       </AnimatePresence>
 
       {/* Bottom row — quick stats */}
-      <div className="mt-3 pt-3 border-t border-white/[0.04] grid grid-cols-5 gap-2">
+      <div className="mt-3 pt-3 border-t border-white/[0.04] grid grid-cols-3 sm:grid-cols-5 gap-2">
         {steps.map(step => (
           <div key={step.id} className="text-center">
             <div className="text-[8px] font-mono text-slate-600 truncate">{step.label}</div>
@@ -1408,7 +1408,7 @@ export default function IncidentTimeMachine() {
 
               {/* 2a. Data Visualizations — replaced WormholeAnimation */}
               <motion.div variants={item} className="space-y-2">
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   <div className="rounded-lg border border-white/[0.06] bg-slate-900/50 p-2.5">
                     <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">Impact Score</span>
                     <p className="text-lg font-bold text-red-400 mt-0.5">

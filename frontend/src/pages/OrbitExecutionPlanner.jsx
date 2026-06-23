@@ -1534,7 +1534,7 @@ export default function OrbitExecutionPlanner() {
                     </div>
                   </div>
                   <BurndownChart totalPoints={d.overview.totalPoints} />
-                  <div className="grid grid-cols-4 gap-2 mt-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
                     <div className="text-center rounded border border-white/[0.06] bg-white/[0.02] p-2">
                       <div className="text-[8px] text-slate-600">Total</div>
                       <div className="text-sm font-bold text-white"><AnimatedCounter value={d.overview.totalPoints} /></div>
@@ -1562,7 +1562,7 @@ export default function OrbitExecutionPlanner() {
                     </div>
                   </div>
                   <VelocityChart velocity={d.velocity} avgVelocity={Array.isArray(d.velocity) && d.velocity.length > 0 ? Math.round(d.velocity.reduce((a, v) => a + (typeof v?.points === 'number' ? v.points : 0), 0) / d.velocity.length) : 0} />
-                  <div className="grid grid-cols-3 gap-2 mt-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
                     {(d.velocity || []).map((v, i) => {
                       if (!v || typeof v !== 'object') return null
                       return (

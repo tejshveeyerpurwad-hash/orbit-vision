@@ -48,6 +48,15 @@ const ENTERPRISE_DATA = {
     { title: 'fix: billing worker OOM handling', desc: 'PR #392 — @dave', to: '/intelligence?q=billing', type: 'MR', risk: 55, confidence: 85, time: '1h ago', severity: 'warning' },
     { title: 'chore: increase connection pool size', desc: 'PR #389 — @alice', to: '/intelligence?q=connection', type: 'MR', risk: 22, confidence: 96, time: '2h ago', severity: 'success' },
   ],
+  teams: [
+    { title: 'SRE Team', desc: '12 members · Infrastructure & reliability', to: '/dashboard', type: 'Team', risk: 0, confidence: 97, time: 'Active', severity: 'success' },
+    { title: 'Payments Team', desc: '8 members · Payment processing pipeline', to: '/dashboard', type: 'Team', risk: 0, confidence: 95, time: 'Active', severity: 'success' },
+    { title: 'Platform Team', desc: '6 members · Core platform & APIs', to: '/dashboard', type: 'Team', risk: 0, confidence: 94, time: 'Active', severity: 'success' },
+    { title: 'Billing Team', desc: '5 members · Billing & invoicing', to: '/dashboard', type: 'Team', risk: 0, confidence: 93, time: 'Active', severity: 'success' },
+    { title: 'Data Engineering', desc: '4 members · Data pipelines & analytics', to: '/analytics', type: 'Team', risk: 0, confidence: 96, time: 'Active', severity: 'success' },
+    { title: 'Security Team', desc: '3 members · Security & compliance', to: '/dashboard', type: 'Team', risk: 0, confidence: 98, time: 'Active', severity: 'success' },
+    { title: 'QA Team', desc: '4 members · Testing & quality assurance', to: '/dashboard', type: 'Team', risk: 0, confidence: 96, time: 'Active', severity: 'success' },
+  ],
   reports: [
     { title: 'CTO Executive Report', desc: 'Engineering intelligence brief', to: '/cto-report', type: 'Report', risk: 0, confidence: 96, time: 'Updated 5min ago', severity: 'info' },
     { title: 'Risk Assessment Summary', desc: 'Top risks by probability and impact', to: '/intelligence', type: 'Report', risk: 0, confidence: 93, time: 'Updated 15min ago', severity: 'info' },
@@ -165,6 +174,7 @@ export default function CommandPalette({ open, onClose, currentPath }) {
     ENTERPRISE_DATA.mrs.forEach(m => flat.push({ ...m, _section: 'MRs', _icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5', _sectionColor: '#06b6d4' }))
     ENTERPRISE_DATA.reports.forEach(r => flat.push({ ...r, _section: 'Reports', _icon: 'M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z', _sectionColor: '#f43f5e' }))
     ENTERPRISE_DATA.deployments.forEach(d => flat.push({ ...d, _section: 'Deployments', _icon: 'M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z', _sectionColor: '#34d399' }))
+    ENTERPRISE_DATA.teams.forEach(t => flat.push({ ...t, _section: 'Teams', _icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z', _sectionColor: '#06b6d4' }))
     return flat
   }, [])
 
@@ -179,6 +189,7 @@ export default function CommandPalette({ open, onClose, currentPath }) {
       services: results.filter(r => r._section === 'Services').length,
       evidence: results.filter(r => r._section === 'Evidence').length,
       mrs: results.filter(r => r._section === 'MRs').length,
+      teams: results.filter(r => r._section === 'Teams').length,
       reports: results.filter(r => r._section === 'Reports').length,
       deployments: results.filter(r => r._section === 'Deployments').length,
     }
@@ -266,13 +277,14 @@ export default function CommandPalette({ open, onClose, currentPath }) {
   const hasResults = filtered.results.length > 0 || query === ''
   const noResults = query && !hasResults
 
-  const totalResults = filtered.analytics.incidents + filtered.analytics.services + filtered.analytics.evidence + filtered.analytics.mrs + filtered.analytics.reports + filtered.analytics.deployments
+  const totalResults = filtered.analytics.incidents + filtered.analytics.services + filtered.analytics.evidence + filtered.analytics.mrs + filtered.analytics.teams + filtered.analytics.reports + filtered.analytics.deployments
 
   const resultSections = query ? [
     ['Incidents', ENTERPRISE_DATA.incidents.filter(i => fuzzyMatch(i.title, query) || fuzzyMatch(i.desc, query) || fuzzyMatch(i.service || '', query)), '#ef4444'],
     ['Services', ENTERPRISE_DATA.services.filter(s => fuzzyMatch(s.title, query) || fuzzyMatch(s.desc, query)), '#22d3ee'],
     ['Evidence', ENTERPRISE_DATA.evidence.filter(e => fuzzyMatch(e.title, query) || fuzzyMatch(e.desc, query)), '#8b5cf6'],
     ['MRs', ENTERPRISE_DATA.mrs.filter(m => fuzzyMatch(m.title, query) || fuzzyMatch(m.desc, query)), '#06b6d4'],
+    ['Teams', ENTERPRISE_DATA.teams.filter(t => fuzzyMatch(t.title, query) || fuzzyMatch(t.desc, query)), '#34d399'],
     ['Reports', ENTERPRISE_DATA.reports.filter(r => fuzzyMatch(r.title, query) || fuzzyMatch(r.desc, query)), '#f43f5e'],
     ['Deployments', ENTERPRISE_DATA.deployments.filter(d => fuzzyMatch(d.title, query) || fuzzyMatch(d.desc, query)), '#34d399'],
   ] : []

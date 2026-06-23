@@ -652,11 +652,13 @@ export default function KnowledgeGraph() {
       <div className="px-2 sm:px-3 pt-2">
         <ExecutiveBanner currentPage="/knowledge-graph" />
       </div>
-      <div className="-m-4 sm:-m-6 lg:-m-8" style={{ height: 'calc(100vh - 3.5rem)', maxWidth: '100vw' }}>
-        <div className="flex flex-col h-full">
-          <ReactFlowProvider>
-            <GraphInside />
-          </ReactFlowProvider>
+      <div className="overflow-x-hidden">
+        <div className="-m-4 sm:-m-6 lg:-m-8" style={{ height: 'calc(100vh - 3.5rem)', width: '100vw' }}>
+          <div className="flex flex-col h-full">
+            <ReactFlowProvider>
+              <GraphInside />
+            </ReactFlowProvider>
+          </div>
         </div>
       </div>
       <div className="px-2 sm:px-4 pb-2">

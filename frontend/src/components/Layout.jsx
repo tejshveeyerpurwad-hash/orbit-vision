@@ -632,23 +632,63 @@ export default function Layout({ children }) {
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
-              <nav className="flex-1 overflow-y-auto p-3 space-y-0.5">
-                {NAV_ITEMS.map(item => {
-                  const active = isActive(item.to)
-                  return (
-                    <Link key={item.to} to={item.to}
-                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
-                      style={{ color: active ? 'var(--text-primary)' : 'var(--text-secondary)', background: active ? 'rgba(6,182,212,0.1)' : 'transparent', border: active ? '1px solid rgba(6,182,212,0.2)' : '1px solid transparent' }}>
-                      <svg className="h-4 w-4 shrink-0" style={{ color: active ? '#22d3ee' : 'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                      </svg>
-                      <span className="truncate">{item.label}</span>
-                      {active && <span className="ml-auto flex h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />}
-                    </Link>
-                  )
-                })}
+              <nav className="flex-1 overflow-y-auto p-3 space-y-4">
+                {/* OVERVIEW */}
+                <div>
+                  <p className="px-3 pb-1 text-[8px] font-mono font-bold tracking-widest uppercase" style={{ color:'var(--text-muted)' }}>Overview</p>
+                  {NAV_ITEMS.slice(0, 3).map(item => {
+                    const active = isActive(item.to)
+                    return (
+                      <Link key={item.to} to={item.to} onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
+                        style={{ color: active ? 'var(--text-primary)' : 'var(--text-secondary)', background: active ? 'rgba(6,182,212,0.1)' : 'transparent', border: active ? '1px solid rgba(6,182,212,0.2)' : '1px solid transparent' }}>
+                        <svg className="h-4 w-4 shrink-0" style={{ color: active ? '#22d3ee' : 'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
+                        </svg>
+                        <span className="truncate">{item.label}</span>
+                        {active && <span className="ml-auto flex h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />}
+                      </Link>
+                    )
+                  })}
+                </div>
+                {/* ANALYSIS */}
+                <div>
+                  <p className="px-3 pb-1 text-[8px] font-mono font-bold tracking-widest uppercase" style={{ color:'var(--text-muted)' }}>Analysis</p>
+                  {NAV_ITEMS.slice(3, 6).map(item => {
+                    const active = isActive(item.to)
+                    return (
+                      <Link key={item.to} to={item.to} onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
+                        style={{ color: active ? 'var(--text-primary)' : 'var(--text-secondary)', background: active ? 'rgba(6,182,212,0.1)' : 'transparent', border: active ? '1px solid rgba(6,182,212,0.2)' : '1px solid transparent' }}>
+                        <svg className="h-4 w-4 shrink-0" style={{ color: active ? '#22d3ee' : 'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
+                        </svg>
+                        <span className="truncate">{item.label}</span>
+                        {active && <span className="ml-auto flex h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />}
+                      </Link>
+                    )
+                  })}
+                </div>
+                {/* OPERATIONS */}
+                <div>
+                  <p className="px-3 pb-1 text-[8px] font-mono font-bold tracking-widest uppercase" style={{ color:'var(--text-muted)' }}>Operations</p>
+                  {NAV_ITEMS.slice(6).map(item => {
+                    const active = isActive(item.to)
+                    return (
+                      <Link key={item.to} to={item.to} onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
+                        style={{ color: active ? 'var(--text-primary)' : 'var(--text-secondary)', background: active ? 'rgba(6,182,212,0.1)' : 'transparent', border: active ? '1px solid rgba(6,182,212,0.2)' : '1px solid transparent' }}>
+                        <svg className="h-4 w-4 shrink-0" style={{ color: active ? '#22d3ee' : 'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
+                        </svg>
+                        <span className="truncate">{item.label}</span>
+                        {active && <span className="ml-auto flex h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />}
+                      </Link>
+                    )
+                  })}
+                </div>
                 {/* Separator */}
-                <div className="my-2 border-t" style={{ borderColor:'var(--border)' }} />
+                <div className="border-t" style={{ borderColor:'var(--border)' }} />
                 {/* Notifications */}
                 <button onClick={() => { setMobileMenuOpen(false); setNotificationOpen(true) }}
                   className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
@@ -660,7 +700,7 @@ export default function Layout({ children }) {
                   <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-red-500/10 text-[8px] font-bold text-red-400">4</span>
                 </button>
                 {/* Profile */}
-                <Link to="/settings"
+                <Link to="/settings" onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
                   style={{ color:'var(--text-secondary)' }}>
                   <svg className="h-4 w-4 shrink-0" style={{ color:'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -685,10 +725,10 @@ export default function Layout({ children }) {
                   </div>
                 </div>
                 {/* Documentation */}
-                <Link to="/help"
+                <Link to="/help" onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
                   style={{ color:'var(--text-secondary)' }}>
-                  <svg className="h-4 w-4 shrink-0" style={{ color:'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                   </svg>
                   <span>Documentation</span>
@@ -738,20 +778,13 @@ export default function Layout({ children }) {
             {/* Top accent */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/25 to-transparent" aria-hidden />
 
-            <div className="relative flex items-center h-full px-4 lg:px-5 gap-3">
+            <div className="relative flex items-center h-full px-3 lg:px-5 gap-2 lg:gap-3">
 
-              {/* ── LEFT: Hamburger + Logo + Back + LIVE ── */}
-              <div className="flex items-center gap-2 shrink-0">
-                {/* Desktop hamburger — opens Command Center */}
+              {/* ── LEFT GROUP ── */}
+              <div className="flex items-center gap-1.5 lg:gap-2 shrink-0">
+                {/* Desktop hamburger */}
                 <button id="desktop-command-center-trigger" onClick={() => setCommandCenterOpen(true)}
                   className="nb-icon-btn hidden lg:flex" aria-label="Command Center">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                  </svg>
-                </button>
-                {/* Mobile hamburger — opens navigation */}
-                <button id="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)}
-                  className="nb-icon-btn lg:hidden" aria-label="Open menu">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                   </svg>
@@ -774,44 +807,35 @@ export default function Layout({ children }) {
                   </div>
                 </Link>
 
-                <div className="nb-sep hidden sm:block" />
-
-                {/* Smart back button — shows previous page name */}
-                <AnimatePresence mode="wait">
-                  {showBack && (
-                    <motion.button
-                      key={pathname}
-                      id="nav-back-btn"
-                      initial={{ opacity:0, x:-10 }}
-                      animate={{ opacity:1, x:0 }}
-                      exit={{ opacity:0, x:-10 }}
-                      transition={{ duration:.18, ease:'easeOut' }}
-                      onClick={handleBack}
-                      className="nb-back-btn hidden sm:flex"
-                      title={`Back to ${getPrevLabel() || 'previous page'}`}
-                      aria-label="Go back"
-                    >
-                      <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                      </svg>
-                      <span className="hidden lg:inline ml-0.5">{getPrevLabel() || 'Back'}</span>
-                    </motion.button>
-                  )}
-                </AnimatePresence>
-
-                {/* LIVE badge */}
-                <div id="nav-live-badge"
-                  className="hidden sm:flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/[0.06] px-2.5 py-1 nb-live-pulse">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  </span>
-                  <span className="text-[9px] font-mono font-bold text-emerald-300 tracking-widest">LIVE</span>
+                {/* Desktop: Separator + Back + LIVE */}
+                <div className="hidden sm:flex items-center gap-2">
+                  <div className="nb-sep" />
+                  <AnimatePresence mode="wait">
+                    {showBack && (
+                      <motion.button key={pathname} id="nav-back-btn"
+                        initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-10 }}
+                        transition={{ duration:.18, ease:'easeOut' }}
+                        onClick={handleBack} className="nb-back-btn"
+                        title={`Back to ${getPrevLabel() || 'previous page'}`} aria-label="Go back">
+                        <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                        <span className="hidden lg:inline ml-0.5">{getPrevLabel() || 'Back'}</span>
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
+                  <div id="nav-live-badge"
+                    className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/[0.06] px-2.5 py-1 nb-live-pulse">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                    </span>
+                    <span className="text-[9px] font-mono font-bold text-emerald-300 tracking-widest">LIVE</span>
+                  </div>
                 </div>
-
               </div>
 
-              {/* ── CENTER: Nav items ── */}
+              {/* ── CENTER: Desktop nav items ── */}
               <nav ref={navRef} id="main-nav"
                 className="hidden lg:flex items-center gap-0.5 mx-auto" aria-label="Main navigation">
                 {NAV_ITEMS.map(item => {
@@ -841,32 +865,32 @@ export default function Layout({ children }) {
                 })}
               </nav>
 
-              {/* ── RIGHT: Badges + actions ── */}
-              <div className="flex items-center gap-1.5 shrink-0 ml-auto lg:ml-0">
-                {/* AI Confidence */}
-                <div id="nav-ai-confidence" className="nb-conf-badge hidden md:flex" title="AI prediction confidence">
-                  <svg className="h-3 w-3 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                  </svg>
-                  <span>94%</span>
-                  <span style={{ fontSize:'9px', fontWeight:500, color:'var(--text-muted)', letterSpacing:'.05em' }}>AI</span>
+              {/* ── RIGHT GROUP ── */}
+              <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ml-auto">
+                {/* Desktop badges */}
+                <div className="hidden lg:flex items-center gap-1.5">
+                  <div id="nav-ai-confidence" className="nb-conf-badge" title="AI prediction confidence">
+                    <svg className="h-3 w-3 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                    </svg>
+                    <span>94%</span>
+                    <span style={{ fontSize:'9px', fontWeight:500, color:'var(--text-muted)', letterSpacing:'.05em' }}>AI</span>
+                  </div>
+                  <div className="nb-sep" />
                 </div>
 
-                <div className="nb-sep hidden md:block" />
-
-                {/* Search */}
-                <button id="nav-search" className="nb-search-btn hidden sm:flex"
+                {/* Search - visible on mobile too */}
+                <button id="nav-search" className="nb-icon-btn"
                   onClick={() => setSearchOpen(!searchOpen)} aria-label="Open search">
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                   </svg>
-                  <span className="hidden lg:inline" style={{ color:'var(--text-muted)' }}>Search</span>
-                  <kbd className="hidden lg:inline-flex items-center gap-0.5 rounded-md border px-1.5 py-0.5 text-[9px] font-mono"
-                    style={{ borderColor:'var(--border)', background:'rgba(255,255,255,0.03)', color:'var(--text-muted)' }}>⌘K</kbd>
                 </button>
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[9px] font-mono"
+                  style={{ borderColor:'var(--border)', background:'rgba(255,255,255,0.03)', color:'var(--text-muted)' }}>⌘K</span>
 
                 {/* Notifications */}
-                <button id="nav-notifications" className="nb-icon-btn relative hidden sm:flex" aria-label="Notifications"
+                <button id="nav-notifications" className="nb-icon-btn relative" aria-label="Notifications"
                   onClick={() => setNotificationOpen(true)}>
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
@@ -874,34 +898,39 @@ export default function Layout({ children }) {
                   <span className="nb-notif-badge" />
                 </button>
 
-                {/* Theme toggle */}
-                <ThemeToggle theme={theme} onChange={setTheme} />
+                {/* Desktop-only: Theme + Fullscreen + Present */}
+                <div className="hidden md:flex items-center gap-1">
+                  <ThemeToggle theme={theme} onChange={setTheme} />
+                  <button id="nav-fullscreen" className="nb-icon-btn"
+                    onClick={toggleFullscreen} aria-label={isFullscreen?'Exit fullscreen':'Enter fullscreen'}>
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      {isFullscreen
+                        ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+                        : <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />}
+                    </svg>
+                  </button>
+                  <button id="nav-present" onClick={togglePresentMode}
+                    className={`flex items-center gap-1.5 rounded-[9px] border px-2.5 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${presentMode ? 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200' : 'text-slate-500 hover:text-cyan-300 hover:border-cyan-400/25 hover:bg-cyan-500/[0.04]'}`}
+                    style={{ borderColor: presentMode ? undefined : 'var(--border)' }}
+                    aria-label="Toggle presentation mode">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
+                    </svg>
+                    <span className="hidden xl:inline">Present</span>
+                  </button>
+                  <div className="nb-sep" />
+                </div>
 
-                {/* Fullscreen */}
-                <button id="nav-fullscreen" className="nb-icon-btn hidden md:flex"
-                  onClick={toggleFullscreen} aria-label={isFullscreen?'Exit fullscreen':'Enter fullscreen'}>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    {isFullscreen
-                      ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
-                      : <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />}
+                {/* Mobile hamburger */}
+                <button id="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)}
+                  className="nb-icon-btn lg:hidden" aria-label="Open menu">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                   </svg>
                 </button>
-
-                {/* Present */}
-                <button id="nav-present" onClick={togglePresentMode}
-                  className={`hidden sm:flex items-center gap-1.5 rounded-[9px] border px-2.5 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${presentMode ? 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200' : 'text-slate-500 hover:text-cyan-300 hover:border-cyan-400/25 hover:bg-cyan-500/[0.04]'}`}
-                  style={{ borderColor: presentMode ? undefined : 'var(--border)' }}
-                  aria-label="Toggle presentation mode">
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
-                  </svg>
-                  <span className="hidden xl:inline">Present</span>
-                </button>
-
-                <div className="nb-sep" />
 
                 {/* Avatar / Profile */}
-                <div ref={profileRef} className="relative">
+                <div ref={profileRef} className="relative hidden sm:block">
                   <button onClick={() => setProfileOpen(o => !o)} id="nav-avatar" className="nb-avatar" aria-label="Profile">
                     <span className="text-[9px]">OF</span>
                   </button>

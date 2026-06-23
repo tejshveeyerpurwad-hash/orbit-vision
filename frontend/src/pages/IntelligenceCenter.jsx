@@ -4,6 +4,8 @@ import Layout from '../components/Layout'
 import StatusBadge from '../components/StatusBadge'
 import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
+import ExecutiveSummary from '../components/ExecutiveSummary'
+import AIRecommendations from '../components/AIRecommendations'
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
@@ -1266,6 +1268,9 @@ export default function IntelligenceCenter() {
           </div>
         </motion.div>
 
+
+        <ExecutiveSummary pageTitle="Intelligence Center" confidence={94} />
+        <AIRecommendations />
 
         <ExecutiveBanner currentPage="/intelligence" />
 

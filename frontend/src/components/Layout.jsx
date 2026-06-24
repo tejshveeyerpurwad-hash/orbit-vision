@@ -251,21 +251,23 @@ const GLOBAL_STYLES = `
   #main-nav::-webkit-scrollbar { display: none; }
   .nb-icon-btn {
     position:relative; display:flex; align-items:center; justify-content:center;
-    width:32px; height:32px; border-radius:9px;
+    min-width:44px; min-height:44px; width:32px; height:32px; border-radius:9px;
     color: var(--text-muted); transition: color .2s, background .2s;
     cursor:pointer; background:none; border:none; padding:0;
   }
+  @media (min-width: 1024px) { .nb-icon-btn { min-width:32px; min-height:32px; } }
   .nb-icon-btn:hover { color: var(--text-secondary); background: rgba(255,255,255,0.05); }
   .of-light .nb-icon-btn:hover { background: rgba(6,182,212,0.08); }
 
   .nb-search-btn {
     display:flex; align-items:center; gap:6px;
-    padding:5px 11px; border-radius:9px;
+    min-height:44px; padding:5px 11px; border-radius:9px;
     border: 1px solid var(--border);
     background: rgba(255,255,255,0.025);
     color: var(--text-muted); font-size:12px; font-weight:500;
     cursor:pointer; transition:all .2s; white-space:nowrap;
   }
+  @media (min-width: 1024px) { .nb-search-btn { min-height:auto; } }
   .nb-search-btn:hover { border-color:rgba(6,182,212,.25); color:var(--text-secondary); box-shadow:0 0 14px -4px rgba(6,182,212,.12); }
 
   .nb-avatar {
@@ -899,6 +901,18 @@ export default function Layout({ children }) {
                   <OrbitLogo size="sm" />
                 </Link>
 
+                {/* Mobile hamburger — opens the sidebar drawer on mobile */}
+                <button
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="lg:hidden nb-icon-btn shrink-0 min-w-[44px] min-h-[44px]"
+                  aria-label="Open navigation menu"
+                  id="mobile-nav-hamburger"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
+                </button>
+
                 {/* Desktop: Separator + Back + LIVE */}
                   <div className="hidden sm:flex items-center gap-2 shrink-0">
                   <div className="nb-sep" />
@@ -1138,12 +1152,12 @@ export default function Layout({ children }) {
       {!presentMode && (
         <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t backdrop-blur-2xl"
           style={{ background: 'var(--navbar-bg)', borderColor: 'var(--border)' }}>
-          <div className="flex items-center justify-around px-2 py-1.5">
+          <div className="flex items-center justify-around px-2 py-1">
             {NAV_ITEMS.slice(0, 5).map(item => {
               const active = isActive(item.to)
               return (
                 <Link key={item.to} to={item.to}
-                  className="flex flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 transition-all min-w-0"
+                  className="flex flex-col items-center gap-0.5 rounded-xl px-3 py-2 transition-all min-w-0"
                   style={{
                     color: active ? '#22d3ee' : 'var(--text-muted)',
                     background: active ? 'rgba(6,182,212,0.08)' : 'transparent'
@@ -1157,8 +1171,8 @@ export default function Layout({ children }) {
               )
             })}
             {/* More button — uses 9-dot grid icon, NOT hamburger (avoids duplicate ☰) */}
-            <button onClick={() => setMobileMenuOpen(true)}
-              className="flex flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 transition-all min-w-0"
+            <button id="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)}
+              className="flex flex-col items-center gap-0.5 rounded-xl px-3 py-2 transition-all min-w-0"
               style={{ color: mobileMenuOpen ? '#22d3ee' : 'var(--text-muted)' }}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

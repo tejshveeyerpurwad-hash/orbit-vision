@@ -337,7 +337,7 @@ export default function Footer() {
                   <div className="relative h-1 w-1 rounded-full bg-cyan-400" />
                 </div>
                 <span className="font-semibold text-slate-500">
-                  Orbit<span className="text-cyan-400">Foresight</span>
+                  Orbit<span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Foresight</span>
                 </span>
                 <span className="text-slate-700/60">v3.4.1</span>
               </div>

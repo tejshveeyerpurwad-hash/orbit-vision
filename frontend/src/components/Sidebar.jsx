@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import OrbitLogo from './branding/OrbitLogo'
 
 const navItems = [
   {
@@ -32,14 +33,8 @@ export default function Sidebar({ activeTab, onTabChange, collapsed, onToggle })
       }`}>
 
         <div className="flex h-14 items-center gap-3 border-b border-white/[0.06] px-4">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2.5 group min-w-0">
-            <div className="relative flex h-7 w-7 shrink-0 items-center justify-center">
-              <div className="absolute h-7 w-7 rounded-full bg-brand/20 animate-ping-slow" />
-              <div className="relative h-2 w-2 rounded-full bg-brand shadow-lg shadow-brand/50" />
-            </div>
-            <span className="text-sm font-bold tracking-tight truncate lg:hidden xl:block">
-              Orbit<span className="text-brand">Foresight</span>
-            </span>
+          <button onClick={() => navigate('/')} className="flex items-center min-w-0">
+            <OrbitLogo size="sm" />
           </button>
           <button onClick={onToggle} className="ml-auto rounded-lg p-1.5 text-slate-600 hover:bg-white/[0.06] hover:text-slate-300 lg:hidden">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

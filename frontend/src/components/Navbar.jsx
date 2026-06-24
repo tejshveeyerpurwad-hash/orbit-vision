@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import OrbitLogo from './branding/OrbitLogo'
 
 const links = [
   { to: '/dashboard',         label: 'Dashboard'      },
@@ -36,34 +37,8 @@ export default function Navbar() {
 
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 relative">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group shrink-0" id="landing-nav-logo">
-          <div className="relative flex h-7 w-7 items-center justify-center">
-            <div
-              className="absolute h-7 w-7 rounded-full"
-              style={{
-                background: 'rgba(6,182,212,0.15)',
-                animation: 'ping-slow-nb 1.8s cubic-bezier(0,0,0.2,1) infinite',
-              }}
-            />
-            <div
-              className="relative h-2 w-2 rounded-full"
-              style={{
-                background: '#06b6d4',
-                boxShadow: '0 0 8px rgba(6,182,212,0.7)',
-              }}
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[13px] font-bold tracking-tight text-white leading-none">
-              Orbit<span style={{ color: '#22d3ee' }}>Foresight</span>
-            </span>
-            <span
-              className="text-[8px] font-mono tracking-[0.12em] uppercase leading-none mt-0.5"
-              style={{ color: '#475569' }}
-            >
-              Predict Before Production
-            </span>
-          </div>
+        <Link to="/" className="shrink-0" id="landing-nav-logo">
+          <OrbitLogo size="sm" />
         </Link>
 
         {/* Desktop nav */}
@@ -196,12 +171,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      <style>{`
-        @keyframes ping-slow-nb {
-          0%    { transform: scale(1);   opacity: 0.8; }
-          75%,100% { transform: scale(2.2); opacity: 0; }
-        }
-      `}</style>
     </header>
   )
 }

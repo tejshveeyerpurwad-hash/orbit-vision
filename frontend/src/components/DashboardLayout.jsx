@@ -36,7 +36,7 @@ export default function DashboardLayout({ data, children }) {
           </button>
 
           <div className="flex items-center gap-1 text-xs text-slate-600">
-            <span className="hidden sm:inline">Orbit Foresight</span>
+            <span className="hidden sm:inline">OrbitForesight</span>
             <span className="hidden sm:inline mx-1.5">/</span>
             <span className="text-slate-400">{tabs.find(t => t.id === data?.activeTab)?.label || 'Dashboard'}</span>
           </div>

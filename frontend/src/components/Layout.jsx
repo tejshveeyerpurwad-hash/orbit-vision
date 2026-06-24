@@ -9,7 +9,7 @@ import CommandCenterDrawer from './CommandCenterDrawer'
 import ExecutiveCommandHeader from './ExecutiveCommandHeader'
 import CinematicMissionBriefing from './CinematicMissionBriefing'
 import AICopilot from './AICopilot'
-import OrbitLogo from './OrbitLogo'
+import OrbitLogo from './branding/OrbitLogo'
 import { initLayoutGuard } from '../utils/layoutGuard'
 
 /* ─────────────────────────────────────────────────────────────
@@ -677,7 +677,7 @@ export default function Layout({ children }) {
                 <div className="absolute h-5 w-5 rounded-full bg-cyan-500/20" />
                 <div className="relative h-1.5 w-1.5 rounded-full bg-cyan-400" />
               </div>
-              <span className="text-[10px] font-bold text-white/80">Orbit<span className="text-cyan-400">Foresight</span></span>
+              <span className="text-[10px] font-bold text-white/80">Orbit<span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Foresight</span></span>
               <span className="text-[8px] text-slate-600 font-mono uppercase tracking-widest">Presentation</span>
             </div>
             <div className="flex items-center gap-3 pointer-events-auto">
@@ -729,12 +729,8 @@ export default function Layout({ children }) {
               className="fixed top-0 left-0 z-50 flex h-full w-[85vw] max-w-[320px] min-w-[280px] flex-col backdrop-blur-2xl border-r lg:hidden"
               style={{ background:'var(--bg-base)', borderColor:'var(--border)' }}>
               <div className="flex h-16 items-center justify-between border-b px-5" style={{ borderColor:'var(--border)' }}>
-                <Link to="/" className="flex items-center gap-2.5">
+                <Link to="/" className="block">
                   <OrbitLogo size="md" />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-extrabold tracking-tight" style={{ color:'var(--text-primary)' }}>Orbit<span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Foresight</span></span>
-                    <span className="text-[9px] font-mono tracking-wider uppercase" style={{ color:'var(--text-muted)' }}>Predict Before Production</span>
-                  </div>
                 </Link>
                 <button onClick={() => setMobileMenuOpen(false)} className="nb-icon-btn" aria-label="Close menu">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -899,16 +895,8 @@ export default function Layout({ children }) {
                 </button>
 
                 {/* Logo */}
-                <Link to="/" className="flex items-center gap-2.5 group shrink-0" id="nav-logo">
+                <Link to="/" className="shrink-0" id="nav-logo">
                   <OrbitLogo size="sm" />
-                  <div className="hidden sm:flex flex-col">
-                    <span className="text-[14px] font-extrabold tracking-tight leading-none" style={{ color:'var(--text-primary)' }}>
-                      Orbit<span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Foresight</span>
-                    </span>
-                    <span className="text-[7px] font-mono tracking-[0.14em] uppercase leading-none mt-0.5" style={{ color:'var(--text-muted)' }}>
-                      Predict Before Production
-                    </span>
-                  </div>
                 </Link>
 
                 {/* Desktop: Separator + Back + LIVE */}

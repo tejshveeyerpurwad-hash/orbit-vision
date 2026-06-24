@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import Navbar from '../components/Navbar'
 import SolutionSection from '../components/SolutionSection'
+import OrbitLogo from '../components/branding/OrbitLogo'
 
 function AnimatedCounter({ value, suffix = '', duration = 2 }) {
   const [count, setCount] = useState(0)
@@ -1733,12 +1734,8 @@ export default function Landing() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
             <div className="col-span-2 sm:col-span-1">
-              <div className="flex items-center gap-2.5 mb-3">
-                <div className="relative flex h-6 w-6 items-center justify-center">
-                  <div className="absolute h-6 w-6 rounded-full bg-brand/20 animate-ping" />
-                  <div className="relative h-1.5 w-1.5 rounded-full bg-brand" />
-                </div>
-                <span className="text-sm font-bold tracking-tight text-white">Orbit<span className="text-brand">Foresight</span></span>
+              <div className="mb-3">
+                <OrbitLogo size="sm" />
               </div>
               <p className="text-[10px] text-slate-600 leading-relaxed">AI-powered engineering intelligence platform that predicts incidents before they reach production. Built for GitLab Orbit ecosystem.</p>
             </div>

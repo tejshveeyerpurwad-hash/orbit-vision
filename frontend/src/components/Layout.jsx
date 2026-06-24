@@ -217,7 +217,6 @@ const GLOBAL_STYLES = `
     background: var(--navbar-bg);
     backdrop-filter: blur(28px) saturate(200%);
     -webkit-backdrop-filter: blur(28px) saturate(200%);
-    border-bottom: 1px solid var(--border);
     box-shadow: 0 4px 32px -8px rgba(6,182,212,0.08);
   }
   .of-light .nb-glass { box-shadow: 0 4px 32px -8px rgba(6,182,212,0.06); }

@@ -3,6 +3,7 @@ import { useEffect, useState, lazy, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Landing from './pages/Landing'
 import ErrorBoundary from './components/ErrorBoundary'
+import { DemoProvider } from './components/DemoContext'
 
 function PageSkeleton() {
   return (
@@ -70,23 +71,25 @@ export default function App() {
   const location = useLocation()
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedPage><Landing /></AnimatedPage>} />
-        <Route path="/dashboard" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><Dashboard /></AnimatedPage></Suspense>} />
-        <Route path="/intelligence" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><IntelligenceCenter /></AnimatedPage></Suspense>} />
-        <Route path="/knowledge-graph" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><KnowledgeGraph /></AnimatedPage></Suspense>} />
-        <Route path="/impact-analysis" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><ChangeImpactAnalysis /></AnimatedPage></Suspense>} />
-        <Route path="/cto-report" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><AICTOReport /></AnimatedPage></Suspense>} />
-        <Route path="/deployment-simulator" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><DeploymentSimulator /></AnimatedPage></Suspense>} />
-        <Route path="/analytics" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><ErrorBoundary><Analytics /></ErrorBoundary></AnimatedPage></Suspense>} />
-        <Route path="/time-machine" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><ErrorBoundary><IncidentTimeMachine /></ErrorBoundary></AnimatedPage></Suspense>} />
-        <Route path="/ai-planner" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><AIEngineeringPlanner /></AnimatedPage></Suspense>} />
-        <Route path="/decision-simulator" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><DecisionSimulator /></AnimatedPage></Suspense>} />
-        <Route path="/execution-planner" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><OrbitExecutionPlanner /></AnimatedPage></Suspense>} />
-        <Route path="/settings" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><Settings /></AnimatedPage></Suspense>} />
-        <Route path="/help" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><Help /></AnimatedPage></Suspense>} />
-      </Routes>
-    </AnimatePresence>
+    <DemoProvider>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<AnimatedPage><Landing /></AnimatedPage>} />
+          <Route path="/dashboard" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><Dashboard /></AnimatedPage></Suspense>} />
+          <Route path="/intelligence" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><IntelligenceCenter /></AnimatedPage></Suspense>} />
+          <Route path="/knowledge-graph" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><KnowledgeGraph /></AnimatedPage></Suspense>} />
+          <Route path="/impact-analysis" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><ChangeImpactAnalysis /></AnimatedPage></Suspense>} />
+          <Route path="/cto-report" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><AICTOReport /></AnimatedPage></Suspense>} />
+          <Route path="/deployment-simulator" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><DeploymentSimulator /></AnimatedPage></Suspense>} />
+          <Route path="/analytics" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><ErrorBoundary><Analytics /></ErrorBoundary></AnimatedPage></Suspense>} />
+          <Route path="/time-machine" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><ErrorBoundary><IncidentTimeMachine /></ErrorBoundary></AnimatedPage></Suspense>} />
+          <Route path="/ai-planner" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><AIEngineeringPlanner /></AnimatedPage></Suspense>} />
+          <Route path="/decision-simulator" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><DecisionSimulator /></AnimatedPage></Suspense>} />
+          <Route path="/execution-planner" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><OrbitExecutionPlanner /></AnimatedPage></Suspense>} />
+          <Route path="/settings" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><Settings /></AnimatedPage></Suspense>} />
+          <Route path="/help" element={<Suspense fallback={<PageSkeleton />}><AnimatedPage><Help /></AnimatedPage></Suspense>} />
+        </Routes>
+      </AnimatePresence>
+    </DemoProvider>
   )
 }

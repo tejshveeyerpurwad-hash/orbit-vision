@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useDemo } from './DemoContext'
 
 const QUERIES = [
   { id: 'risk', label: 'Why is risk increasing?', icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z' },
@@ -88,13 +89,18 @@ export default function AICopilot() {
   const [response, setResponse] = useState(null)
   const [loading, setLoading] = useState(false)
   const panelRef = useRef(null)
+  const { scenario, currentScenario } = useDemo()
 
   const handleQuery = (query) => {
     setSelectedQuery(query)
     setLoading(true)
     setResponse(null)
     setTimeout(() => {
-      setResponse(RESPONSES[query.id])
+      const scenarioResponses = currentScenario?.copilotResponses
+      const res = scenarioResponses?.[query.id]
+        ? { ...RESPONSES[query.id], body: scenarioResponses[query.id], title: RESPONSES[query.id].title, insights: RESPONSES[query.id].insights }
+        : RESPONSES[query.id]
+      setResponse(res)
       setLoading(false)
     }, 800)
   }
@@ -159,6 +165,17 @@ export default function AICopilot() {
                 <p className="text-xs font-semibold text-white">AI Copilot</p>
                 <p className="text-[8px] text-slate-600 font-mono">Ctrl+M to open &middot; Ask anything</p>
               </div>
+              {scenario && currentScenario && (
+                <span className="text-[8px] font-mono font-bold px-1 py-0.5 rounded border"
+                  style={{
+                    color: currentScenario.verdictColor === 'red' ? '#f87171' : currentScenario.verdictColor === 'amber' ? '#fbbf24' : '#34d399',
+                    borderColor: currentScenario.verdictColor === 'red' ? 'rgba(248,113,113,0.3)' : currentScenario.verdictColor === 'amber' ? 'rgba(251,191,36,0.3)' : 'rgba(52,211,153,0.3)',
+                    background: currentScenario.verdictColor === 'red' ? 'rgba(248,113,113,0.08)' : currentScenario.verdictColor === 'amber' ? 'rgba(251,191,36,0.08)' : 'rgba(52,211,153,0.08)',
+                  }}
+                >
+                  {currentScenario.emoji} {currentScenario.label}
+                </span>
+              )}
               <button onClick={() => setOpen(false)} className="flex h-6 w-6 items-center justify-center rounded hover:bg-slate-800 transition-colors">
                 <svg className="h-3.5 w-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

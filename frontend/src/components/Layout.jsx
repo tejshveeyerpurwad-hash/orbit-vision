@@ -10,6 +10,11 @@ import ExecutiveCommandHeader from './ExecutiveCommandHeader'
 import CinematicMissionBriefing from './CinematicMissionBriefing'
 import AICopilot from './AICopilot'
 import OrbitLogo from './branding/OrbitLogo'
+import JudgeTour from './JudgeTour'
+import DemoScenarioSelector from './DemoScenarioSelector'
+import ExecutiveVerdict from './ExecutiveVerdict'
+import DemoAutoplay from './DemoAutoplay'
+import { useDemo } from './DemoContext'
 import { initLayoutGuard } from '../utils/layoutGuard'
 
 /* ─────────────────────────────────────────────────────────────
@@ -573,6 +578,9 @@ export default function Layout({ children }) {
 
   useEffect(() => { setMobileMenuOpen(false); setCommandCenterOpen(false) }, [pathname])
 
+  /* Demo context */
+  const { currentScenario, scenario, currentChapter, tourActive, startTour } = useDemo()
+
   /* Layout overflow guard */
   useEffect(() => initLayoutGuard(), [])
 
@@ -651,6 +659,9 @@ export default function Layout({ children }) {
       {showMissionBriefing && <CinematicMissionBriefing onComplete={() => setShowMissionBriefing(false)} />}
 
       <AICopilot />
+
+      {/* ── Judge Tour & Demo overlays ── */}
+      {tourActive && <JudgeTour />}
 
       {/* ── Premium animated background ── */}
       <PremiumBackground isDark={isDark} />
@@ -1020,11 +1031,67 @@ export default function Layout({ children }) {
         </div>
 
         {/* ════════════════════════════════════════════════
+            JUDGE DEMO TOOLBAR — scenario selector + tour + autoplay + verdict
+        ════════════════════════════════════════════════ */}
+        {!presentMode && (
+          <div className="px-2 sm:px-3 lg:px-4 pt-2 sm:pt-3">
+            <div className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-slate-900/40 backdrop-blur-sm">
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:24px_24px]" />
+              <div className="relative z-10 flex items-center gap-2 sm:gap-3 p-2 sm:p-3 flex-wrap">
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <svg className="h-3 w-3 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  </svg>
+                  <span className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider hidden sm:inline">Judge Tools</span>
+                </div>
+                <div className="h-4 w-px bg-white/[0.06] hidden sm:block" />
+                <DemoScenarioSelector />
+                <div className="h-4 w-px bg-white/[0.06]" />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={startTour}
+                    className="flex items-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1.5 text-[9px] sm:text-[10px] font-semibold text-cyan-300 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all"
+                  >
+                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                    </svg>
+                    👑 Judge Tour
+                  </button>
+                  <DemoAutoplay />
+                </div>
+                <div className="ml-auto flex items-center gap-2">
+                  <ExecutiveVerdict />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ════════════════════════════════════════════════
             PAGE CONTENT
         ════════════════════════════════════════════════ */}
         <main className="flex-1">
           <div className={`${presentMode ? 'p-0' : 'p-2 sm:p-3 lg:p-4 pb-16 lg:pb-4'}`}>
             <div className={`mx-auto w-full ${presentMode ? 'max-w-full' : 'max-w-full'}`}>
+              {/* Cross-page story banner */}
+              {!presentMode && scenario && (
+                <div className="mb-3 flex items-center gap-2 rounded-lg border border-white/[0.04] bg-white/[0.01] px-3 py-1.5">
+                  <div className="flex items-center gap-1.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5">
+                    <span className="text-[7px] font-mono font-bold text-cyan-400">CH {currentChapter.chapter}</span>
+                  </div>
+                  <span className="text-[9px] font-mono font-semibold text-cyan-300">{currentChapter.title}</span>
+                  <span className="text-[8px] text-slate-600 font-mono">— {currentChapter.subtitle}</span>
+                  <div className="ml-auto flex items-center gap-1">
+                    {[1,2,3,4,5,6,7,8].map(i => (
+                      <div key={i} className={`h-1 rounded-full transition-all duration-300 ${
+                        i < currentChapter.chapter ? 'w-1.5 bg-emerald-500/50' :
+                        i === currentChapter.chapter ? 'w-4 bg-cyan-400' :
+                        'w-1.5 bg-slate-700'
+                      }`} />
+                    ))}
+                  </div>
+                </div>
+              )}
               {children}
             </div>
           </div>

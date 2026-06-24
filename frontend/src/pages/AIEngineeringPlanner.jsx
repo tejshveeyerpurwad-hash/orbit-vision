@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component } from 'react'
+import { useState, useEffect, useRef, Component, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
@@ -418,7 +418,7 @@ function ArchitectureDiagram({ services }) {
   const impactColors = { critical: '#ef4444', high: '#f59e0b', medium: '#eab308', low: '#22c55e' }
   return (
     <div className="relative overflow-x-auto">
-      <svg className="w-full max-w-full" viewBox={`0 0 ${svgW} ${svgH}`} style={{ minHeight: svgH, minWidth: svgW }}>
+      <svg className="w-full max-w-full" viewBox={`0 0 ${svgW} ${svgH}`} style={{ minHeight: svgH }}>
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="#6366f1" />
@@ -545,6 +545,31 @@ export default function AIEngineeringPlanner() {
   const [selectedPreset, setSelectedPreset] = useState(-1)
   const [hasGenerated, setHasGenerated] = useState(false)
   const inputRef = useRef(null)
+  const resultsRef = useRef(null)
+
+  const scrollToResults = useCallback(() => {
+    setTimeout(() => {
+      if (resultsRef.current) {
+        const rect = resultsRef.current.getBoundingClientRect()
+        console.log('[Planner Debug] Result container:', {
+          mounted: true,
+          width: rect.width,
+          height: rect.height,
+          top: rect.top,
+          left: rect.left,
+          visible: rect.width > 0 && rect.height > 0,
+          display: getComputedStyle(resultsRef.current).display,
+          opacity: getComputedStyle(resultsRef.current).opacity,
+          visibility: getComputedStyle(resultsRef.current).visibility,
+          overflow: getComputedStyle(resultsRef.current).overflow,
+        })
+        const top = rect.top + window.scrollY - 16
+        window.scrollTo({ top, behavior: 'smooth' })
+      } else {
+        console.warn('[Planner Debug] Result container NOT mounted')
+      }
+    }, 350)
+  }, [])
 
   useEffect(() => {
     if (!plan && !planning && !hasGenerated) {
@@ -571,6 +596,7 @@ export default function AIEngineeringPlanner() {
     setTimeout(() => {
       setPlan(mockPlan)
       setPlanning(false)
+      scrollToResults()
     }, 2800)
   }
 
@@ -710,9 +736,38 @@ export default function AIEngineeringPlanner() {
 
         {planning && <LoadingState />}
 
-        <AnimatePresence mode="wait">
-          {plan && !planning && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
+        {hasGenerated && !planning && !plan && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-500/20 mb-4">
+              <svg className="h-8 w-8 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-white mb-1">Plan generation failed</h2>
+            <p className="text-sm text-slate-400 max-w-md mb-4">An unexpected error occurred. The investigation completed but no plan was produced.</p>
+            <button onClick={() => { setHasGenerated(false); setInput('') }} className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-violet-400 active:scale-[0.97] shadow-lg shadow-violet-500/20">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" /></svg>
+              Try Again
+            </button>
+          </motion.div>
+        )}
+
+        {plan && !planning && (
+          <div ref={resultsRef} style={{ border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+            {/* Fallback card — always visible when results exist */}
+            <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.04] to-green-500/[0.02] p-3 mb-4 flex items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20">
+                <svg className="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white">Investigation completed successfully</p>
+                <p className="text-[10px] text-slate-400">Plan generated for &ldquo;{input}&rdquo; &mdash; {plan.services.length} services analyzed, {plan.risks.length} risks identified</p>
+              </div>
+              <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 text-[8px] font-mono font-bold whitespace-nowrap">RESULTS LOADED</span>
+            </div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
 
               <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -1523,8 +1578,8 @@ export default function AIEngineeringPlanner() {
               </motion.div>
 
             </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
       </motion.div>
     </Layout>
     </PlanErrorBoundary>

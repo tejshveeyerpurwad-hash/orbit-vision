@@ -8,6 +8,7 @@ import AIRecommendations from '../components/AIRecommendations'
 import PageHero from '../components/PageHero'
 import BusinessImpact from '../components/BusinessImpact'
 import InvestigationWorkflow from '../components/InvestigationWorkflow'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
@@ -780,6 +781,7 @@ export default function IntelligenceCenter() {
   }
 
   return (
+    <ErrorBoundary title="Intelligence Center Error" message="The investigation engine encountered an error. Please try again.">
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-2 pb-4 overflow-x-hidden px-1 sm:px-0">
 
@@ -1924,7 +1926,7 @@ export default function IntelligenceCenter() {
                   </svg>
                 </div>
                 <h3 className="text-xs font-semibold text-white">Historical Intelligence</h3>
-                <span className="text-[9px] text-slate-600 font-mono">{data.mrs.length} correlated MRs</span>
+                <span className="text-[9px] text-slate-600 font-mono">{(data.mrs || []).length} correlated MRs</span>
               </div>
               <div className="space-y-1.5">
                 {(data.mrs || []).map((mr, i) => (
@@ -2120,7 +2122,7 @@ export default function IntelligenceCenter() {
                         </span>
                         <span className="flex items-center gap-0.5">
                           <svg className="h-2.5 w-2.5 text-cyan-400/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
-                          {data.recommendationConfidence[i]}% confidence
+                          {(data.recommendationConfidence || [])[i] || 0}% confidence
                         </span>
                       </div>
                     </div>
@@ -2568,7 +2570,7 @@ export default function IntelligenceCenter() {
                   </svg>
                 </div>
                 <h3 className="text-xs font-semibold text-white">Historical Incident Trends</h3>
-                <span className="text-[9px] text-slate-600 font-mono">{data.incidents.length} past incidents</span>
+                <span className="text-[9px] text-slate-600 font-mono">{(data.incidents || []).length} past incidents</span>
               </div>
               <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
                 {(data.incidents || []).map((inc, i) => (
@@ -2728,7 +2730,7 @@ export default function IntelligenceCenter() {
                     </div>
                     <div className="rounded bg-white/[0.02] border border-white/[0.06] p-2 text-center">
                       <div className="text-[8px] text-slate-600 font-mono uppercase">MRs Correlated</div>
-                      <div className="text-lg font-bold text-blue-400 font-mono">{data.mrs.length}</div>
+                      <div className="text-lg font-bold text-blue-400 font-mono">{(data.mrs || []).length}</div>
                     </div>
                     <div className="rounded bg-white/[0.02] border border-white/[0.06] p-2 text-center">
                       <div className="text-[8px] text-slate-600 font-mono uppercase">Evidence Items</div>
@@ -2854,5 +2856,6 @@ export default function IntelligenceCenter() {
 
       </motion.div>
     </Layout>
+    </ErrorBoundary>
   )
 }

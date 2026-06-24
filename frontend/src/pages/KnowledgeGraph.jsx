@@ -6,6 +6,7 @@ import Layout from '../components/Layout'
 import NarrativeCTA from '../components/NarrativeCTA'
 import ExecutiveBanner from '../components/ExecutiveBanner'
 import PageHero from '../components/PageHero'
+import KnowledgeGraphEvidence from '../components/KnowledgeGraphEvidence'
 
 const initialNodes = [
   { id: 'gateway', position: { x: 475, y: 50 }, data: { label: 'API Gateway', type: 'API', risk: 'medium', team: 'Platform', deps: ['Payments', 'Auth', 'Billing'] } },
@@ -730,13 +731,16 @@ export default function KnowledgeGraph() {
     <Layout>
       <div className="px-2 sm:px-3 pt-2 space-y-2">
         <PageHero
-          title="Digital Twin — Service Dependency Map"
-          subtitle="Live interactive model of your entire infrastructure topology showing real-time risk propagation, blast radius, and dependency health across all 47 services."
+          title="Orbit Knowledge Graph — Service Relationship Mapping"
+          subtitle="Orbit Knowledge Graph Intelligence: 847 nodes, 1,247 edges, 2,184 service relationships. Real-time Dependency Graph Analysis showing risk propagation, Blast Radius Prediction, and dependency health across all 47 services."
           impact="$340K"
           impactLabel="Blast Radius Exposure"
           confidence={92}
         />
         <ExecutiveBanner currentPage="/knowledge-graph" />
+      </div>
+      <div className="px-2 sm:px-3 pt-2">
+        <KnowledgeGraphEvidence />
       </div>
       <div className="overflow-x-hidden">
         <div className="-m-4 sm:-m-6 lg:-m-8" style={{ height: 'calc(100vh - 3.5rem)', width: '100vw' }}>

@@ -2117,7 +2117,7 @@ function ExecutiveIntelligenceHero() {
         <div className="flex items-center justify-between mb-3 sm:mb-4 flex-wrap gap-2">
           <div>
             <span className="text-[9px] sm:text-[10px] font-mono text-cyan-400 uppercase tracking-[0.2em] font-semibold">Orbit Intelligence Suite</span>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight mt-1">Executive Intelligence Command Center</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight mt-1">Orbit Executive Intelligence Command Center</h1>
           </div>
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
@@ -2384,12 +2384,12 @@ function AIStrategicInsightsPanel() {
 
         <AIStrategicInsightsPanel />
 
-        {/* Executive Intelligence Command Center Header & Metrics */}
+        {/* Orbit Executive Intelligence Command Center Header & Metrics */}
         <div className="rounded-xl border border-white/[0.08] bg-slate-900/40 backdrop-blur-md p-5 shadow-2xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
             <div>
               <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-[0.2em] font-semibold">Mission Control HUD</span>
-              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-0.5">Executive Intelligence Command Center</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-0.5">Orbit Executive Intelligence Command Center</h1>
             </div>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">

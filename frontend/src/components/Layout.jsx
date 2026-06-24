@@ -980,10 +980,10 @@ export default function Layout({ children }) {
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
                     </span>
-                    <span className="text-xs font-bold text-cyan-300">AI Active</span>
+                    <span className="text-xs font-bold text-cyan-300">Orbit AI Active</span>
                     <span className="h-3 w-px bg-cyan-500/20" />
                     <span className="text-xs font-mono font-bold text-cyan-400">94%</span>
-                    <span className="text-[9px] text-cyan-500/60">confidence</span>
+                    <span className="text-[9px] text-cyan-500/60">intelligence confidence</span>
                   </div>
                   <div className="nb-sep" />
                 </div>

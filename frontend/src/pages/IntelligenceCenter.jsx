@@ -787,8 +787,8 @@ export default function IntelligenceCenter() {
 
         <div className="space-y-2 mb-2">
           <PageHero
-            title="Investigate Root Cause"
-            subtitle="AI-powered investigation analyzing 47 services, 128 past incidents, and real-time telemetry to identify root cause and blast radius."
+            title="Orbit Root Cause Analysis"
+            subtitle="Orbit Dependency Graph Analysis investigating 47 services — 847 Knowledge Graph nodes, 1,247 edges, and real-time telemetry correlating 1,847 historical incidents to identify root cause and blast radius."
             impact="$2.4M"
             impactLabel="Revenue Protected"
             confidence={94}
@@ -853,7 +853,7 @@ export default function IntelligenceCenter() {
           <div className="relative p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold tracking-[0.2em] text-white uppercase">ROOT CAUSE COMMAND CENTER</h1>
+                <h1 className="text-2xl font-bold tracking-[0.2em] text-white uppercase">ORBIT ROOT CAUSE COMMAND CENTER</h1>
                 <p className="text-xs text-slate-400 font-mono mt-1 max-w-3xl">{data.title}</p>
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -1300,7 +1300,7 @@ export default function IntelligenceCenter() {
                 </div>
                 <div>
                   <h1 className="font-mono text-xs font-bold tracking-widest text-white uppercase">Forensic Investigation Console</h1>
-                  <p className="text-[7px] text-slate-500 font-mono tracking-wide">AI-Powered Risk Intelligence & Root Cause Analysis Platform</p>
+                  <p className="text-[7px] text-slate-500 font-mono tracking-wide">Orbit Knowledge Graph Intelligence · Dependency Graph Analysis · Root Cause Investigation</p>
                 </div>
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">

@@ -419,6 +419,10 @@ export default function AIEngineeringPlanner() {
 
   return (
     <Layout>
+      <div className="flex items-center gap-2 mb-1 px-1">
+        <span className="rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2 py-0.5 text-[8px] font-mono font-bold">Orbit AI</span>
+        <span className="text-[8px] text-slate-600 font-mono">Knowledge Graph Intelligence · Deployment Risk Intelligence · Engineering Decision Support</span>
+      </div>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-3 sm:space-y-4">
 
         {/* ── SECTION 1: Executive Strategy Brief ── */}

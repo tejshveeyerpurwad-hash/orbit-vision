@@ -4,12 +4,12 @@ import InvestigationProgress from './InvestigationProgress'
 
 const investigation = {
   title: 'Payment Pipeline Failure',
-  subtitle: 'Forensic Analysis — Case #OV-2024-0847',
-  description: 'System anomalies detected across 6 services with 96% AI confidence. 3 critical risks identified — payment error rate spike, Redis memory pressure, billing dependency timeout.',
+  subtitle: 'Orbit Knowledge Graph Intelligence — Case #OV-2024-0847',
+  description: 'Orbit Dependency Graph Analysis detected anomalies across 6 services with 94% confidence. Blast Radius Prediction identified 3 critical risks — payment error rate spike, Redis memory pressure, billing dependency timeout.',
   exposure: '$288,000',
-  confidence: '96%',
+  confidence: '94%',
   affectedServices: '3 Critical',
-  totalSystems: '8',
+  totalSystems: '47',
   riskLevel: 'CRITICAL',
   services: [
     { name: 'Payment Service', risk: 'Critical' },
@@ -19,17 +19,17 @@ const investigation = {
 }
 
 const pageStages = {
-  '/dashboard': { stage: 'Risk Detection', eta: '2 min', mission: 'Contain Payment Service Failure' },
-  '/intelligence': { stage: 'Root Cause Analysis', eta: '8 min', mission: 'Isolate Failure Origin' },
-  '/time-machine': { stage: 'Historical Pattern Match', eta: '4 min', mission: 'Confirm Recurrence Pattern' },
-  '/knowledge-graph': { stage: 'Dependency Impact Analysis', eta: '6 min', mission: 'Map Blast Radius' },
-  '/cto-report': { stage: 'Business Impact Assessment', eta: '3 min', mission: 'Quantify Executive Risk' },
-  '/ai-planner': { stage: 'AI Strategy Planning', eta: '10 min', mission: 'Generate Remediation Strategy' },
-  '/execution-planner': { stage: 'Execution Planning', eta: '12 min', mission: 'Deploy Remediation Plan' },
-  '/analytics': { stage: 'Outcome Measurement', eta: '—', mission: 'Validate Business Impact' },
-  '/impact-analysis': { stage: 'Boardroom Review', eta: '5 min', mission: 'Assess Cross-Service Impact' },
-  '/deployment-simulator': { stage: 'Mission Control', eta: '15 min', mission: 'Orchestrate Safe Deployment' },
-  '/decision-simulator': { stage: 'Decision Simulator', eta: '5 min', mission: 'Simulate Failure Scenarios' },
+  '/dashboard': { stage: 'Orbit Risk Detection', eta: '2 min', mission: 'Contain Payment Service Failure' },
+  '/intelligence': { stage: 'Orbit Root Cause Analysis', eta: '8 min', mission: 'Isolate Failure Origin via Dependency Graph Analysis' },
+  '/time-machine': { stage: 'Historical Incident Correlation', eta: '4 min', mission: 'Match Failure Pattern to 1,847 Historical Incidents' },
+  '/knowledge-graph': { stage: 'Dependency Graph Analysis', eta: '6 min', mission: 'Map Blast Radius Across 6 Services' },
+  '/cto-report': { stage: 'Engineering Decision Support', eta: '3 min', mission: 'Quantify Executive Risk — Revenue, SLA, Customer Impact' },
+  '/ai-planner': { stage: 'Orbit Strategy Planning', eta: '10 min', mission: 'Generate Remediation Strategy with ROI Analysis' },
+  '/execution-planner': { stage: 'Deployment Risk Intelligence', eta: '12 min', mission: 'Deploy Remediation with 94% Confidence' },
+  '/analytics': { stage: 'Outcome Intelligence', eta: '—', mission: 'Validate Business Impact via Service Relationship Mapping' },
+  '/impact-analysis': { stage: 'Boardroom Review', eta: '5 min', mission: 'Assess Cross-Service Impact Chain' },
+  '/deployment-simulator': { stage: 'Mission Control', eta: '15 min', mission: 'Orchestrate Safe Deployment via Blast Radius Prediction' },
+  '/decision-simulator': { stage: 'Orbit Decision Simulator', eta: '5 min', mission: 'Simulate Failure Scenarios with Historical Correlation' },
 }
 
 const kpiItems = [
@@ -69,6 +69,15 @@ const kpiItems = [
     textColor: 'text-amber-300',
     changeColor: 'text-amber-400',
   },
+  {
+    label: 'Blast Radius Accuracy',
+    value: '92%',
+    change: '+5.2%',
+    color: 'from-purple-500/20 to-purple-500/5 border-purple-500/25',
+    icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
+    textColor: 'text-purple-300',
+    changeColor: 'text-purple-400',
+  },
 ]
 
 export default function ExecutiveCommandHeader() {
@@ -100,10 +109,10 @@ export default function ExecutiveCommandHeader() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" />
           </span>
-          <span className="text-[10px] font-mono font-bold text-cyan-400/80 tracking-wider uppercase">AI Active</span>
+          <span className="text-[10px] font-mono font-bold text-cyan-400/80 tracking-wider uppercase">Orbit AI Active</span>
           <span className="h-4 w-px bg-white/[0.06]" />
           <div className="flex items-center gap-1.5 rounded-md border border-white/[0.04] bg-white/[0.02] px-2 py-1">
-            <span className="text-[9px] font-mono text-slate-500">Mission</span>
+            <span className="text-[9px] font-mono text-slate-500">Orbit Mission</span>
             <span className="text-[9px] font-mono text-cyan-400 font-semibold">{stage.mission}</span>
           </div>
           <span className="h-4 w-px bg-white/[0.06]" />
@@ -150,7 +159,7 @@ export default function ExecutiveCommandHeader() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                 </svg>
               </div>
-              <span className="text-[10px] font-mono font-bold text-red-400 tracking-wider uppercase">Active Executive Investigation</span>
+              <span className="text-[10px] font-mono font-bold text-red-400 tracking-wider uppercase">Orbit Executive Investigation</span>
               <span className="text-[9px] font-mono text-slate-600 ml-auto">{stage.stage}</span>
             </div>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight mb-1 leading-tight">
@@ -168,7 +177,7 @@ export default function ExecutiveCommandHeader() {
               <span className="text-[8px] text-amber-500/60">Monthly revenue at risk</span>
             </div>
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-2.5 sm:p-3 flex flex-col justify-center">
-              <span className="text-[8px] font-mono font-bold text-emerald-400/80 uppercase tracking-wider">AI Confidence</span>
+              <span className="text-[8px] font-mono font-bold text-emerald-400/80 uppercase tracking-wider">Orbit AI Confidence</span>
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-400 of-present-kpi">{investigation.confidence}</span>
                 <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden max-w-[80px]">
@@ -220,7 +229,7 @@ export default function ExecutiveCommandHeader() {
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
               </svg>
-              START INVESTIGATION
+              START ORBIT INVESTIGATION
               <svg className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>

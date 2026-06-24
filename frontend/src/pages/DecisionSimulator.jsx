@@ -175,9 +175,9 @@ export default function DecisionSimulator() {
             </svg>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white mb-1">Executive Decision Simulator</h1>
-            <p className="text-[10px] text-violet-400 font-medium tracking-[0.15em] uppercase mb-1">AI-Powered What-If Analysis Engine</p>
-            <p className="text-sm text-slate-400 max-w-lg">Simulate service failures and see real-time blast radius, revenue impact, and AI-recommended response.</p>
+            <h1 className="text-2xl font-bold text-white mb-1">Orbit Decision Simulator</h1>
+            <p className="text-[10px] text-violet-400 font-medium tracking-[0.15em] uppercase mb-1">Orbit Blast Radius Prediction · Engineering Decision Support</p>
+            <p className="text-sm text-slate-400 max-w-lg">Simulate service failures using Orbit Blast Radius Prediction — see real-time propagation chains, revenue impact, customer exposure, and AI-recommended response.</p>
           </div>
         </motion.div>
 

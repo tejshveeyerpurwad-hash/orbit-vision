@@ -252,8 +252,8 @@ export default function ChangeImpactAnalysis() {
         <AIRecommendations />
 
         <motion.div variants={item}>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Change Impact Analysis</h1>
-          <p className="mt-1 text-sm text-slate-500">Service-level risk propagation and blast radius visualization</p>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Orbit Change Impact Analysis</h1>
+          <p className="mt-1 text-sm text-slate-500">Orbit Dependency Graph Analysis — Risk Propagation & Blast Radius Visualization</p>
         </motion.div>
 
         <motion.div variants={item} className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">

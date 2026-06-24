@@ -248,7 +248,7 @@ export default function AICTOReport() {
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-2">
         <ExecutiveBanner currentPage="/cto-report" />
 
-        <PageHero title="Executive Boardroom Intelligence" subtitle="AI-powered CTO recommendation for payment retry support with $2.8M projected annual savings" impact="$2.8M" impactLabel="Projected Annual Savings" confidence={87} />
+        <PageHero title="Orbit Engineering Decision Support — Boardroom Impact" subtitle="Orbit Engineering Decision Support quantifies $2.8M projected annual savings — Blast Radius Prediction across 6 services, revenue exposure analysis, SLA compliance risk, and executive summary ready for boardroom presentation." impact="$2.8M" impactLabel="Projected Annual Savings" confidence={87} />
         <ExecutiveSummary />
 
         {/* B2. Executive Impact Radar */}

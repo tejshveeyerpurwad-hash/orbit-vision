@@ -1160,7 +1160,7 @@ export default function IncidentTimeMachine() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-2">
         <ExecutiveBanner currentPage="/time-machine" />
-        <PageHero title="Chronological Incident Forensics Engine" subtitle="AI-powered forensic analysis across 847 timelines, 156 replayed incidents, and 23 detected patterns — investigate root causes before they escalate." impact="156" impactLabel="Incidents Replayed" confidence={91} />
+        <PageHero title="Orbit Time Machine — Historical Incident Correlation" subtitle="Orbit Historical Incident Correlation across 1,847 incidents — 847 Knowledge Graph nodes, pattern matching at 91% accuracy, 23 recurring failure patterns detected. Replay, analyze, and prevent." impact="1,847" impactLabel="Incidents Analyzed" confidence={91} />
         <ExecutiveSummary />
         <InvestigationWorkflow />
         <motion.div variants={item}>
@@ -1175,8 +1175,8 @@ export default function IncidentTimeMachine() {
                 <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-cyan-400 animate-ping opacity-75" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold tracking-widest uppercase text-white">Time Lab</h1>
-                <p className="text-[11px] font-mono text-slate-500 tracking-wide">Chronological Incident Forensics Engine</p>
+                <h1 className="text-2xl font-bold tracking-widest uppercase text-white">Orbit Time Lab</h1>
+                <p className="text-[11px] font-mono text-slate-500 tracking-wide">Orbit Incident Forensics Engine — Historical Correlation</p>
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/5 px-4 py-1.5">

@@ -517,7 +517,7 @@ export default function OrbitExecutionPlanner() {
     <Layout>
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-8">
         <ExecutiveBanner currentPage="/execution-planner" />
-        <PageHero title="AI Mission Control / Launch Sequence" subtitle="Real-time execution planning across 4 services, 3 teams, and 3 sprints — deployment readiness at 71% with 2 active blockers." impact="42" impactLabel="Completion %" confidence={87} />
+        <PageHero title="Orbit Deployment Risk Intelligence — Mission Control" subtitle="Orbit Deployment Risk Intelligence for real-time execution planning: 4 services, 3 teams, 3 sprints. Deployment readiness at 71% with 2 active blockers. Blast Radius Prediction active." impact="42" impactLabel="Completion %" confidence={87} />
         <ExecutiveSummary />
 
         {/* ===== 1. NASA MISSION CONTROL HERO BANNER ===== */}

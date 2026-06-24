@@ -523,13 +523,14 @@ export default function Layout({ children }) {
 
   const goToSlide = useCallback((dir) => {
     const next = currentSlideIdx + dir
-    if (next >= 0 && next < WORKFLOW.length) navigate(WORKFLOW[next].to + '?present=1')
+    if (next >= 0 && next < WORKFLOW.length) { sessionStorage.setItem('of-present', '1'); navigate(WORKFLOW[next].to) }
   }, [currentSlideIdx, navigate])
 
   /* Present mode */
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    if (params.get('present') === '1') { setPresentMode(true); document.body.classList.add('of-present-mode') }
+    if (sessionStorage.getItem('of-present') === '1') {
+      setPresentMode(true); document.body.classList.add('of-present-mode')
+    }
   }, [])
 
   useEffect(() => {
@@ -543,26 +544,27 @@ export default function Layout({ children }) {
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goToSlide(-1) }
       else if (e.key === 'Escape') {
         setPresentMode(false)
-        const p = new URLSearchParams(window.location.search)
-        p.delete('present')
-        navigate(pathname + (p.toString() ? '?' + p.toString() : ''), { replace: true })
+        sessionStorage.removeItem('of-present')
+        document.body.classList.remove('of-present-mode')
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [presentMode, goToSlide, navigate, pathname])
+  }, [presentMode, goToSlide])
 
   const togglePresentMode = useCallback(() => {
     setPresentMode(prev => {
       const next = !prev
-      const p = new URLSearchParams(window.location.search)
-      next ? p.set('present','1') : p.delete('present')
-      window.history.replaceState(null, '', pathname + (p.toString() ? '?'+p.toString() : ''))
-      if (next) document.body.classList.add('of-present-mode')
-      else document.body.classList.remove('of-present-mode')
+      if (next) {
+        sessionStorage.setItem('of-present', '1')
+        document.body.classList.add('of-present-mode')
+      } else {
+        sessionStorage.removeItem('of-present')
+        document.body.classList.remove('of-present-mode')
+      }
       return next
     })
-  }, [pathname])
+  }, [])
 
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); setIsFullscreen(true) }
@@ -682,7 +684,7 @@ export default function Layout({ children }) {
             </button>
             <div className="flex items-center gap-1">
               {WORKFLOW.map((n,i) => (
-                <div key={n.to} onClick={() => navigate(n.to+'?present=1')}
+                <div key={n.to} onClick={() => { sessionStorage.setItem('of-present', '1'); navigate(n.to) }}
                   className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i===currentSlideIdx?'w-5 bg-cyan-400':i<currentSlideIdx?'w-1.5 bg-emerald-500/60':'w-1.5 bg-slate-700 hover:bg-slate-600'}`} />
               ))}
             </div>

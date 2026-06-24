@@ -171,7 +171,8 @@ export default function Footer() {
                 </Link>
                 <Link
                   to="/?present=1"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-xs font-semibold text-slate-300 hover:text-white hover:border-cyan-500/30 hover:bg-cyan-500/[0.05] hover:shadow-[0_0_16px_rgba(6,182,212,0.06)] transition-all"
+                  onClick={() => sessionStorage.setItem('of-present', '1')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-xs font-semibold text-slate-300 hover:text-white hover:border-cyan-500/30 hover:bg-cyan-500/[0.05] hover:shadow-[0_0_16px rgba(6,182,212,0.06)] transition-all"
                 >
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />

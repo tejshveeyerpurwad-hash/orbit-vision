@@ -104,8 +104,8 @@ const GLOBAL_STYLES = `
   .of-theme-transition * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important; }
 
   /* ── Background canvas ── */
-  body { background: var(--bg-base); color: var(--text-primary); margin: 0; overflow-x: hidden; max-width: 100vw; }
-  html { overflow-x: hidden; max-width: 100vw; }
+  body { background: var(--bg-base); color: var(--text-primary); margin: 0; overflow-x: clip; }
+  html { overflow-x: clip; }
 
   /* ── Animated grid ── */
   @keyframes grid-drift {
@@ -601,6 +601,28 @@ export default function Layout({ children }) {
     return () => window.removeEventListener('keydown', handler)
   }, [])
 
+  /* Header debug logging */
+  useEffect(() => {
+    const actionIds = ['nav-search','nav-notifications','nav-fullscreen','nav-ai-pulse','nav-avatar','nav-theme-toggle','nav-present']
+    const log = () => {
+      const w = window.innerWidth
+      const statuses = actionIds.map(id => {
+        const el = document.getElementById(id)
+        if (!el) return { id, rendered: false, display: 'N/A', visible: false }
+        const style = window.getComputedStyle(el)
+        const display = style.display
+        const visible = display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0'
+        return { id, rendered: true, display, visible }
+      })
+      const visible = statuses.filter(s => s.visible).length
+      const total = statuses.filter(s => s.rendered).length
+      console.log(`[Header Debug] width=${w}px | presentMode=${presentMode} | actions: ${visible}/${total} visible`, statuses)
+    }
+    log()
+    window.addEventListener('resize', log)
+    return () => window.removeEventListener('resize', log)
+  }, [presentMode])
+
   /* Track previous path for smart back label */
   const prevPathRef = useRef(null)
   useEffect(() => {
@@ -637,7 +659,7 @@ export default function Layout({ children }) {
 
   return (
     <div className={`flex min-h-screen relative ${isDark ? '' : 'of-light'}`}
-      style={{ fontFamily:"'Inter',system-ui,-apple-system,sans-serif", background:'var(--bg-base)', color:'var(--text-primary)', overflowX:'hidden', maxWidth:'100vw' }}
+      style={{ fontFamily:"'Inter',system-ui,-apple-system,sans-serif", background:'var(--bg-base)', color:'var(--text-primary)' }}
       data-layout-root>
       <style>{GLOBAL_STYLES}</style>
 
@@ -868,13 +890,13 @@ export default function Layout({ children }) {
             {/* Top accent */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/25 to-transparent" aria-hidden />
 
-            <div className="relative flex items-center h-full px-3 lg:px-5 gap-2 lg:gap-3">
+            <div className="relative flex items-center h-full px-3 lg:px-5 gap-2 lg:gap-3 flex-nowrap min-w-0">
 
               {/* ── LEFT GROUP ── */}
               <div className="flex items-center gap-1.5 lg:gap-2 shrink-0">
                 {/* Desktop hamburger */}
                 <button id="desktop-command-center-trigger" onClick={() => setCommandCenterOpen(true)}
-                  className="nb-icon-btn hidden lg:flex" aria-label="Command Center">
+                  className="nb-icon-btn hidden lg:flex shrink-0" aria-label="Command Center">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                   </svg>
@@ -894,7 +916,7 @@ export default function Layout({ children }) {
                 </Link>
 
                 {/* Desktop: Separator + Back + LIVE */}
-                <div className="hidden sm:flex items-center gap-2">
+                  <div className="hidden sm:flex items-center gap-2 shrink-0">
                   <div className="nb-sep" />
                   <AnimatePresence mode="wait">
                     {showBack && (
@@ -923,7 +945,7 @@ export default function Layout({ children }) {
 
               {/* ── CENTER: Desktop nav items ── */}
               <nav ref={navRef} id="main-nav"
-                className="hidden lg:flex items-center gap-0.5 mx-auto" aria-label="Main navigation">
+                className="hidden lg:flex items-center gap-0.5 mx-auto overflow-x-auto min-w-0" aria-label="Main navigation">
                 {NAV_ITEMS.map(item => {
                   const active = isActive(item.to)
                   return (
@@ -954,8 +976,8 @@ export default function Layout({ children }) {
               {/* ── RIGHT GROUP ── */}
               <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ml-auto">
                 {/* Desktop badges */}
-                <div className="hidden lg:flex items-center gap-2">
-                  <div id="nav-ai-pulse" className="flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/[0.05] px-3 py-1.5">
+                <div className="max-lg:hidden lg:flex items-center gap-2 shrink-0">
+                  <div id="nav-ai-pulse" className="flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/[0.05] px-3 py-1.5 shrink-0">
                     <span className="relative flex h-2 w-2">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
@@ -969,17 +991,17 @@ export default function Layout({ children }) {
                 </div>
 
                 {/* Search - visible on mobile too */}
-                <button id="nav-search" className="nb-icon-btn"
+                <button id="nav-search" className="nb-icon-btn shrink-0"
                   onClick={() => setSearchOpen(!searchOpen)} aria-label="Open search">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                   </svg>
                 </button>
-                <span className="hidden sm:inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[9px] font-mono"
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[9px] font-mono shrink-0"
                   style={{ borderColor:'var(--border)', background:'rgba(255,255,255,0.03)', color:'var(--text-muted)' }}>⌘K</span>
 
                 {/* Notifications */}
-                <button id="nav-notifications" className="nb-icon-btn relative" aria-label="Notifications"
+                <button id="nav-notifications" className="nb-icon-btn relative shrink-0" aria-label="Notifications"
                   onClick={() => setNotificationOpen(true)}>
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
@@ -988,9 +1010,9 @@ export default function Layout({ children }) {
                 </button>
 
                 {/* Desktop-only: Theme + Fullscreen + Present */}
-                <div className="hidden md:flex items-center gap-1">
+                <div className="max-md:hidden md:flex items-center gap-1 shrink-0">
                   <ThemeToggle theme={theme} onChange={setTheme} />
-                  <button id="nav-fullscreen" className="nb-icon-btn"
+                  <button id="nav-fullscreen" className="nb-icon-btn shrink-0"
                     onClick={toggleFullscreen} aria-label={isFullscreen?'Exit fullscreen':'Enter fullscreen'}>
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       {isFullscreen
@@ -999,7 +1021,7 @@ export default function Layout({ children }) {
                     </svg>
                   </button>
                   <button id="nav-present" onClick={togglePresentMode}
-                    className={`flex items-center gap-1.5 rounded-[9px] border px-2.5 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${presentMode ? 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200' : 'text-slate-500 hover:text-cyan-300 hover:border-cyan-400/25 hover:bg-cyan-500/[0.04]'}`}
+                    className={`shrink-0 flex items-center gap-1.5 rounded-[9px] border px-2.5 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${presentMode ? 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200' : 'text-slate-500 hover:text-cyan-300 hover:border-cyan-400/25 hover:bg-cyan-500/[0.04]'}`}
                     style={{ borderColor: presentMode ? undefined : 'var(--border)' }}
                     aria-label="Toggle presentation mode">
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -1012,15 +1034,15 @@ export default function Layout({ children }) {
 
                 {/* Mobile hamburger */}
                 <button id="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)}
-                  className="nb-icon-btn lg:hidden" aria-label="Open menu">
+                  className="nb-icon-btn lg:hidden shrink-0" aria-label="Open menu">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                   </svg>
                 </button>
 
                 {/* Avatar / Profile */}
-                <div ref={profileRef} className="relative hidden sm:block">
-                  <button onClick={() => setProfileOpen(o => !o)} id="nav-avatar" className="nb-avatar" aria-label="Profile">
+                <div ref={profileRef} className="relative hidden sm:block shrink-0">
+                  <button onClick={() => setProfileOpen(o => !o)} id="nav-avatar" className="nb-avatar shrink-0" aria-label="Profile">
                     <span className="text-[9px]">OF</span>
                   </button>
                   <AnimatePresence>

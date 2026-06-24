@@ -98,7 +98,8 @@ const GLOBAL_STYLES = `
   .of-theme-transition * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important; }
 
   /* ── Background canvas ── */
-  body { background: var(--bg-base); color: var(--text-primary); margin: 0; }
+  body { background: var(--bg-base); color: var(--text-primary); margin: 0; overflow-x: hidden; max-width: 100vw; }
+  html { overflow-x: hidden; max-width: 100vw; }
 
   /* ── Animated grid ── */
   @keyframes grid-drift {
@@ -106,8 +107,8 @@ const GLOBAL_STYLES = `
     100% { transform: translate(40px,40px); }
   }
   .of-bg-grid {
-    position: fixed; inset: -80px; pointer-events: none; z-index: 0;
-    max-width: calc(100vw + 160px); overflow: hidden;
+    position: absolute; inset: -80px; pointer-events: none; z-index: 0;
+    width: calc(100% + 160px); max-width: none; overflow: hidden;
     background-image:
       linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
